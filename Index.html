@@ -1,0 +1,1754 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>Command Center</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #0c0c0c;
+  --bg1: #111;
+  --bg2: #1a1a1a;
+  --border: #252525;
+  --text: #d4d4d4;
+  --text2: #777;
+  --accent: #e8a020;
+  --accent-dim: rgba(232, 160, 32, 0.15);
+  --red: #e05252;
+  --green: #34c77b;
+  --blue: #4a90d9;
+  --purple: #8b6fc0;
+  --pink: #d4619b;
+  --font: 'IBM Plex Mono', monospace;
+  --radius: 5px;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { background: var(--bg); color: var(--text); font-family: var(--font); overflow: hidden; height: 100vh; width: 100vw; font-size: 12px; }
+::-webkit-scrollbar { width: 5px; height: 5px; }
+::-webkit-scrollbar-track { background: var(--bg1); }
+::-webkit-scrollbar-thumb { background: #333; border-radius: 3px; }
+button { font-family: var(--font); cursor: pointer; border: none; outline: none; font-size: 11px; }
+input, select, textarea { font-family: var(--font); font-size: 12px; outline: none; background: var(--bg2); border: 1px solid var(--border); color: var(--text); padding: 8px 10px; border-radius: var(--radius); width: 100%; box-sizing: border-box; }
+input:focus, select:focus, textarea:focus { border-color: var(--accent); }
+
+#app { display: flex; height: 100vh; width: 100vw; overflow: hidden; }
+
+/* SIDEBAR */
+#sidebar { width: 240px; min-width: 240px; background: var(--bg1); border-right: 1px solid var(--border); display: flex; flex-direction: column; transition: width 0.2s, min-width 0.2s; overflow: hidden; }
+#sidebar.collapsed { width: 44px; min-width: 44px; }
+#sidebar-header { display: flex; align-items: center; justify-content: space-between; padding: 12px 14px; border-bottom: 1px solid var(--border); }
+#sidebar.collapsed #sidebar-header { justify-content: center; padding: 12px 6px; }
+#sidebar.collapsed #logo { display: none; }
+#logo { font-size: 12px; font-weight: 700; color: var(--accent); letter-spacing: 1.5px; }
+#collapse-btn { background: none; color: var(--text2); font-size: 16px; padding: 2px 6px; }
+#tab-bar { display: flex; border-bottom: 1px solid var(--border); }
+#sidebar.collapsed #tab-bar { flex-direction: column; }
+.tab-btn { flex: 1; padding: 8px 2px; background: none; color: var(--text2); font-size: 10px; text-transform: uppercase; letter-spacing: 0.5px; border-bottom: 2px solid transparent; transition: all 0.15s; }
+.tab-btn.active { color: var(--accent); background: var(--bg2); border-bottom-color: var(--accent); }
+#sidebar.collapsed .tab-btn { padding: 10px 2px; font-size: 14px; }
+#task-list { flex: 1; overflow-y: auto; padding: 8px; }
+#sidebar.collapsed #task-list { display: none; }
+#add-task-btn, #add-break-btn { width: 100%; padding: 9px; background: var(--bg2); border: 1px dashed var(--border); color: var(--accent); font-size: 12px; border-radius: var(--radius); margin-bottom: 4px; }
+#add-break-btn { color: var(--red); border-color: #3a2020; }
+.task-item { padding: 8px 10px; margin-bottom: 3px; cursor: pointer; border-radius: 0 var(--radius) var(--radius) 0; border-left: 3px solid var(--text2); transition: background 0.1s; }
+.task-item:hover { background: var(--bg2); }
+.task-item.selected { background: #1e1e1e; }
+.task-item-title { font-size: 11px; color: var(--text); margin-bottom: 2px; display: flex; justify-content: space-between; align-items: center; }
+.task-item-meta { font-size: 10px; color: var(--text2); }
+.task-del-btn { background: none; color: var(--red); font-size: 14px; padding: 0 4px; opacity: 0.5; }
+.task-item:hover .task-del-btn { opacity: 1; }
+
+/* MAIN */
+#main { flex: 1; display: flex; flex-direction: column; overflow: hidden; }
+#toolbar { display: flex; align-items: center; justify-content: space-between; padding: 8px 14px; border-bottom: 1px solid var(--border); background: var(--bg1); flex-shrink: 0; gap: 8px; }
+.nav-btn { background: var(--bg2); border: 1px solid var(--border); color: var(--text2); padding: 4px 10px; font-size: 14px; border-radius: var(--radius); }
+#today-btn { background: var(--bg2); border: 1px solid var(--border); color: var(--accent); padding: 4px 10px; border-radius: var(--radius); }
+#date-label { font-size: 12px; color: var(--text); margin-left: 6px; }
+.view-btn { padding: 4px 11px; background: var(--bg2); border: 1px solid var(--border); color: var(--text2); border-radius: var(--radius); text-transform: uppercase; font-size: 10px; letter-spacing: 0.5px; }
+.view-btn.active { background: var(--accent-dim); border-color: var(--accent); color: var(--accent); }
+
+/* GANTT */
+#gantt-container { flex: 1; overflow: auto; position: relative; background: var(--bg); }
+#gantt-header { position: sticky; top: 0; z-index: 10; background: var(--bg1); border-bottom: 1px solid var(--border); height: 30px; overflow: hidden; }
+.grid-label { position: absolute; top: 0; height: 30px; display: flex; align-items: center; padding-left: 6px; font-size: 9px; color: var(--text2); white-space: nowrap; border-left: 1px solid var(--border); }
+.grid-label.minor { color: #444; border-left-color: #1e1e1e; }
+#gantt-body { position: relative; }
+.gantt-gridline { position: absolute; top: 0; bottom: 0; border-left: 1px solid #1a1a1a; pointer-events: none; }
+.gantt-gridline.major { border-left-color: #222; }
+#now-line { position: absolute; top: 0; bottom: 0; width: 2px; background: var(--red); z-index: 5; pointer-events: none; }
+#now-dot { position: absolute; top: -4px; left: -4px; width: 10px; height: 10px; border-radius: 50%; background: var(--red); }
+.gantt-row { position: absolute; left: 0; right: 0; height: 46px; border-top: 1px solid #1e1e1e; border-bottom: 1px solid #1e1e1e; background: transparent; }
+
+/* LINK MODE */
+#link-btn { padding: 4px 11px; background: var(--bg2); border: 1px solid var(--border); color: var(--text2); border-radius: var(--radius); font-size: 10px; letter-spacing: 0.5px; margin-left: 8px; }
+#link-btn.active { background: rgba(52,199,123,0.15); border-color: var(--green); color: var(--green); animation: link-pulse 1.5s infinite; }
+@keyframes link-pulse { 0%,100% { box-shadow: 0 0 0 0 rgba(52,199,123,0.3); } 50% { box-shadow: 0 0 0 4px rgba(52,199,123,0); } }
+#link-hint { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); background: var(--green); color: #000; padding: 8px 18px; border-radius: 20px; font-size: 11px; font-weight: 600; z-index: 100; display: none; letter-spacing: 0.5px; }
+.task-bar.link-source { box-shadow: 0 0 0 2px var(--green) !important; }
+.task-bar.link-target-hover { box-shadow: 0 0 0 2px var(--accent) !important; }
+body.link-mode .task-bar { cursor: crosshair !important; }
+body.link-mode .resize-handle { display: none !important; }
+
+/* TASK BAR */
+.task-bar { position: absolute; height: 30px; border-radius: var(--radius); display: flex; align-items: center; padding: 0 14px; cursor: grab; user-select: none; overflow: visible; z-index: 3; border-left-width: 3px; border-left-style: solid; }
+.task-bar:active { cursor: grabbing; z-index: 20; }
+.task-bar.selected { box-shadow: 0 0 0 1px var(--accent); }
+.task-bar-label { font-size: 10px; color: var(--text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; flex: 1; }
+/* Full name tooltip shown on hover, positioned below bar */
+.task-bar-tooltip { position: absolute; top: 100%; left: 0; margin-top: 4px; background: #222; border: 1px solid #444; border-radius: 4px; padding: 5px 8px; font-size: 10px; color: #eee; white-space: nowrap; z-index: 30; pointer-events: none; opacity: 0; transition: opacity 0.15s; box-shadow: 0 4px 12px rgba(0,0,0,0.5); }
+.task-bar:hover .task-bar-tooltip { opacity: 1; }
+
+/* RESIZE HANDLES — the ↔ arrows on task edges */
+.resize-handle { position: absolute; top: 0; width: 10px; height: 100%; cursor: ew-resize; z-index: 4; display: flex; align-items: center; justify-content: center; opacity: 0; transition: opacity 0.15s; }
+.task-bar:hover .resize-handle { opacity: 1; }
+.resize-handle-left { left: -2px; border-radius: var(--radius) 0 0 var(--radius); }
+.resize-handle-right { right: -2px; border-radius: 0 var(--radius) var(--radius) 0; }
+.resize-handle::after { content: "↔"; font-size: 9px; color: #fff; text-shadow: 0 0 3px #000; }
+
+/* DELETE BUTTON ON BAR */
+.bar-delete { position: absolute; top: -8px; right: -8px; width: 18px; height: 18px; border-radius: 50%; background: var(--red); color: #fff; font-size: 11px; display: flex; align-items: center; justify-content: center; z-index: 5; opacity: 0; transition: opacity 0.15s; cursor: pointer; line-height: 1; }
+.task-bar:hover .bar-delete { opacity: 0.8; }
+.bar-delete:hover { opacity: 1 !important; transform: scale(1.1); }
+
+/* LINK ICON ON BAR — click to start linking from this task */
+.bar-link { position: absolute; top: -8px; right: 14px; width: 18px; height: 18px; border-radius: 50%; background: var(--green); color: #000; font-size: 10px; display: flex; align-items: center; justify-content: center; z-index: 5; opacity: 0; transition: opacity 0.15s; cursor: pointer; line-height: 1; }
+.task-bar:hover .bar-link { opacity: 0.7; }
+.bar-link:hover { opacity: 1 !important; transform: scale(1.1); }
+
+/* BREAK BLOCK */
+.break-block { position: absolute; height: 100%; background: repeating-linear-gradient(45deg, transparent, transparent 4px, rgba(224,82,82,0.08) 4px, rgba(224,82,82,0.08) 8px); border-left: 2px dashed rgba(224,82,82,0.3); border-right: 2px dashed rgba(224,82,82,0.3); z-index: 1; pointer-events: none; display: flex; align-items: flex-start; padding: 4px 6px; }
+.break-label { font-size: 8px; color: var(--red); text-transform: uppercase; letter-spacing: 1px; opacity: 0.6; }
+
+/* PANELS */
+.panel { flex: 1; overflow-y: auto; padding: 20px; display: none; }
+.panel.active { display: block; }
+#notes-panel.active { display: flex; padding: 0; overflow: hidden; }
+#notes-panel > div { width: 100%; }
+#note-content { font-family: var(--font); }
+#note-content ul, #note-content ol { padding-left: 20px; margin: 4px 0; }
+#note-content li { margin-bottom: 2px; }
+#note-content b, #note-content strong { color: var(--accent); }
+@media (max-width: 700px) {
+  #notes-sidebar { width: 140px !important; min-width: 140px !important; }
+}
+.panel-title { font-size: 14px; color: var(--accent); font-weight: 700; letter-spacing: 1px; margin-bottom: 16px; }
+.stat-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(110px, 1fr)); gap: 10px; margin-bottom: 24px; }
+.stat-box { background: var(--bg2); border: 1px solid var(--border); border-radius: 6px; padding: 14px; text-align: center; }
+.stat-value { font-size: 22px; font-weight: 700; }
+.stat-label { font-size: 9px; color: var(--text2); text-transform: uppercase; letter-spacing: 1px; margin-top: 4px; }
+.chart-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+@media (max-width: 700px) { .chart-row { grid-template-columns: 1fr; } }
+.chart-box { background: var(--bg2); border: 1px solid var(--border); border-radius: 6px; padding: 14px; }
+.chart-title { font-size: 10px; color: var(--text2); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 12px; }
+.bar-row { display: flex; align-items: center; margin-bottom: 6px; gap: 8px; }
+.bar-label { width: 70px; font-size: 10px; color: var(--text2); text-align: right; flex-shrink: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.bar-track { flex: 1; height: 18px; background: #1a1a1a; border-radius: 3px; overflow: hidden; }
+.bar-fill { height: 100%; border-radius: 3px; transition: width 0.4s ease; display: flex; align-items: center; padding-left: 6px; }
+.bar-value { font-size: 9px; color: #fff; white-space: nowrap; }
+.pie-chart { width: 140px; height: 140px; border-radius: 50%; margin: 0 auto 12px; }
+.pie-legend { text-align: center; }
+.pie-legend-item { display: inline-flex; align-items: center; gap: 4px; margin: 3px 8px; font-size: 10px; color: var(--text2); }
+.pie-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+.tag-filter-btn { padding: 4px 10px; font-size: 10px; background: var(--bg2); border: 1px solid var(--border); color: var(--text2); border-radius: 3px; margin: 0 4px 6px 0; }
+.tag-filter-btn.active { background: var(--accent-dim); border-color: var(--accent); color: var(--accent); }
+.achievement-card { padding: 10px 14px; background: var(--bg2); border: 1px solid var(--border); border-radius: 0 6px 6px 0; margin-bottom: 6px; border-left-width: 3px; border-left-style: solid; }
+.decision-card { background: var(--bg2); border: 1px solid var(--border); border-radius: 6px; padding: 12px; margin-bottom: 12px; }
+.decision-q { font-size: 12px; color: var(--text); margin-bottom: 8px; display: flex; justify-content: space-between; align-items: center; }
+.rating-btn { width: 34px; height: 34px; border-radius: var(--radius); border: 1px solid var(--border); background: var(--bg1); color: var(--text2); font-size: 13px; font-weight: 700; }
+.rating-btn.active { background: var(--accent-dim); border-color: var(--accent); color: var(--accent); }
+#eval-btn { width: 100%; padding: 12px; background: var(--accent); color: #000; font-size: 13px; font-weight: 700; border-radius: var(--radius); margin: 12px 0; }
+.result-box { background: var(--bg2); border: 1px solid rgba(232,160,32,0.2); border-radius: 6px; padding: 18px; text-align: center; display: none; }
+.result-pct { font-size: 36px; color: var(--accent); font-weight: 700; margin-bottom: 6px; }
+.result-verdict { font-size: 12px; color: var(--text); line-height: 1.5; }
+
+/* MODAL */
+#modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.7); z-index: 1000; align-items: center; justify-content: center; }
+#modal-overlay.open { display: flex; }
+#modal { background: var(--bg1); border: 1px solid var(--border); border-radius: 8px; padding: 22px; width: 380px; max-width: 92vw; max-height: 88vh; overflow-y: auto; }
+.modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 18px; }
+.modal-title { color: var(--accent); font-size: 14px; font-weight: 700; }
+.modal-close { background: none; color: var(--text2); font-size: 20px; }
+.form-label { display: block; font-size: 9px; color: var(--text2); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 4px; }
+.form-group { margin-bottom: 13px; }
+.form-row { display: flex; gap: 10px; }
+.dep-btn { padding: 4px 8px; font-size: 10px; background: var(--bg2); border: 1px solid var(--border); color: var(--text2); border-radius: 3px; margin: 2px; }
+.dep-btn.active { background: var(--accent-dim); border-color: var(--accent); color: var(--accent); }
+#save-btn { flex: 1; padding: 10px; background: var(--accent); color: #000; font-weight: 700; border-radius: var(--radius); font-size: 12px; }
+#delete-btn { padding: 10px 16px; background: var(--bg2); border: 1px solid var(--red); color: var(--red); border-radius: var(--radius); font-size: 12px; display: none; }
+
+/* BREAK MODAL */
+#break-modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.7); z-index: 1000; align-items: center; justify-content: center; }
+#break-modal-overlay.open { display: flex; }
+
+@media (max-width: 600px) {
+  #sidebar { width: 44px; min-width: 44px; }
+  #sidebar #logo { display: none; }
+  #sidebar #task-list { display: none; }
+  #sidebar #sidebar-header { justify-content: center; padding: 12px 6px; }
+  #sidebar #tab-bar { flex-direction: column; }
+  #sidebar .tab-btn { padding: 10px 2px; font-size: 14px; }
+  #toolbar { padding: 6px 10px; }
+  #date-label { font-size: 11px; }
+}
+</style>
+</head>
+<body>
+<div id="app">
+  <div id="sidebar">
+    <div id="sidebar-header">
+      <span id="logo">COMMAND</span>
+      <button id="collapse-btn" onclick="toggleSidebar()">←</button>
+    </div>
+    <div id="tab-bar">
+      <button class="tab-btn active" data-tab="tasks" onclick="switchTab('tasks')">Tasks</button>
+      <button class="tab-btn" data-tab="todo" onclick="switchTab('todo')">✓</button>
+      <button class="tab-btn" data-tab="analytics" onclick="switchTab('analytics')">Stats</button>
+      <button class="tab-btn" data-tab="achievements" onclick="switchTab('achievements')">★</button>
+      <button class="tab-btn" data-tab="decide" onclick="switchTab('decide')">⚖</button>
+      <button class="tab-btn" data-tab="notes" onclick="switchTab('notes')">📝</button>
+      <button class="tab-btn" data-tab="sync" onclick="switchTab('sync')">⚙</button>
+    </div>
+    <div id="task-list">
+      <button id="add-task-btn" onclick="openModal(null)">+ New Task</button>
+      <button id="add-break-btn" onclick="openBreakModal()">+ Break / DND Block</button>
+      <div id="task-list-items"></div>
+    </div>
+  </div>
+
+  <div id="main">
+    <div id="toolbar">
+      <div style="display:flex;align-items:center;gap:6px;" id="nav-controls">
+        <button class="nav-btn" onclick="navigateDate(-1)">‹</button>
+        <button id="today-btn" onclick="goToday()">Today</button>
+        <button class="nav-btn" onclick="navigateDate(1)">›</button>
+        <span id="date-label"></span>
+      </div>
+      <div id="view-buttons" style="display:flex;gap:4px;align-items:center;">
+        <button class="view-btn active" data-view="day" onclick="setView('day')">Day</button>
+        <button class="view-btn" data-view="week" onclick="setView('week')">Week</button>
+        <button class="view-btn" data-view="month" onclick="setView('month')">Month</button>
+        <button id="link-btn" onclick="toggleLinkMode()" title="Link two tasks">🔗 Link</button>
+      </div>
+    </div>
+    <div id="link-hint">Click a task to start linking...</div>
+
+    <div id="gantt-container">
+      <div id="gantt-header"></div>
+      <div id="gantt-body">
+        <svg id="dep-svg" style="position:absolute;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:6;overflow:visible;">
+          <defs><marker id="arrow" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="rgba(232,160,32,0.35)" /></marker></defs>
+        </svg>
+      </div>
+    </div>
+
+    <!-- Todo Panel -->
+    <div id="todo-panel" class="panel">
+      <div class="panel-title">QUICK TODO</div>
+      <div style="display:flex;gap:8px;margin-bottom:16px;">
+        <input id="todo-input" placeholder="Type a task and press Enter..." style="flex:1;padding:10px;font-size:13px;" onkeydown="if(event.key==='Enter'){event.preventDefault();addTodo()}" />
+        <button onclick="addTodo()" style="padding:10px 16px;background:var(--accent);color:#000;font-weight:700;border-radius:var(--radius);font-size:12px;">Add</button>
+      </div>
+      <div style="display:flex;gap:8px;margin-bottom:12px;">
+        <button class="tag-filter-btn active" id="todo-filter-all" onclick="setTodoFilter('all')">All</button>
+        <button class="tag-filter-btn" id="todo-filter-unscheduled" onclick="setTodoFilter('unscheduled')">Unscheduled</button>
+        <button class="tag-filter-btn" id="todo-filter-scheduled" onclick="setTodoFilter('scheduled')">Scheduled</button>
+      </div>
+      <div id="todo-list"></div>
+    </div>
+
+    <div id="analytics-panel" class="panel">
+      <div class="panel-title">ANALYTICS</div>
+      <div class="stat-grid" id="stat-grid"></div>
+      <div class="chart-row">
+        <div class="chart-box"><div class="chart-title">Time by Category</div><div id="pie-area"></div></div>
+        <div class="chart-box"><div class="chart-title">Time by Tag</div><div id="bar-area"></div></div>
+      </div>
+      <!-- Completed Tasks Section -->
+      <div style="margin-top:20px;">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">
+          <div class="panel-title" style="margin-bottom:0;">COMPLETED TASKS</div>
+          <button onclick="downloadCompleted()" style="padding:6px 12px;background:var(--bg2);border:1px solid var(--accent);color:var(--accent);border-radius:var(--radius);font-size:10px;font-family:var(--font);">⬇ Download CSV</button>
+        </div>
+        <div style="display:flex;gap:8px;align-items:center;margin-bottom:12px;flex-wrap:wrap;">
+          <label class="form-label" style="margin:0;white-space:nowrap;">Filter by date:</label>
+          <input type="date" id="completed-from" style="width:auto;padding:5px 8px;font-size:11px;" onchange="renderAnalytics()" />
+          <span style="color:var(--text2);font-size:11px;">to</span>
+          <input type="date" id="completed-to" style="width:auto;padding:5px 8px;font-size:11px;" onchange="renderAnalytics()" />
+          <button onclick="clearCompletedFilter()" style="padding:5px 10px;background:var(--bg2);border:1px solid var(--border);color:var(--text2);border-radius:var(--radius);font-size:10px;">Clear</button>
+        </div>
+        <div id="completed-filters" style="margin-bottom:10px;"></div>
+        <div id="completed-list"></div>
+      </div>
+    </div>
+
+    <div id="achievements-panel" class="panel">
+      <div class="panel-title">ACHIEVEMENTS</div>
+      <div id="achieve-filters"></div>
+      <div id="achieve-list"></div>
+    </div>
+
+    <div id="decide-panel" class="panel">
+      <div class="panel-title">DECISION ENGINE</div>
+      <div class="form-group"><input id="decision-title" placeholder="What decision are you facing?" /></div>
+      <div id="decision-questions"></div>
+      <div style="display:flex;gap:8px;margin-bottom:8px;">
+        <input id="new-question" placeholder="Add a question..." style="flex:1" />
+        <button onclick="addQuestion()" style="padding:8px 14px;background:var(--bg2);border:1px solid var(--border);color:var(--accent);border-radius:var(--radius);">+</button>
+      </div>
+      <button id="eval-btn" onclick="evaluateDecision()">EVALUATE</button>
+      <div class="result-box" id="result-box"><div class="result-pct" id="result-pct"></div><div class="result-verdict" id="result-verdict"></div></div>
+    </div>
+
+    <!-- Notes Panel -->
+    <div id="notes-panel" class="panel">
+      <div style="display:flex;height:100%;">
+        <!-- Notes sidebar list -->
+        <div id="notes-sidebar" style="width:220px;min-width:220px;border-right:1px solid var(--border);display:flex;flex-direction:column;margin-right:0;">
+          <div style="padding:10px;border-bottom:1px solid var(--border);">
+            <button onclick="createNote()" style="width:100%;padding:8px;background:var(--bg2);border:1px dashed var(--border);color:var(--accent);font-size:12px;border-radius:var(--radius);font-family:var(--font);cursor:pointer;">+ New Note</button>
+          </div>
+          <div style="padding:8px;border-bottom:1px solid var(--border);">
+            <input id="note-search" placeholder="Search notes..." oninput="renderNotes()" style="padding:6px 8px;font-size:11px;" />
+          </div>
+          <div id="notes-list" style="flex:1;overflow-y:auto;padding:4px;"></div>
+        </div>
+        <!-- Note editor -->
+        <div id="note-editor" style="flex:1;display:flex;flex-direction:column;padding:0;">
+          <div id="note-empty-state" style="flex:1;display:flex;align-items:center;justify-content:center;color:var(--text2);font-size:12px;">
+            Select a note or create a new one
+          </div>
+          <div id="note-edit-area" style="flex:1;display:none;flex-direction:column;">
+            <div style="padding:12px 16px;border-bottom:1px solid var(--border);display:flex;gap:8px;align-items:center;">
+              <input id="note-title" placeholder="Note title..." style="flex:1;padding:8px 10px;font-size:14px;font-weight:600;border:none;background:transparent;color:var(--text);" oninput="autoSaveNote()" />
+              <select id="note-link-task" style="width:auto;padding:5px 8px;font-size:10px;max-width:180px;" onchange="autoSaveNote()">
+                <option value="">No linked task</option>
+              </select>
+              <button onclick="deleteNote()" style="background:none;border:1px solid var(--red);color:var(--red);padding:4px 10px;border-radius:var(--radius);font-size:10px;cursor:pointer;font-family:var(--font);">Delete</button>
+            </div>
+            <div style="padding:4px 16px 0;display:flex;gap:4px;border-bottom:1px solid var(--border);padding-bottom:6px;">
+              <button onclick="formatNote('bold')" title="Bold" style="background:var(--bg2);border:1px solid var(--border);color:var(--text);padding:4px 8px;border-radius:3px;font-size:11px;font-weight:700;">B</button>
+              <button onclick="formatNote('italic')" title="Italic" style="background:var(--bg2);border:1px solid var(--border);color:var(--text);padding:4px 8px;border-radius:3px;font-size:11px;font-style:italic;">I</button>
+              <button onclick="formatNote('insertUnorderedList')" title="Bullet list" style="background:var(--bg2);border:1px solid var(--border);color:var(--text);padding:4px 8px;border-radius:3px;font-size:11px;">• List</button>
+              <button onclick="formatNote('insertOrderedList')" title="Numbered list" style="background:var(--bg2);border:1px solid var(--border);color:var(--text);padding:4px 8px;border-radius:3px;font-size:11px;">1. List</button>
+              <span style="flex:1;"></span>
+              <span id="note-saved-indicator" style="font-size:9px;color:var(--text2);align-self:center;">Saved</span>
+            </div>
+            <div id="note-content" contenteditable="true" style="flex:1;padding:16px;font-size:12px;line-height:1.8;color:var(--text);overflow-y:auto;outline:none;min-height:200px;" oninput="autoSaveNote()"></div>
+            <div id="note-meta" style="padding:8px 16px;border-top:1px solid var(--border);font-size:9px;color:var(--text2);"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Sync Panel -->
+    <div id="sync-panel" class="panel">
+      <div class="panel-title">SYNC & BACKUP</div>
+
+      <div style="background:var(--bg2);border:1px solid var(--border);border-radius:6px;padding:16px;margin-bottom:16px;">
+        <div style="font-size:11px;color:var(--accent);font-weight:600;margin-bottom:10px;text-transform:uppercase;letter-spacing:1px;">Copy / Paste Sync (for Notion)</div>
+        <p style="font-size:11px;color:var(--text2);line-height:1.6;margin-bottom:12px;">
+          Copy your data → paste into a Notion code block → on another device, copy from Notion → paste here.
+        </p>
+        <div style="display:flex;gap:8px;margin-bottom:10px;">
+          <button onclick="copyDataToClipboard()" style="flex:1;padding:10px;background:var(--accent);color:#000;font-weight:700;border-radius:var(--radius);font-size:12px;">📋 Copy Data</button>
+          <button onclick="togglePasteArea()" style="flex:1;padding:10px;background:var(--bg1);border:1px solid var(--accent);color:var(--accent);font-weight:700;border-radius:var(--radius);font-size:12px;">📥 Paste Data</button>
+        </div>
+        <div id="paste-area" style="display:none;">
+          <textarea id="paste-input" rows="5" placeholder="Paste your JSON data here..." style="margin-bottom:8px;font-size:10px;"></textarea>
+          <button onclick="pasteDataFromClipboard()" style="width:100%;padding:8px;background:var(--green);color:#000;font-weight:700;border-radius:var(--radius);font-size:11px;">✓ Load Pasted Data</button>
+        </div>
+        <div id="copy-status" style="font-size:10px;color:var(--green);margin-top:6px;display:none;"></div>
+      </div>
+
+      <div style="background:var(--bg2);border:1px solid var(--border);border-radius:6px;padding:16px;margin-bottom:16px;">
+        <div style="font-size:11px;color:var(--accent);font-weight:600;margin-bottom:10px;text-transform:uppercase;letter-spacing:1px;">File Export / Import</div>
+        <div style="display:flex;gap:8px;margin-bottom:8px;">
+          <button onclick="exportData()" style="flex:1;padding:10px;background:var(--bg1);border:1px solid var(--accent);color:var(--accent);font-weight:700;border-radius:var(--radius);font-size:12px;">⬇ Export File</button>
+          <button onclick="document.getElementById('import-file').click()" style="flex:1;padding:10px;background:var(--bg1);border:1px solid var(--accent);color:var(--accent);font-weight:700;border-radius:var(--radius);font-size:12px;">⬆ Import File</button>
+        </div>
+        <input type="file" id="import-file" accept=".json" style="display:none" onchange="importData(event)" />
+      </div>
+
+      <div style="background:var(--bg2);border:1px solid var(--border);border-radius:6px;padding:16px;">
+        <div style="font-size:11px;color:var(--red);font-weight:600;margin-bottom:10px;text-transform:uppercase;letter-spacing:1px;">Danger Zone</div>
+        <button onclick="clearAllData()" style="padding:10px 16px;background:var(--bg1);border:1px solid var(--red);color:var(--red);border-radius:var(--radius);font-size:12px;width:100%;">🗑 Clear All Data</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Task Modal -->
+<div id="modal-overlay" onclick="closeModal()">
+  <div id="modal" onclick="event.stopPropagation()">
+    <div class="modal-header">
+      <span class="modal-title" id="modal-title">New Task</span>
+      <button class="modal-close" onclick="closeModal()">×</button>
+    </div>
+    <div class="form-group"><label class="form-label">Title</label><input id="f-title" placeholder="Task name..." /></div>
+    <div class="form-row">
+      <div class="form-group" style="flex:1"><label class="form-label">Category</label><select id="f-category"></select></div>
+      <div class="form-group" style="flex:1"><label class="form-label">Duration (min)</label><input id="f-duration" type="number" min="5" step="5" value="60" /></div>
+    </div>
+    <div class="form-row">
+      <div class="form-group" style="flex:1"><label class="form-label">Date</label><input id="f-date" type="date" /></div>
+      <div class="form-group" style="flex:1"><label class="form-label">Start Time</label><input id="f-time" type="time" value="09:00" /></div>
+    </div>
+    <div class="form-group"><label class="form-label">Depends On</label><div id="f-deps" style="display:flex;flex-wrap:wrap;gap:3px;"></div></div>
+    <div class="form-group"><label class="form-label">Tags</label>
+      <div id="f-preset-tags" style="display:flex;flex-wrap:wrap;gap:4px;margin-bottom:6px;"></div>
+      <input id="f-tags-custom" placeholder="Add custom tag + Enter" style="font-size:11px;" onkeydown="if(event.key==='Enter'){event.preventDefault();addCustomTag()}" />
+      <div id="f-active-tags" style="display:flex;flex-wrap:wrap;gap:4px;margin-top:6px;"></div>
+    </div>
+    <div class="form-group"><label class="form-label">Notes</label><textarea id="f-notes" rows="3" placeholder="Notes about this task..."></textarea></div>
+    <div class="form-group"><label style="display:flex;align-items:center;gap:8px;cursor:pointer;"><input type="checkbox" id="f-completed" style="accent-color:var(--accent)" /><span style="font-size:12px;">Mark as completed</span></label></div>
+    <div style="display:flex;gap:8px;">
+      <button id="save-btn" onclick="saveTask()">Save</button>
+      <button id="delete-btn" onclick="deleteTask()">Delete</button>
+    </div>
+  </div>
+</div>
+
+<!-- Break Modal -->
+<div id="break-modal-overlay" onclick="closeBreakModal()">
+  <div id="modal" onclick="event.stopPropagation()" style="background:var(--bg1);border:1px solid var(--border);border-radius:8px;padding:22px;width:340px;max-width:92vw;">
+    <div class="modal-header">
+      <span class="modal-title" style="color:var(--red)">Break / DND Block</span>
+      <button class="modal-close" onclick="closeBreakModal()">×</button>
+    </div>
+    <div class="form-group"><label class="form-label">Label</label><input id="b-label" placeholder="Lunch, Break, DND..." value="Break" /></div>
+    <div class="form-row">
+      <div class="form-group" style="flex:1"><label class="form-label">Date</label><input id="b-date" type="date" /></div>
+    </div>
+    <div class="form-row">
+      <div class="form-group" style="flex:1"><label class="form-label">Start Time</label><input id="b-start" type="time" value="12:00" /></div>
+      <div class="form-group" style="flex:1"><label class="form-label">End Time</label><input id="b-end" type="time" value="13:00" /></div>
+    </div>
+    <button onclick="saveBreak()" style="width:100%;padding:10px;background:var(--red);color:#fff;font-weight:700;border-radius:var(--radius);font-size:12px;">Add Break</button>
+  </div>
+</div>
+
+<script>
+// ══════════════════════════════════════
+// 1. DATA & STATE
+// ══════════════════════════════════════
+let tasks = [];
+let breaks = [];  // { id, label, start (ms), end (ms) }
+let notes = [];   // { id, title, content, linkedTaskId, createdAt, updatedAt }
+let activeNoteId = null;
+let noteSaveTimer = null;
+let currentView = "day";
+let referenceDate = new Date();
+let selectedTaskId = null;
+let editingTaskId = null;
+let activeTab = "tasks";
+let sidebarCollapsed = window.innerWidth < 600;
+let linkMode = false;       // Are we in "link tasks" mode?
+let linkSourceId = null;    // First task clicked in link mode
+
+let decisionQuestions = [
+  { id: "q1", text: "How crucial is this? (1-5)", weight: 2, answer: 0 },
+  { id: "q2", text: "Time it consumes? (1=lot, 5=little)", weight: 1.5, answer: 0 },
+  { id: "q3", text: "Can it be done later? (1=yes, 5=no)", weight: 1.5, answer: 0 },
+  { id: "q4", text: "Impact on my life? (1-5)", weight: 2, answer: 0 },
+  { id: "q5", text: "Will it help me learn? (1-5)", weight: 1, answer: 0 },
+];
+
+// ══════════════════════════════════════
+// 2. CONSTANTS
+// ══════════════════════════════════════
+const COLORS = {
+  "Learning": "#e8a020", "Work": "#4a90d9", "Practice": "#34c77b",
+  "Planning": "#8b6fc0", "Review": "#e05252", "Personal": "#d4619b", "Other": "#6b7280",
+};
+const CATEGORIES = Object.keys(COLORS);
+const ROW_H = 46;
+const STORAGE_KEY = "command_center_v3";
+const BREAKS_KEY = "command_center_breaks";
+const NOTES_KEY = "command_center_notes";
+
+// Responsive: calculate MPP based on available screen width
+function getMPP() {
+  if (currentView === "day") {
+    // Fixed: 120px per hour = 2880px total width. Scroll horizontally.
+    // 60 min / 120px = 0.5 min per pixel. Short tasks (15min = 30px) are clearly visible.
+    return 0.5;
+  } else if (currentView === "week") {
+    // Fixed: ~300px per day = 2100px total
+    return 1440 / 300;
+  } else {
+    // Month: ~80px per day
+    return 1440 / 80;
+  }
+}
+
+// Scroll the Gantt to the current time (or 8 AM) so you don't start at midnight
+function scrollToNow() {
+  const container = document.getElementById("gantt-container");
+  if (!container || activeTab !== "tasks") return;
+  const mpp = getMPP();
+  const tlStart = getStart(currentView, referenceDate);
+  const now = new Date();
+  // Scroll to 1 hour before current time, or 7 AM if viewing a different day
+  let target;
+  if (now.toDateString() === referenceDate.toDateString()) {
+    target = new Date(now); target.setMinutes(target.getMinutes() - 60);
+  } else {
+    target = new Date(tlStart); target.setHours(7, 0, 0, 0);
+  }
+  const scrollX = Math.max(0, ((target - tlStart) / 60000) / mpp);
+  container.scrollLeft = scrollX;
+}
+
+// ══════════════════════════════════════
+// 3. HELPERS
+// ══════════════════════════════════════
+function genId() { return Math.random().toString(36).substr(2, 9); }
+function fmtDur(m) { if (m < 60) return m + "m"; const h = Math.floor(m / 60), r = m % 60; return r ? h + "h " + r + "m" : h + "h"; }
+function fmtDate(d) { return d.toLocaleDateString("en-US", { month: "short", day: "numeric" }); }
+function fmtTime(d) { return d.toLocaleTimeString("en-US", { hour: "numeric", minute: "2-digit", hour12: true }); }
+function fmtTimeShort(d) { return d.toLocaleTimeString("en-US", { hour: "numeric", hour12: true }); }
+function isoDate(d) { return d.toISOString().slice(0, 10); }
+function timeStr(d) { return d.toTimeString().slice(0, 5); }
+
+function getStart(view, ref) {
+  const d = new Date(ref);
+  if (view === "day") { d.setHours(0,0,0,0); return d; }
+  if (view === "week") { d.setDate(d.getDate() - d.getDay()); d.setHours(0,0,0,0); return d; }
+  d.setDate(1); d.setHours(0,0,0,0); return d;
+}
+function getEnd(view, start) {
+  const d = new Date(start);
+  if (view === "day") d.setDate(d.getDate() + 1);
+  else if (view === "week") d.setDate(d.getDate() + 7);
+  else d.setMonth(d.getMonth() + 1);
+  return d;
+}
+
+function save() {
+  try {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(tasks));
+    localStorage.setItem(BREAKS_KEY, JSON.stringify(breaks));
+    localStorage.setItem(NOTES_KEY, JSON.stringify(notes));
+  } catch(e) {}
+}
+
+function load() {
+  try {
+    const s = localStorage.getItem(STORAGE_KEY);
+    if (s) { tasks = JSON.parse(s).map(t => ({...t, start: new Date(t.start).getTime()})); }
+    else {
+      tasks = [
+        { id: "t1", title: "Morning Planning", category: "Planning", start: new Date().setHours(9,0,0,0), duration: 30, dependencies: [], notes: "", tags: ["Daily"], completed: false },
+        { id: "t2", title: "Deep Work Block", category: "Work", start: new Date().setHours(9,30,0,0), duration: 120, dependencies: ["t1"], notes: "", tags: ["Focus"], completed: false },
+        { id: "t3", title: "Learning Session", category: "Learning", start: new Date().setHours(14,0,0,0), duration: 60, dependencies: [], notes: "", tags: ["Growth"], completed: false },
+      ];
+    }
+    const b = localStorage.getItem(BREAKS_KEY);
+    if (b) breaks = JSON.parse(b);
+    const n = localStorage.getItem(NOTES_KEY);
+    if (n) notes = JSON.parse(n);
+  } catch(e) {}
+}
+
+/*
+  DEPENDENCY CASCADE — handles chains of 10+ linked tasks.
+  When task A moves, all tasks depending on A shift proportionally.
+  cascadeForward() and cascadeBackward() handle this (defined in drag section).
+*/
+
+// ══════════════════════════════════════
+// 4. RENDERING
+// ══════════════════════════════════════
+function renderAll() {
+  renderSidebar();
+  renderToolbar();
+  if (activeTab === "tasks") renderGantt();
+  if (activeTab === "todo") renderTodo();
+  if (activeTab === "analytics") renderAnalytics();
+  if (activeTab === "achievements") renderAchievements();
+  if (activeTab === "decide") renderDecision();
+  if (activeTab === "notes") renderNotes();
+  if (activeTab === "sync") { document.getElementById("sync-panel").classList.add("active"); }
+}
+
+function renderSidebar() {
+  const sb = document.getElementById("sidebar");
+  if (sidebarCollapsed) sb.classList.add("collapsed"); else sb.classList.remove("collapsed");
+  document.getElementById("collapse-btn").textContent = sidebarCollapsed ? "→" : "←";
+  document.querySelectorAll(".tab-btn").forEach(btn => {
+    btn.classList.toggle("active", btn.dataset.tab === activeTab);
+    const icons = { tasks: "☰", todo: "✓", analytics: "◐", achievements: "★", decide: "⚖", notes: "📝", sync: "⚙" };
+    const labels = { tasks: "Tasks", todo: "✓", analytics: "Stats", achievements: "★", decide: "⚖", notes: "📝", sync: "⚙" };
+    btn.textContent = sidebarCollapsed ? icons[btn.dataset.tab] : labels[btn.dataset.tab];
+  });
+  const listEl = document.getElementById("task-list-items");
+  if (!listEl) return;
+  let html = "";
+  const sorted = [...tasks].filter(t => !t.completed).sort((a, b) => a.start - b.start);
+  sorted.forEach(t => {
+    const col = COLORS[t.category] || "#666";
+    html += `<div class="task-item${selectedTaskId === t.id ? ' selected' : ''}" style="border-left-color:${col}" onclick="selectTask('${t.id}')" ondblclick="openModal('${t.id}')">
+      <div class="task-item-title"><span>${t.completed ? "✓ " : ""}${t.title}</span><button class="task-del-btn" onclick="event.stopPropagation();quickDelete('${t.id}')">×</button></div>
+      <div class="task-item-meta">${fmtDur(t.duration)} · ${t.category}</div>
+    </div>`;
+  });
+  // Show breaks in sidebar
+  breaks.forEach(b => {
+    html += `<div class="task-item" style="border-left-color:var(--red);opacity:0.6" onclick="event.stopPropagation()">
+      <div class="task-item-title"><span>☰ ${b.label}</span><button class="task-del-btn" onclick="event.stopPropagation();deleteBreak('${b.id}')">×</button></div>
+      <div class="task-item-meta">${fmtTime(new Date(b.start))} - ${fmtTime(new Date(b.end))}</div>
+    </div>`;
+  });
+  listEl.innerHTML = html;
+}
+
+function renderToolbar() {
+  const navCtrl = document.getElementById("nav-controls");
+  const viewBtns = document.getElementById("view-buttons");
+  navCtrl.style.display = activeTab === "tasks" ? "flex" : "none";
+  viewBtns.style.display = activeTab === "tasks" ? "flex" : "none";
+  // Reset link mode when switching away from tasks
+  if (activeTab !== "tasks" && linkMode) {
+    linkMode = false; linkSourceId = null;
+    document.getElementById("link-btn").classList.remove("active");
+    document.getElementById("link-hint").style.display = "none";
+  }
+
+  const d = referenceDate;
+  let label = "";
+  if (currentView === "day") label = d.toLocaleDateString("en-US", { weekday: "long", month: "long", day: "numeric" });
+  else if (currentView === "week") { const s = getStart("week", d), e = new Date(s); e.setDate(e.getDate() + 6); label = fmtDate(s) + " — " + fmtDate(e); }
+  else label = d.toLocaleDateString("en-US", { month: "long", year: "numeric" });
+  document.getElementById("date-label").textContent = label;
+  document.querySelectorAll(".view-btn").forEach(btn => btn.classList.toggle("active", btn.dataset.view === currentView));
+}
+
+function renderGantt() {
+  const container = document.getElementById("gantt-container");
+  const header = document.getElementById("gantt-header");
+  const body = document.getElementById("gantt-body");
+  container.style.display = activeTab === "tasks" ? "" : "none";
+
+  const mpp = getMPP();
+  const tlStart = getStart(currentView, referenceDate);
+  const tlEnd = getEnd(currentView, tlStart);
+  const totalMin = (tlEnd - tlStart) / 60000;
+  const totalW = totalMin / mpp;
+
+  header.style.minWidth = totalW + "px";
+  body.style.minWidth = totalW + "px";
+
+  // RESPONSIVE GRID LINES — calculate spacing, skip labels if too tight
+  let headerHtml = "", gridHtml = "";
+  const lines = [];
+
+  if (currentView === "day") {
+    // Calculate how many pixels per hour
+    const pxPerHour = 60 / mpp;
+    // If less than 55px per hour, show every 2 or 3 hours
+    let step = 1;
+    if (pxPerHour < 35) step = 3;
+    else if (pxPerHour < 55) step = 2;
+
+    for (let h = 0; h < 24; h++) {
+      const d = new Date(tlStart); d.setHours(h, 0, 0, 0);
+      const off = ((d - tlStart) / 60000) / mpp;
+      const showLabel = h % step === 0;
+      lines.push({ off, label: showLabel ? fmtTimeShort(d) : "", major: showLabel });
+    }
+  } else if (currentView === "week") {
+    for (let i = 0; i < 7; i++) {
+      const d = new Date(tlStart); d.setDate(d.getDate() + i);
+      const off = ((d - tlStart) / 60000) / mpp;
+      lines.push({ off, label: d.toLocaleDateString("en-US", { weekday: "short", day: "numeric" }), major: true });
+    }
+  } else {
+    const d = new Date(tlStart);
+    const pxPerDay = (24 * 60) / mpp;
+    let step = 1;
+    if (pxPerDay < 25) step = 7;
+    else if (pxPerDay < 45) step = 3;
+    let dayIdx = 0;
+    while (d < tlEnd) {
+      const off = ((d - tlStart) / 60000) / mpp;
+      const showLabel = dayIdx % step === 0 || d.getDate() === 1;
+      lines.push({ off, label: showLabel ? fmtDate(d) : "", major: showLabel });
+      d.setDate(d.getDate() + 1);
+      dayIdx++;
+    }
+  }
+
+  lines.forEach(l => {
+    headerHtml += `<div class="grid-label${l.major ? '' : ' minor'}" style="left:${l.off}px">${l.label}</div>`;
+    gridHtml += `<div class="gantt-gridline${l.major ? ' major' : ''}" style="left:${l.off}px"></div>`;
+  });
+  header.innerHTML = headerHtml;
+
+  // Now line
+  const now = new Date();
+  let nowHtml = "";
+  if (now >= tlStart && now <= tlEnd) {
+    const off = ((now - tlStart) / 60000) / mpp;
+    nowHtml = `<div id="now-line" style="left:${off}px"><div id="now-dot"></div></div>`;
+  }
+
+  // Break blocks
+  let breakHtml = "";
+  breaks.forEach(b => {
+    const bStart = new Date(b.start);
+    const bEnd = new Date(b.end);
+    if (bEnd <= tlStart || bStart >= tlEnd) return;
+    const left = Math.max(0, ((bStart - tlStart) / 60000) / mpp);
+    const right = ((bEnd - tlStart) / 60000) / mpp;
+    const w = right - left;
+    breakHtml += `<div class="break-block" style="left:${left}px;width:${w}px;top:0;"><span class="break-label">${b.label}</span></div>`;
+  });
+
+  // Sorted tasks — completed tasks are hidden (moved to Stats)
+  const sorted = [...tasks].filter(t => !t.completed).sort((a, b) => a.start - b.start);
+
+  // Rows
+  let rowHtml = "";
+  sorted.forEach((_, i) => {
+    rowHtml += `<div class="gantt-row" style="top:${i * ROW_H}px"></div>`;
+  });
+
+  // Task bars with resize handles and delete button
+  let barHtml = "";
+  sorted.forEach((t, i) => {
+    const col = COLORS[t.category] || "#666";
+    const left = ((new Date(t.start) - tlStart) / 60000) / mpp;
+    const w = Math.max(t.duration / mpp, 24);
+    const opacity = t.completed ? 0.5 : 1;
+    const sel = selectedTaskId === t.id ? " selected" : "";
+    const linkSrc = (linkMode && linkSourceId === t.id) ? " link-source" : "";
+    barHtml += `<div class="task-bar${sel}${linkSrc}" data-id="${t.id}" 
+      style="left:${left}px;top:${i * ROW_H + 8}px;width:${w}px;
+             background:${col}30;border:1px solid ${col}55;border-left:3px solid ${col};opacity:${opacity}"
+      onmousedown="startDrag(event,'${t.id}','move')"
+      ontouchstart="startDrag(event,'${t.id}','move')"
+      onclick="handleBarClick('${t.id}')">
+      <div class="resize-handle resize-handle-left" onmousedown="event.stopPropagation();event.preventDefault();startDrag(event,'${t.id}','resize-left')" ontouchstart="event.stopPropagation();event.preventDefault();startDrag(event,'${t.id}','resize-left')"></div>
+      <span class="task-bar-label">${t.completed ? "✓ " : ""}${t.title} · ${fmtDur(t.duration)}</span>
+      <div class="task-bar-tooltip">${t.title}<br><span style="color:var(--accent)">${fmtTime(new Date(t.start))} — ${fmtTime(new Date(t.start + t.duration * 60000))}</span> · ${fmtDur(t.duration)} · ${t.category}</div>
+      <div class="resize-handle resize-handle-right" onmousedown="event.stopPropagation();startDrag(event,'${t.id}','resize-right')" ontouchstart="event.stopPropagation();startDrag(event,'${t.id}','resize-right')"></div>
+      <div class="bar-delete" onclick="event.stopPropagation();quickDelete('${t.id}')">×</div>
+    </div>`;
+  });
+
+  // Dependency SVG
+  const svg = document.getElementById("dep-svg");
+  let pathHtml = `<defs><marker id="arrow" markerWidth="10" markerHeight="7" refX="10" refY="3.5" orient="auto"><polygon points="0 0, 10 3.5, 0 7" fill="rgba(232,160,32,0.6)" /></marker></defs>`;
+  sorted.forEach((t, i) => {
+    (t.dependencies || []).forEach(depId => {
+      const di = sorted.findIndex(x => x.id === depId);
+      if (di < 0) return;
+      const dep = sorted[di];
+      const x1 = ((new Date(dep.start) - tlStart) / 60000) / mpp + Math.max(dep.duration / mpp, 24);
+      const y1 = di * ROW_H + 23;
+      const x2 = ((new Date(t.start) - tlStart) / 60000) / mpp;
+      const y2 = i * ROW_H + 23;
+      const mx = (x1 + x2) / 2;
+      // Clickable hit area (invisible wide path for clicking)
+      pathHtml += `<path d="M ${x1} ${y1} C ${mx} ${y1}, ${mx} ${y2}, ${x2} ${y2}" fill="none" stroke="transparent" stroke-width="12" style="pointer-events:stroke;cursor:pointer" onclick="unlinkDep('${t.id}','${depId}')" />`;
+      // Visible arrow
+      pathHtml += `<path d="M ${x1} ${y1} C ${mx} ${y1}, ${mx} ${y2}, ${x2} ${y2}" fill="none" stroke="rgba(232,160,32,0.5)" stroke-width="2" stroke-dasharray="6,3" marker-end="url(#arrow)" style="pointer-events:none" />`;
+    });
+  });
+  svg.innerHTML = pathHtml;
+
+  body.style.minHeight = (sorted.length * ROW_H + 40) + "px";
+  body.innerHTML = breakHtml + gridHtml + nowHtml + rowHtml + barHtml;
+  body.appendChild(svg);
+}
+
+function renderAnalytics() {
+  const panel = document.getElementById("analytics-panel");
+  panel.classList.toggle("active", activeTab === "analytics");
+  if (activeTab !== "analytics") return;
+  const realTasks = tasks;
+  const total = realTasks.length;
+  const done = realTasks.filter(t => t.completed).length;
+  const totalMin = realTasks.reduce((s, t) => s + t.duration, 0);
+  const doneMin = realTasks.filter(t => t.completed).reduce((s, t) => s + t.duration, 0);
+  document.getElementById("stat-grid").innerHTML = `
+    <div class="stat-box"><div class="stat-value" style="color:var(--accent)">${total}</div><div class="stat-label">Total Tasks</div></div>
+    <div class="stat-box"><div class="stat-value" style="color:var(--green)">${done}</div><div class="stat-label">Completed</div></div>
+    <div class="stat-box"><div class="stat-value" style="color:var(--blue)">${fmtDur(totalMin)}</div><div class="stat-label">Total Time</div></div>
+    <div class="stat-box"><div class="stat-value" style="color:var(--purple)">${fmtDur(doneMin)}</div><div class="stat-label">Time Done</div></div>`;
+  const catMap = {};
+  realTasks.forEach(t => { catMap[t.category] = (catMap[t.category] || 0) + t.duration; });
+  const catEntries = Object.entries(catMap).sort((a, b) => b[1] - a[1]);
+  const catTotal = catEntries.reduce((s, e) => s + e[1], 0) || 1;
+  let conicParts = [], cumPct = 0, legendHtml = "";
+  catEntries.forEach(([name, mins]) => {
+    const pct = (mins / catTotal) * 100; const col = COLORS[name] || "#666";
+    conicParts.push(`${col} ${cumPct}% ${cumPct + pct}%`); cumPct += pct;
+    legendHtml += `<span class="pie-legend-item"><span class="pie-dot" style="background:${col}"></span>${name} ${fmtDur(mins)}</span>`;
+  });
+  document.getElementById("pie-area").innerHTML = `<div class="pie-chart" style="background:conic-gradient(${conicParts.join(",")})"></div><div class="pie-legend">${legendHtml}</div>`;
+  const tagMap = {};
+  realTasks.forEach(t => (t.tags || []).forEach(tag => { tagMap[tag] = (tagMap[tag] || 0) + t.duration; }));
+  const tagEntries = Object.entries(tagMap).sort((a, b) => b[1] - a[1]);
+  const maxTag = tagEntries.length ? tagEntries[0][1] : 1;
+  let barHtml = "";
+  tagEntries.forEach(([name, mins]) => { const pct = (mins / maxTag) * 100;
+    barHtml += `<div class="bar-row"><span class="bar-label">${name}</span><div class="bar-track"><div class="bar-fill" style="width:${pct}%;background:var(--accent)"><span class="bar-value">${fmtDur(mins)}</span></div></div></div>`;
+  });
+  document.getElementById("bar-area").innerHTML = barHtml || '<div style="color:var(--text2);font-size:11px;">Add tags to tasks to see data here.</div>';
+
+  // ── Completed tasks section ──
+  let completedTasks = tasks.filter(t => t.completed).sort((a, b) => b.start - a.start);
+
+  // Date filter
+  const fromEl = document.getElementById("completed-from");
+  const toEl = document.getElementById("completed-to");
+  if (fromEl && fromEl.value) {
+    const fromMs = new Date(fromEl.value + "T00:00:00").getTime();
+    completedTasks = completedTasks.filter(t => t.start >= fromMs);
+  }
+  if (toEl && toEl.value) {
+    const toMs = new Date(toEl.value + "T23:59:59").getTime();
+    completedTasks = completedTasks.filter(t => t.start <= toMs);
+  }
+
+  // Category filter
+  const completedCats = [...new Set(completedTasks.map(t => t.category))];
+  let catFilterHtml = `<button class="tag-filter-btn${!window._completedCatFilter ? ' active' : ''}" onclick="filterCompletedCat(null)">All (${completedTasks.length})</button>`;
+  completedCats.forEach(cat => {
+    const count = completedTasks.filter(t => t.category === cat).length;
+    catFilterHtml += `<button class="tag-filter-btn${window._completedCatFilter === cat ? ' active' : ''}" onclick="filterCompletedCat('${cat}')">${cat} (${count})</button>`;
+  });
+  document.getElementById("completed-filters").innerHTML = catFilterHtml;
+
+  if (window._completedCatFilter) {
+    completedTasks = completedTasks.filter(t => t.category === window._completedCatFilter);
+  }
+
+  // Completed total time
+  const completedMin = completedTasks.reduce((s, t) => s + t.duration, 0);
+
+  let compHtml = "";
+  if (!completedTasks.length) {
+    compHtml = '<div style="color:var(--text2);font-size:12px;text-align:center;padding:30px;">No completed tasks found.</div>';
+  } else {
+    compHtml += `<div style="font-size:11px;color:var(--accent);margin-bottom:10px;">${completedTasks.length} tasks · ${fmtDur(completedMin)} total</div>`;
+    completedTasks.forEach(t => {
+      const col = COLORS[t.category] || "#666";
+      const d = new Date(t.start);
+      const dateStr = d.toLocaleDateString("en-US", { weekday: "short", month: "short", day: "numeric" });
+      compHtml += `<div class="achievement-card" style="border-left-color:${col};display:flex;justify-content:space-between;align-items:center;">
+        <div>
+          <div style="font-size:12px;color:var(--text)">✓ ${t.title}</div>
+          <div style="font-size:10px;color:var(--text2);margin-top:3px">${dateStr} · ${fmtTime(d)} · ${fmtDur(t.duration)} · ${t.category}${t.tags?.length ? " · " + t.tags.join(", ") : ""}</div>
+        </div>
+        <button onclick="uncompleteTask('${t.id}')" title="Restore to active" style="background:none;border:1px solid var(--border);color:var(--text2);border-radius:3px;padding:3px 8px;font-size:9px;cursor:pointer;white-space:nowrap;font-family:var(--font);">↩ Undo</button>
+      </div>`;
+    });
+  }
+  document.getElementById("completed-list").innerHTML = compHtml;
+}
+
+function renderAchievements() {
+  const panel = document.getElementById("achievements-panel");
+  panel.classList.toggle("active", activeTab === "achievements");
+  if (activeTab !== "achievements") return;
+  const done = tasks.filter(t => t.completed);
+  const allTags = [...new Set(done.flatMap(t => t.tags || []))];
+  let filterHtml = `<button class="tag-filter-btn${!window._achFilter ? ' active' : ''}" onclick="filterAch(null)">All (${done.length})</button>`;
+  allTags.forEach(tag => { filterHtml += `<button class="tag-filter-btn${window._achFilter === tag ? ' active' : ''}" onclick="filterAch('${tag}')">${tag}</button>`; });
+  document.getElementById("achieve-filters").innerHTML = filterHtml;
+  const filtered = window._achFilter ? done.filter(t => t.tags && t.tags.includes(window._achFilter)) : done;
+  let listHtml = "";
+  if (!filtered.length) listHtml = '<div style="color:var(--text2);font-size:12px;text-align:center;padding:40px;">Complete tasks to see achievements here.</div>';
+  filtered.forEach(t => { const col = COLORS[t.category] || "#666";
+    listHtml += `<div class="achievement-card" style="border-left-color:${col}"><div style="font-size:12px;color:var(--text)">✓ ${t.title}</div><div style="font-size:10px;color:var(--text2);margin-top:4px">${fmtDur(t.duration)} · ${t.category}${t.tags?.length ? " · " + t.tags.join(", ") : ""}</div></div>`;
+  });
+  document.getElementById("achieve-list").innerHTML = listHtml;
+}
+
+function renderDecision() {
+  const panel = document.getElementById("decide-panel");
+  panel.classList.toggle("active", activeTab === "decide");
+  if (activeTab !== "decide") return;
+  let html = "";
+  decisionQuestions.forEach((q, qi) => {
+    let btns = "";
+    for (let v = 1; v <= 5; v++) btns += `<button class="rating-btn${q.answer === v ? ' active' : ''}" onclick="rateQ(${qi},${v})">${v}</button>`;
+    html += `<div class="decision-card"><div class="decision-q"><span>${q.text}</span><button onclick="removeQ(${qi})" style="background:none;color:var(--red);font-size:14px;border:none;cursor:pointer">×</button></div><div style="display:flex;gap:6px">${btns}</div></div>`;
+  });
+  document.getElementById("decision-questions").innerHTML = html;
+}
+
+// ── NOTES ──
+function renderNotes() {
+  const panel = document.getElementById("notes-panel");
+  panel.classList.toggle("active", activeTab === "notes");
+  if (activeTab !== "notes") return;
+
+  // Search filter
+  const searchEl = document.getElementById("note-search");
+  const query = searchEl ? searchEl.value.toLowerCase() : "";
+
+  let filtered = notes;
+  if (query) {
+    filtered = notes.filter(n =>
+      n.title.toLowerCase().includes(query) ||
+      (n.content || "").toLowerCase().includes(query)
+    );
+  }
+
+  // Sort by most recently updated
+  filtered = [...filtered].sort((a, b) => (b.updatedAt || b.createdAt) - (a.updatedAt || a.createdAt));
+
+  // Render note list
+  const listEl = document.getElementById("notes-list");
+  let listHtml = "";
+  if (!filtered.length && !query) {
+    listHtml = '<div style="color:var(--text2);font-size:11px;text-align:center;padding:20px;">No notes yet.<br>Click "+ New Note" to start.</div>';
+  } else if (!filtered.length && query) {
+    listHtml = '<div style="color:var(--text2);font-size:11px;text-align:center;padding:20px;">No notes match your search.</div>';
+  }
+  filtered.forEach(n => {
+    const isActive = activeNoteId === n.id;
+    const linkedTask = n.linkedTaskId ? tasks.find(t => t.id === n.linkedTaskId) : null;
+    const preview = (n.content || "").replace(/<[^>]*>/g, "").slice(0, 60);
+    const dateStr = new Date(n.updatedAt || n.createdAt).toLocaleDateString("en-US", { month: "short", day: "numeric" });
+    listHtml += `<div onclick="openNote('${n.id}')" style="
+      padding:8px 10px;margin-bottom:3px;cursor:pointer;border-radius:var(--radius);
+      background:${isActive ? '#1e1e1e' : 'transparent'};
+      border-left:3px solid ${isActive ? 'var(--accent)' : 'transparent'};
+      transition:background 0.1s;
+    ">
+      <div style="font-size:11px;color:${isActive ? 'var(--accent)' : 'var(--text)'};font-weight:${isActive ? '600' : '400'};margin-bottom:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${n.title || "Untitled"}</div>
+      <div style="font-size:9px;color:var(--text2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">
+        ${dateStr}${linkedTask ? ' · 🔗 ' + linkedTask.title : ''}${preview ? ' · ' + preview : ''}
+      </div>
+    </div>`;
+  });
+  listEl.innerHTML = listHtml;
+
+  // Show/hide editor
+  const emptyState = document.getElementById("note-empty-state");
+  const editArea = document.getElementById("note-edit-area");
+  if (activeNoteId) {
+    emptyState.style.display = "none";
+    editArea.style.display = "flex";
+  } else {
+    emptyState.style.display = "flex";
+    editArea.style.display = "none";
+  }
+
+  // Populate task link dropdown
+  if (activeNoteId) {
+    const linkSelect = document.getElementById("note-link-task");
+    const note = notes.find(n => n.id === activeNoteId);
+    let optHtml = '<option value="">No linked task</option>';
+    tasks.forEach(t => {
+      optHtml += `<option value="${t.id}"${note && note.linkedTaskId === t.id ? ' selected' : ''}>${t.title}</option>`;
+    });
+    linkSelect.innerHTML = optHtml;
+
+    // Show meta info
+    if (note) {
+      const created = new Date(note.createdAt).toLocaleString("en-US", { month: "short", day: "numeric", hour: "numeric", minute: "2-digit" });
+      const updated = new Date(note.updatedAt || note.createdAt).toLocaleString("en-US", { month: "short", day: "numeric", hour: "numeric", minute: "2-digit" });
+      document.getElementById("note-meta").textContent = `Created: ${created}  ·  Last edited: ${updated}`;
+    }
+  }
+}
+
+function createNote() {
+  const note = {
+    id: genId(),
+    title: "",
+    content: "",
+    linkedTaskId: "",
+    createdAt: Date.now(),
+    updatedAt: Date.now(),
+  };
+  notes.unshift(note);
+  activeNoteId = note.id;
+  save();
+  renderNotes();
+  // Focus the title field
+  setTimeout(() => {
+    const titleEl = document.getElementById("note-title");
+    if (titleEl) { titleEl.value = ""; titleEl.focus(); }
+    const contentEl = document.getElementById("note-content");
+    if (contentEl) contentEl.innerHTML = "";
+  }, 50);
+}
+
+function openNote(id) {
+  // Save current note first
+  if (activeNoteId) saveCurrentNote();
+
+  activeNoteId = id;
+  const note = notes.find(n => n.id === id);
+  if (!note) return;
+
+  renderNotes();
+
+  // Load content into editor
+  setTimeout(() => {
+    document.getElementById("note-title").value = note.title || "";
+    document.getElementById("note-content").innerHTML = note.content || "";
+  }, 10);
+}
+
+function saveCurrentNote() {
+  if (!activeNoteId) return;
+  const note = notes.find(n => n.id === activeNoteId);
+  if (!note) return;
+  const titleEl = document.getElementById("note-title");
+  const contentEl = document.getElementById("note-content");
+  const linkEl = document.getElementById("note-link-task");
+  if (titleEl) note.title = titleEl.value;
+  if (contentEl) note.content = contentEl.innerHTML;
+  if (linkEl) note.linkedTaskId = linkEl.value;
+  note.updatedAt = Date.now();
+  save();
+}
+
+function autoSaveNote() {
+  // Debounce: save after 500ms of no typing
+  clearTimeout(noteSaveTimer);
+  const indicator = document.getElementById("note-saved-indicator");
+  if (indicator) indicator.textContent = "Saving...";
+  noteSaveTimer = setTimeout(() => {
+    saveCurrentNote();
+    if (indicator) indicator.textContent = "Saved ✓";
+    // Update the list to reflect title changes
+    renderNotes();
+    // Re-focus content if it was focused
+  }, 500);
+}
+
+function deleteNote() {
+  if (!activeNoteId) return;
+  if (!confirm("Delete this note?")) return;
+  notes = notes.filter(n => n.id !== activeNoteId);
+  activeNoteId = null;
+  save();
+  renderNotes();
+}
+
+function formatNote(command) {
+  document.execCommand(command, false, null);
+  document.getElementById("note-content").focus();
+}
+
+// ══════════════════════════════════════
+// 5. EVENT HANDLERS
+// ══════════════════════════════════════
+function toggleSidebar() { sidebarCollapsed = !sidebarCollapsed; renderAll(); }
+function switchTab(tab) { activeTab = tab; document.getElementById("gantt-container").style.display = tab === "tasks" ? "" : "none"; document.querySelectorAll(".panel").forEach(p => p.classList.remove("active")); renderAll(); }
+function setView(v) { currentView = v; renderAll(); setTimeout(scrollToNow, 50); }
+function navigateDate(dir) { const d = new Date(referenceDate); if (currentView === "day") d.setDate(d.getDate() + dir); else if (currentView === "week") d.setDate(d.getDate() + 7 * dir); else d.setMonth(d.getMonth() + dir); referenceDate = d; renderAll(); setTimeout(scrollToNow, 50); }
+function goToday() { referenceDate = new Date(); renderAll(); setTimeout(scrollToNow, 50); }
+function selectTask(id) { selectedTaskId = id; renderAll(); }
+
+// ── LINK MODE — click task A then task B to create a dependency arrow ──
+function toggleLinkMode() {
+  linkMode = !linkMode;
+  linkSourceId = null;
+  document.getElementById("link-btn").classList.toggle("active", linkMode);
+  document.getElementById("link-hint").style.display = linkMode ? "block" : "none";
+  document.body.classList.toggle("link-mode", linkMode);
+  if (linkMode) document.getElementById("link-hint").textContent = "Click the FIRST task (parent)...";
+  renderGantt();
+}
+
+function handleBarClick(id) {
+  if (!linkMode) { selectTask(id); return; }
+
+  if (!linkSourceId) {
+    // First click — select source (parent task)
+    linkSourceId = id;
+    document.getElementById("link-hint").textContent = "Now click the SECOND task (dependent)...";
+    renderGantt();
+  } else if (linkSourceId !== id) {
+    // Second click — create dependency: id depends on linkSourceId
+    const target = tasks.find(t => t.id === id);
+    if (target) {
+      if (!target.dependencies) target.dependencies = [];
+      if (!target.dependencies.includes(linkSourceId)) {
+        target.dependencies.push(linkSourceId);
+        // Enforce: target can't start before source ends
+        const source = tasks.find(t => t.id === linkSourceId);
+        if (source) {
+          const srcEnd = source.start + source.duration * 60000;
+          if (target.start < srcEnd) {
+            target.start = srcEnd;
+            // Snapshot and cascade through whole chain
+            dragOrigPositions = {};
+            tasks.forEach(tk => { dragOrigPositions[tk.id] = { start: tk.start, duration: tk.duration }; });
+            cascadeForward(target.id);
+          }
+        }
+      }
+    }
+    linkMode = false;
+    linkSourceId = null;
+    document.getElementById("link-btn").classList.remove("active");
+    document.getElementById("link-hint").style.display = "none";
+    document.body.classList.remove("link-mode");
+    save();
+    renderAll();
+  }
+}
+function filterAch(tag) { window._achFilter = tag; renderAchievements(); }
+
+// Completed tasks filters and actions
+function filterCompletedCat(cat) { window._completedCatFilter = cat; renderAnalytics(); }
+function clearCompletedFilter() {
+  window._completedCatFilter = null;
+  const fromEl = document.getElementById("completed-from");
+  const toEl = document.getElementById("completed-to");
+  if (fromEl) fromEl.value = "";
+  if (toEl) toEl.value = "";
+  renderAnalytics();
+}
+function uncompleteTask(id) {
+  const t = tasks.find(t => t.id === id);
+  if (t) { t.completed = false; save(); renderAll(); }
+}
+function downloadCompleted() {
+  let completedTasks = tasks.filter(t => t.completed).sort((a, b) => b.start - a.start);
+  const fromEl = document.getElementById("completed-from");
+  const toEl = document.getElementById("completed-to");
+  if (fromEl && fromEl.value) {
+    const fromMs = new Date(fromEl.value + "T00:00:00").getTime();
+    completedTasks = completedTasks.filter(t => t.start >= fromMs);
+  }
+  if (toEl && toEl.value) {
+    const toMs = new Date(toEl.value + "T23:59:59").getTime();
+    completedTasks = completedTasks.filter(t => t.start <= toMs);
+  }
+  if (window._completedCatFilter) {
+    completedTasks = completedTasks.filter(t => t.category === window._completedCatFilter);
+  }
+  // Build CSV
+  let csv = "Title,Category,Date,Start Time,Duration (min),Tags,Notes\n";
+  completedTasks.forEach(t => {
+    const d = new Date(t.start);
+    const date = d.toLocaleDateString("en-US");
+    const time = fmtTime(d);
+    const tags = (t.tags || []).join("; ");
+    const notes = (t.notes || "").replace(/"/g, '""');
+    csv += `"${t.title}","${t.category}","${date}","${time}",${t.duration},"${tags}","${notes}"\n`;
+  });
+  const blob = new Blob([csv], { type: "text/csv" });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = "completed-tasks-" + new Date().toISOString().slice(0, 10) + ".csv";
+  a.click();
+  URL.revokeObjectURL(url);
+}
+
+// Unlink a dependency by clicking its arrow
+function unlinkDep(taskId, depId) {
+  const t = tasks.find(tk => tk.id === taskId);
+  if (t && t.dependencies) {
+    t.dependencies = t.dependencies.filter(d => d !== depId);
+    save();
+    renderAll();
+  }
+}
+
+// Quick delete from sidebar or bar
+function quickDelete(id) {
+  if (!confirm("Delete this task?")) return;
+  tasks = tasks.filter(t => t.id !== id);
+  tasks.forEach(t => { if (t.dependencies) t.dependencies = t.dependencies.filter(d => d !== id); });
+  if (selectedTaskId === id) selectedTaskId = null;
+  save(); renderAll();
+}
+
+// ── DRAG / RESIZE ──
+let dragId = null, dragMode = null;
+let dragStartX = 0, dragOrigStart = 0, dragOrigDur = 0;
+let dragOrigPositions = {};
+let dragActive = false;   // Has the drag actually started (past dead zone)?
+let dragPending = false;  // Is a drag being prepared?
+const DRAG_DEAD_ZONE = 4; // Pixels to move before drag activates
+const SNAP_MINUTES = 5;   // Snap to 5-minute increments
+
+// Snap a timestamp to the nearest 5-minute boundary
+function snapTo5(ms) {
+  const d = new Date(ms);
+  const mins = d.getMinutes();
+  const snapped = Math.round(mins / SNAP_MINUTES) * SNAP_MINUTES;
+  d.setMinutes(snapped, 0, 0);
+  return d.getTime();
+}
+
+function startDrag(e, id, mode) {
+  if (linkMode) return;
+  // Don't preventDefault here — let clicks and double-clicks fire naturally
+  dragId = id; dragMode = mode;
+  dragPending = true;
+  dragActive = false;
+  dragStartX = e.clientX || (e.touches && e.touches[0].clientX) || 0;
+  const t = tasks.find(t => t.id === id);
+  dragOrigStart = t.start;
+  dragOrigDur = t.duration;
+  dragOrigPositions = {};
+  tasks.forEach(t => { dragOrigPositions[t.id] = { start: t.start, duration: t.duration }; });
+  document.addEventListener("mousemove", onDrag);
+  document.addEventListener("mouseup", endDrag);
+  document.addEventListener("touchmove", onDrag, { passive: false });
+  document.addEventListener("touchend", endDrag);
+}
+
+function onDrag(e) {
+  if (!dragId) return;
+  e.preventDefault();
+  const cx = e.clientX || (e.touches && e.touches[0].clientX) || 0;
+  const dx = cx - dragStartX;
+
+  // Dead zone: don't start dragging until mouse moves 4+ pixels
+  // This lets double-click and single-click work on task bars
+  if (!dragActive) {
+    if (Math.abs(dx) < DRAG_DEAD_ZONE) return;
+    dragActive = true;
+  }
+
+  const mpp = getMPP();
+  const deltaMin = dx * mpp;
+  const deltaMs = deltaMin * 60000;
+  const t = tasks.find(t => t.id === dragId);
+  if (!t) return;
+
+  if (dragMode === "move") {
+    // Reset ALL tasks to original positions first
+    tasks.forEach(tk => {
+      const orig = dragOrigPositions[tk.id];
+      if (orig) { tk.start = orig.start; tk.duration = orig.duration; }
+    });
+    // Apply the move and SNAP to 5-minute boundary
+    t.start = snapTo5(dragOrigStart + deltaMs);
+    // Cascade FORWARD — push children when moving forward
+    cascadeForward(dragId);
+    // Cascade BACKWARD — pull parents when moving backward
+    cascadeBackward(dragId);
+  } else if (dragMode === "resize-right") {
+    // Snap duration to 5-minute increments
+    const rawDur = dragOrigDur + deltaMin;
+    const newDur = Math.max(SNAP_MINUTES, Math.round(rawDur / SNAP_MINUTES) * SNAP_MINUTES);
+    t.duration = newDur;
+    cascadeForward(dragId);
+  } else if (dragMode === "resize-left") {
+    const newStart = snapTo5(dragOrigStart + deltaMs);
+    const startDiff = (newStart - dragOrigStart) / 60000;
+    const newDur = Math.max(SNAP_MINUTES, Math.round((dragOrigDur - startDiff) / SNAP_MINUTES) * SNAP_MINUTES);
+    t.start = newStart;
+    t.duration = newDur;
+    cascadeBackward(dragId);
+  }
+  renderGantt();
+}
+
+/*
+  FORWARD CASCADE — when a task moves, push all its dependents forward.
+  Walks DOWN the dependency tree: parent → child → grandchild → ...
+  
+  Rule: A dependent task cannot start before its parent ends.
+  If it would, it gets pushed forward. This cascades through the chain.
+  Also shifts dependents by the same delta as the parent moved.
+*/
+function cascadeForward(fromId) {
+  const visited = new Set();
+  const queue = [fromId];
+  while (queue.length) {
+    const cid = queue.shift();
+    if (visited.has(cid)) continue;
+    visited.add(cid);
+    const ct = tasks.find(t => t.id === cid);
+    if (!ct) continue;
+    const cEnd = ct.start + ct.duration * 60000;
+    tasks.forEach(dep => {
+      if (dep.dependencies && dep.dependencies.includes(cid)) {
+        const origParent = dragOrigPositions[cid];
+        const origDep = dragOrigPositions[dep.id];
+        if (origParent && origDep) {
+          const parentShift = ct.start - origParent.start;
+          dep.start = origDep.start + parentShift;
+          if (dep.start < cEnd) dep.start = cEnd;
+        }
+        queue.push(dep.id);
+      }
+    });
+  }
+}
+
+/*
+  BACKWARD CASCADE — when a task moves backward, pull its parents backward too.
+  Walks UP the dependency tree: child → parent → grandparent → ...
+  
+  Rule: If a child moves backward and now starts before its parent ends,
+  the parent must shift backward so it ends before the child starts.
+  This cascades upward through the entire chain.
+  
+  Example chain: A → B → C → D
+  If you drag D backward by 30min:
+    - C must end before D's new start → C shifts back
+    - B must end before C's new start → B shifts back  
+    - A must end before B's new start → A shifts back
+*/
+function cascadeBackward(fromId) {
+  const visited = new Set();
+  const queue = [fromId];
+  while (queue.length) {
+    const cid = queue.shift();
+    if (visited.has(cid)) continue;
+    visited.add(cid);
+    const ct = tasks.find(t => t.id === cid);
+    if (!ct) continue;
+    // Find all PARENTS of this task (tasks that this task depends on)
+    (ct.dependencies || []).forEach(parentId => {
+      const parent = tasks.find(t => t.id === parentId);
+      if (!parent) return;
+      const parentEnd = parent.start + parent.duration * 60000;
+      // If parent ends AFTER child starts, parent must shift backward
+      if (parentEnd > ct.start) {
+        const shift = ct.start - parentEnd; // negative value (moving backward)
+        parent.start += shift;
+        queue.push(parentId); // Continue cascading upward
+      }
+    });
+  }
+}
+
+function endDrag() {
+  const wasActive = dragActive;
+  const endedId = dragId;
+  
+  if (dragId && !dragActive) {
+    // Mouse didn't move past dead zone — this was a click, not a drag
+    tasks.forEach(tk => {
+      const orig = dragOrigPositions[tk.id];
+      if (orig) { tk.start = orig.start; tk.duration = orig.duration; }
+    });
+  }
+  if (dragId && dragActive) {
+    // Snap everything to 5-min increments
+    tasks.forEach(tk => {
+      tk.start = snapTo5(tk.start);
+      tk.duration = Math.round(tk.duration / SNAP_MINUTES) * SNAP_MINUTES || SNAP_MINUTES;
+    });
+  }
+  dragId = null; dragMode = null; dragActive = false; dragPending = false;
+  document.removeEventListener("mousemove", onDrag);
+  document.removeEventListener("mouseup", endDrag);
+  document.removeEventListener("touchmove", onDrag);
+  document.removeEventListener("touchend", endDrag);
+  
+  if (!wasActive && endedId) {
+    // Was a click not a drag — check for double-click
+    const now = Date.now();
+    if (lastClickId === endedId && now - lastClickTime < 400) {
+      // DOUBLE CLICK — open edit modal
+      lastClickId = null; lastClickTime = 0;
+      openModal(endedId);
+      return;
+    }
+    lastClickId = endedId;
+    lastClickTime = now;
+    // Don't re-render here — the onclick handler (handleBarClick) will do it
+    return;
+  }
+  save(); renderAll();
+}
+let lastClickId = null, lastClickTime = 0;
+
+// ── MODAL ──
+function openModal(id) {
+  editingTaskId = id;
+  document.getElementById("modal-overlay").classList.add("open");
+  const sel = document.getElementById("f-category");
+  sel.innerHTML = CATEGORIES.map(c => `<option value="${c}">${c}</option>`).join("");
+  if (id) {
+    const t = tasks.find(x => x.id === id); if (!t) return;
+    document.getElementById("modal-title").textContent = "Edit Task";
+    document.getElementById("f-title").value = t.title;
+    document.getElementById("f-category").value = t.category;
+    document.getElementById("f-duration").value = t.duration;
+    document.getElementById("f-date").value = isoDate(new Date(t.start));
+    document.getElementById("f-time").value = timeStr(new Date(t.start));
+    window._modalTags = [...(t.tags || [])];
+    document.getElementById("f-notes").value = t.notes || "";
+    document.getElementById("f-completed").checked = t.completed;
+    document.getElementById("delete-btn").style.display = "";
+  } else {
+    document.getElementById("modal-title").textContent = "New Task";
+    document.getElementById("f-title").value = "";
+    document.getElementById("f-category").value = "Work";
+    document.getElementById("f-duration").value = 60;
+    document.getElementById("f-date").value = isoDate(new Date());
+    document.getElementById("f-time").value = "09:00";
+    window._modalTags = [];
+    document.getElementById("f-notes").value = "";
+    document.getElementById("f-completed").checked = false;
+    document.getElementById("delete-btn").style.display = "none";
+  }
+  window._modalDeps = editingTaskId ? [...(tasks.find(t => t.id === editingTaskId)?.dependencies || [])] : [];
+  renderDeps();
+  renderModalTags();
+}
+
+function renderDeps() {
+  document.getElementById("f-deps").innerHTML = tasks
+    .filter(t => t.id !== editingTaskId && !t.completed)
+    .map(t => `<button class="dep-btn${window._modalDeps.includes(t.id) ? ' active' : ''}" onclick="toggleDep('${t.id}')">${t.title.slice(0, 22)}</button>`)
+    .join("") || '<span style="font-size:10px;color:var(--text2)">No active tasks to link</span>';
+}
+function toggleDep(id) { const i = window._modalDeps.indexOf(id); if (i >= 0) window._modalDeps.splice(i, 1); else window._modalDeps.push(id); renderDeps(); }
+function closeModal() { document.getElementById("modal-overlay").classList.remove("open"); editingTaskId = null; }
+
+function saveTask() {
+  const title = document.getElementById("f-title").value.trim(); if (!title) return;
+  const startDt = new Date(document.getElementById("f-date").value + "T" + document.getElementById("f-time").value);
+  const taskData = {
+    id: editingTaskId || genId(), title, category: document.getElementById("f-category").value,
+    start: startDt.getTime(), duration: parseInt(document.getElementById("f-duration").value) || 60,
+    dependencies: window._modalDeps || [], notes: document.getElementById("f-notes").value,
+    tags: window._modalTags || [],
+    completed: document.getElementById("f-completed").checked,
+  };
+  if (editingTaskId) { const i = tasks.findIndex(t => t.id === editingTaskId); if (i >= 0) tasks[i] = taskData; }
+  else tasks.push(taskData);
+  // Enforce deps after save: snapshot positions then cascade
+  dragOrigPositions = {};
+  tasks.forEach(t => { dragOrigPositions[t.id] = { start: t.start, duration: t.duration }; });
+  const tEnd = taskData.start + taskData.duration * 60000;
+  tasks.forEach(dep => {
+    if (dep.dependencies && dep.dependencies.includes(taskData.id) && dep.start < tEnd) {
+      dep.start = tEnd;
+    }
+  });
+  cascadeForward(taskData.id);
+  save(); closeModal(); renderAll();
+}
+
+function deleteTask() {
+  if (!editingTaskId) return;
+  tasks = tasks.filter(t => t.id !== editingTaskId);
+  tasks.forEach(t => { if (t.dependencies) t.dependencies = t.dependencies.filter(d => d !== editingTaskId); });
+  if (selectedTaskId === editingTaskId) selectedTaskId = null;
+  save(); closeModal(); renderAll();
+}
+
+// ── BREAK MODAL ──
+function openBreakModal() {
+  document.getElementById("break-modal-overlay").classList.add("open");
+  document.getElementById("b-date").value = isoDate(new Date());
+  document.getElementById("b-label").value = "Break";
+  document.getElementById("b-start").value = "12:00";
+  document.getElementById("b-end").value = "13:00";
+}
+function closeBreakModal() { document.getElementById("break-modal-overlay").classList.remove("open"); }
+function saveBreak() {
+  const label = document.getElementById("b-label").value.trim() || "Break";
+  const date = document.getElementById("b-date").value;
+  const start = new Date(date + "T" + document.getElementById("b-start").value).getTime();
+  const end = new Date(date + "T" + document.getElementById("b-end").value).getTime();
+  if (end <= start) return;
+  breaks.push({ id: genId(), label, start, end });
+  save(); closeBreakModal(); renderAll();
+}
+function deleteBreak(id) { breaks = breaks.filter(b => b.id !== id); save(); renderAll(); }
+
+// ── Decision ──
+function rateQ(qi, val) { decisionQuestions[qi].answer = val; renderDecision(); }
+function removeQ(qi) { decisionQuestions.splice(qi, 1); renderDecision(); }
+function addQuestion() { const inp = document.getElementById("new-question"); const t = inp.value.trim(); if (!t) return; decisionQuestions.push({ id: genId(), text: t, weight: 1, answer: 0 }); inp.value = ""; renderDecision(); }
+function evaluateDecision() {
+  let score = 0, maxScore = 0;
+  decisionQuestions.forEach(q => { score += (q.answer || 3) * q.weight; maxScore += 5 * q.weight; });
+  const pct = Math.round((score / (maxScore || 1)) * 100);
+  let verdict = pct >= 80 ? "DO IT NOW — high priority, high impact." : pct >= 60 ? "SCHEDULE IT — important but can be planned." : pct >= 40 ? "DELEGATE OR BATCH — moderate priority." : "SKIP OR DEFER — low impact, save your energy.";
+  document.getElementById("result-box").style.display = "block";
+  document.getElementById("result-pct").textContent = pct + "%";
+  document.getElementById("result-verdict").textContent = verdict;
+}
+
+// ── Export / Import / Clear ──
+function exportData() {
+  const data = {
+    version: 5,
+    exportedAt: new Date().toISOString(),
+    tasks: tasks,
+    breaks: breaks,
+    notes: notes,
+    todos: todos,
+    decisionQuestions: decisionQuestions,
+  };
+  const blob = new Blob([JSON.stringify(data, null, 2)], { type: "application/json" });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = "command-center-backup-" + new Date().toISOString().slice(0, 10) + ".json";
+  a.click();
+  URL.revokeObjectURL(url);
+}
+
+function importData(event) {
+  const file = event.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    try {
+      const data = JSON.parse(e.target.result);
+      if (data.tasks) {
+        tasks = data.tasks.map(t => ({ ...t, start: new Date(t.start).getTime() }));
+      }
+      if (data.breaks) breaks = data.breaks;
+      if (data.notes) notes = data.notes;
+      if (data.todos) { todos = data.todos; saveTodos(); }
+      if (data.decisionQuestions) decisionQuestions = data.decisionQuestions;
+      save();
+      renderAll();
+      alert("Data imported successfully!");
+    } catch (err) {
+      alert("Error reading file: " + err.message);
+    }
+  };
+  reader.readAsText(file);
+  event.target.value = ""; // Reset so same file can be imported again
+}
+
+function clearAllData() {
+  if (!confirm("This will delete ALL tasks, breaks, notes, and settings. Are you sure?")) return;
+  if (!confirm("Really? This cannot be undone.")) return;
+  tasks = []; breaks = []; notes = []; todos = [];
+  activeNoteId = null; selectedTaskId = null;
+  save(); saveTodos(); renderAll();
+}
+
+// ── PRESET TAGS ──
+const PRESET_TAGS = ["Important", "Priority", "Urgent", "Learning", "Work", "Personal", "Focus", "Review", "SAP", "Daily"];
+
+function renderModalTags() {
+  // Preset buttons
+  const presetEl = document.getElementById("f-preset-tags");
+  presetEl.innerHTML = PRESET_TAGS.map(tag =>
+    `<button class="dep-btn${window._modalTags.includes(tag) ? ' active' : ''}" onclick="toggleTag('${tag}')" style="font-size:10px">${tag}</button>`
+  ).join("");
+  // Active tags display (including custom ones not in presets)
+  const activeEl = document.getElementById("f-active-tags");
+  activeEl.innerHTML = window._modalTags.map(tag =>
+    `<span style="display:inline-flex;align-items:center;gap:3px;padding:3px 8px;background:var(--accent-dim);border:1px solid var(--accent);color:var(--accent);border-radius:3px;font-size:10px;">
+      ${tag} <span onclick="removeTag('${tag}')" style="cursor:pointer;font-size:12px;margin-left:2px;">×</span>
+    </span>`
+  ).join("");
+}
+
+function toggleTag(tag) {
+  const i = window._modalTags.indexOf(tag);
+  if (i >= 0) window._modalTags.splice(i, 1);
+  else window._modalTags.push(tag);
+  renderModalTags();
+}
+
+function removeTag(tag) {
+  window._modalTags = window._modalTags.filter(t => t !== tag);
+  renderModalTags();
+}
+
+function addCustomTag() {
+  const inp = document.getElementById("f-tags-custom");
+  const tag = inp.value.trim();
+  if (tag && !window._modalTags.includes(tag)) {
+    window._modalTags.push(tag);
+    renderModalTags();
+  }
+  inp.value = "";
+}
+
+// ── TODO LIST ──
+let todos = [];  // { id, title, scheduled: false, taskId: null, createdAt }
+let todoFilter = "all";
+const TODOS_KEY = "command_center_todos";
+
+function renderTodo() {
+  const panel = document.getElementById("todo-panel");
+  panel.classList.toggle("active", activeTab === "todo");
+  if (activeTab !== "todo") return;
+
+  ["all", "unscheduled", "scheduled"].forEach(f => {
+    const btn = document.getElementById("todo-filter-" + f);
+    if (btn) btn.classList.toggle("active", todoFilter === f);
+  });
+
+  let filtered = [...todos];
+  if (todoFilter === "unscheduled") filtered = todos.filter(t => !t.taskId);
+  if (todoFilter === "scheduled") filtered = todos.filter(t => t.taskId);
+
+  let html = "";
+  if (!filtered.length) {
+    html = '<div style="color:var(--text2);font-size:12px;text-align:center;padding:30px;">Type a task above and press Enter.<br>Schedule it later from here.</div>';
+  }
+  filtered.forEach(td => {
+    const linkedTask = td.taskId ? tasks.find(t => t.id === td.taskId) : null;
+    const scheduled = linkedTask && !linkedTask.completed;
+    const completed = linkedTask && linkedTask.completed;
+    const catColor = linkedTask ? (COLORS[linkedTask.category] || "#666") : "var(--border)";
+
+    html += `<div style="
+      display:flex; align-items:flex-start; gap:12px; padding:12px 14px;
+      background:var(--bg2); border:1px solid var(--border);
+      border-left:3px solid ${catColor};
+      border-radius:0 var(--radius) var(--radius) 0;
+      margin-bottom:6px; max-width:700px;
+      ${completed ? 'opacity:0.45;' : ''}
+    ">
+      <input type="checkbox" ${completed ? 'checked' : ''}
+        onchange="toggleTodoComplete('${td.id}')"
+        style="accent-color:var(--accent); width:18px; height:18px; margin-top:1px; flex-shrink:0; cursor:pointer;" />
+      <div style="flex:1; min-width:0;">
+        <div style="font-size:13px; color:var(--text); font-weight:500;
+          ${completed ? 'text-decoration:line-through; color:var(--text2);' : ''}
+        ">${td.title}</div>
+        ${scheduled ? `<div style="font-size:10px; color:var(--accent); margin-top:4px;">
+          📅 ${fmtTime(new Date(linkedTask.start))} — ${fmtTime(new Date(linkedTask.start + linkedTask.duration * 60000))} · ${fmtDur(linkedTask.duration)} · ${linkedTask.category}
+        </div>` : ''}
+        ${completed ? '<div style="font-size:10px; color:var(--green); margin-top:4px;">✓ Completed</div>' : ''}
+        ${!td.taskId ? '<div style="font-size:10px; color:var(--text2); margin-top:4px;">Not scheduled yet</div>' : ''}
+      </div>
+      <div style="display:flex; gap:6px; align-items:center; flex-shrink:0;">
+        ${!td.taskId ? `<button onclick="scheduleTodo('${td.id}')" style="
+          padding:6px 12px; background:var(--accent-dim); border:1px solid var(--accent);
+          color:var(--accent); border-radius:var(--radius); font-size:10px;
+          cursor:pointer; font-family:var(--font); white-space:nowrap;
+        ">📅 Schedule</button>` : ''}
+        <button onclick="deleteTodo('${td.id}')" style="
+          background:none; border:none; color:var(--red); font-size:16px;
+          cursor:pointer; opacity:0.4; padding:2px 4px;
+        " onmouseover="this.style.opacity=1" onmouseout="this.style.opacity=0.4">×</button>
+      </div>
+    </div>`;
+  });
+  document.getElementById("todo-list").innerHTML = html;
+}
+
+function addTodo() {
+  const inp = document.getElementById("todo-input");
+  const title = inp.value.trim();
+  if (!title) return;
+  todos.push({ id: genId(), title, taskId: null, createdAt: Date.now() });
+  inp.value = "";
+  saveTodos();
+  renderTodo();
+}
+
+function scheduleTodo(todoId) {
+  const td = todos.find(t => t.id === todoId);
+  if (!td) return;
+  // Create a task from this todo and open the modal for time assignment
+  const taskId = genId();
+  const newTask = {
+    id: taskId, title: td.title, category: "Work",
+    start: new Date().setHours(9, 0, 0, 0), duration: 60,
+    dependencies: [], notes: "", tags: [], completed: false,
+  };
+  tasks.push(newTask);
+  td.taskId = taskId;
+  saveTodos(); save();
+  // Open modal to let user set the time
+  editingTaskId = taskId;
+  openModal(taskId);
+}
+
+function toggleTodoComplete(todoId) {
+  const td = todos.find(t => t.id === todoId);
+  if (!td || !td.taskId) return;
+  const task = tasks.find(t => t.id === td.taskId);
+  if (task) {
+    task.completed = !task.completed;
+    save();
+  }
+  renderTodo();
+}
+
+function deleteTodo(todoId) {
+  todos = todos.filter(t => t.id !== todoId);
+  saveTodos();
+  renderTodo();
+}
+
+function setTodoFilter(f) { todoFilter = f; renderTodo(); }
+
+function saveTodos() {
+  try { localStorage.setItem(TODOS_KEY, JSON.stringify(todos)); } catch(e) {}
+}
+
+function loadTodos() {
+  try { const s = localStorage.getItem(TODOS_KEY); if (s) todos = JSON.parse(s); } catch(e) {}
+}
+
+// ── COPY / PASTE SYNC ──
+function copyDataToClipboard() {
+  const data = {
+    version: 5, exportedAt: new Date().toISOString(),
+    tasks, breaks, notes, todos, decisionQuestions,
+  };
+  const text = JSON.stringify(data);
+  navigator.clipboard.writeText(text).then(() => {
+    const st = document.getElementById("copy-status");
+    st.style.display = "block";
+    st.textContent = "✓ Copied to clipboard! Paste into a Notion code block.";
+    setTimeout(() => { st.style.display = "none"; }, 4000);
+  }).catch(() => {
+    // Fallback: select a temporary textarea
+    const ta = document.createElement("textarea");
+    ta.value = text; document.body.appendChild(ta);
+    ta.select(); document.execCommand("copy");
+    document.body.removeChild(ta);
+    const st = document.getElementById("copy-status");
+    st.style.display = "block";
+    st.textContent = "✓ Copied!";
+    setTimeout(() => { st.style.display = "none"; }, 4000);
+  });
+}
+
+function togglePasteArea() {
+  const el = document.getElementById("paste-area");
+  el.style.display = el.style.display === "none" ? "block" : "none";
+  if (el.style.display === "block") document.getElementById("paste-input").focus();
+}
+
+function pasteDataFromClipboard() {
+  const text = document.getElementById("paste-input").value.trim();
+  if (!text) return;
+  try {
+    const data = JSON.parse(text);
+    if (data.tasks) tasks = data.tasks.map(t => ({ ...t, start: new Date(t.start).getTime() }));
+    if (data.breaks) breaks = data.breaks;
+    if (data.notes) notes = data.notes;
+    if (data.todos) todos = data.todos;
+    if (data.decisionQuestions) decisionQuestions = data.decisionQuestions;
+    save(); saveTodos();
+    document.getElementById("paste-input").value = "";
+    document.getElementById("paste-area").style.display = "none";
+    renderAll();
+    alert("Data loaded successfully!");
+  } catch (err) {
+    alert("Invalid JSON: " + err.message);
+  }
+}
+
+// ══════════════════════════════════════
+// 6. INIT
+// ══════════════════════════════════════
+load();
+loadTodos();
+renderAll();
+setTimeout(scrollToNow, 100); // Scroll to current time on load
+window.addEventListener("resize", () => { if (activeTab === "tasks") renderGantt(); });
+</script>
+</body>
+</html>
