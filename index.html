@@ -129,6 +129,33 @@ body.link-mode .resize-handle { display: none !important; }
 #note-content ul, #note-content ol { padding-left: 20px; margin: 4px 0; }
 #note-content li { margin-bottom: 2px; }
 #note-content b, #note-content strong { color: var(--accent); }
+#note-content a { color: var(--blue); text-decoration: underline; cursor: pointer; }
+#note-content a.note-link { color: var(--accent); background: var(--accent-dim); border-radius: 3px; padding: 0 5px; text-decoration: none; white-space: nowrap; }
+#note-content a.note-link.vault { color: var(--purple); background: rgba(139,111,192,0.15); }
+#note-content a.note-link.broken { color: var(--text2); background: var(--bg2); text-decoration: line-through; }
+#note-content img { max-width: 100%; border-radius: var(--radius); }
+.note-embed { margin: 10px 0; max-width: 640px; border: 1px solid var(--border); border-radius: 6px; overflow: hidden; background: var(--bg1); user-select: none; line-height: 1.4; }
+.note-embed iframe { display: block; width: 100%; border: 0; background: #000; }
+.note-embed img { display: block; max-width: 100%; margin: 0 auto; border-radius: 0; }
+.note-embed-bar { display: flex; justify-content: space-between; align-items: center; gap: 8px; padding: 5px 10px; font-size: 10px; border-top: 1px solid var(--border); }
+#note-content .note-embed-bar a { color: var(--text2); text-decoration: none; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+#note-content .note-embed-bar a:hover { color: var(--blue); }
+.note-embed-bar button { background: none; color: var(--red); font-size: 12px; padding: 0 2px; opacity: 0.6; }
+.note-embed-bar button:hover { opacity: 1; }
+.note-card { display: flex; gap: 10px; align-items: center; padding: 10px 12px; }
+.note-card-icon { font-size: 18px; }
+.note-card-host { color: var(--text); font-weight: 600; font-size: 12px; }
+.note-card-url { color: var(--text2); font-size: 10px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 520px; }
+.note-picker { position: fixed; z-index: 1500; width: 290px; max-width: calc(100vw - 24px); background: var(--bg1); border: 1px solid var(--accent); border-radius: 6px; box-shadow: 0 8px 24px rgba(0,0,0,0.6); display: none; overflow: hidden; }
+.note-picker.open { display: block; }
+.note-picker input { border: none; border-bottom: 1px solid var(--border); border-radius: 0; background: var(--bg2); }
+.note-picker-list { max-height: 240px; overflow-y: auto; padding: 4px; }
+.note-picker-item { padding: 6px 8px; font-size: 11px; cursor: pointer; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; border-radius: 3px; color: var(--text); }
+.note-picker-item.active { background: var(--accent-dim); color: var(--accent); }
+.note-picker-item small { color: var(--text2); margin-left: 6px; }
+.note-picker-empty { padding: 8px; font-size: 11px; color: var(--text2); }
+#note-meta a.note-backlink { color: var(--accent); text-decoration: none; }
+#note-meta a.note-backlink:hover { text-decoration: underline; }
 @media (max-width: 700px) {
   #notes-sidebar { width: 140px !important; min-width: 140px !important; }
 }
@@ -430,16 +457,23 @@ body.link-mode .resize-handle { display: none !important; }
               </select>
               <button onclick="deleteNote()" style="background:none;border:1px solid var(--red);color:var(--red);padding:4px 10px;border-radius:var(--radius);font-size:10px;cursor:pointer;font-family:var(--font);">Delete</button>
             </div>
-            <div style="padding:4px 16px 0;display:flex;gap:4px;border-bottom:1px solid var(--border);padding-bottom:6px;">
+            <div style="padding:4px 16px 0;display:flex;flex-wrap:wrap;gap:4px;border-bottom:1px solid var(--border);padding-bottom:6px;">
               <button onclick="formatNote('bold')" title="Bold" style="background:var(--bg2);border:1px solid var(--border);color:var(--text);padding:4px 8px;border-radius:3px;font-size:11px;font-weight:700;">B</button>
               <button onclick="formatNote('italic')" title="Italic" style="background:var(--bg2);border:1px solid var(--border);color:var(--text);padding:4px 8px;border-radius:3px;font-size:11px;font-style:italic;">I</button>
               <button onclick="formatNote('insertUnorderedList')" title="Bullet list" style="background:var(--bg2);border:1px solid var(--border);color:var(--text);padding:4px 8px;border-radius:3px;font-size:11px;">• List</button>
               <button onclick="formatNote('insertOrderedList')" title="Numbered list" style="background:var(--bg2);border:1px solid var(--border);color:var(--text);padding:4px 8px;border-radius:3px;font-size:11px;">1. List</button>
+              <button onmousedown="event.preventDefault()" onclick="noteInsertLink()" title="Add a web link (select text first to link it)" style="background:var(--bg2);border:1px solid var(--border);color:var(--text);padding:4px 8px;border-radius:3px;font-size:11px;">🔗 Link</button>
+              <button onmousedown="event.preventDefault()" onclick="noteInsertEmbed()" title="Embed a video, song, document, image or web page" style="background:var(--bg2);border:1px solid var(--border);color:var(--text);padding:4px 8px;border-radius:3px;font-size:11px;">▣ Embed</button>
+              <button onmousedown="event.preventDefault()" onclick="noteOpenPicker(false)" title="Link to another note (or type [[)" style="background:var(--bg2);border:1px solid var(--border);color:var(--text);padding:4px 8px;border-radius:3px;font-size:11px;">[[ ]] Note</button>
               <span style="flex:1;"></span>
               <span id="note-saved-indicator" style="font-size:9px;color:var(--text2);align-self:center;">Saved</span>
             </div>
             <div id="note-content" contenteditable="true" style="flex:1;padding:16px;font-size:12px;line-height:1.8;color:var(--text);overflow-y:auto;outline:none;min-height:200px;" oninput="autoSaveNote()"></div>
             <div id="note-meta" style="padding:8px 16px;border-top:1px solid var(--border);font-size:9px;color:var(--text2);"></div>
+            <div id="note-picker" class="note-picker">
+              <input id="note-picker-input" placeholder="Link to note…" autocomplete="off" />
+              <div id="note-picker-list" class="note-picker-list"></div>
+            </div>
           </div>
         </div>
       </div>
@@ -1063,7 +1097,9 @@ function renderNotes() {
   filtered.forEach(n => {
     const isActive = activeNoteId === n.id;
     const linkedTask = n.linkedTaskId ? tasks.find(t => t.id === n.linkedTaskId) : null;
-    const preview = (n.content || "").replace(/<[^>]*>/g, "").slice(0, 60);
+    const preview = (n.content || "")
+      .replace(/<div class="note-embed-bar">[\s\S]*?<\/div>/g, " ")   // embed buttons aren't note text
+      .replace(/<[^>]*>/g, "").replace(/&nbsp;/g, " ").trim().slice(0, 60);
     const dateStr = new Date(n.updatedAt || n.createdAt).toLocaleDateString("en-US", { month: "short", day: "numeric" });
     listHtml += `<div onclick="openNote('${n.id}')" style="
       padding:8px 10px;margin-bottom:3px;cursor:pointer;border-radius:var(--radius);
@@ -1104,7 +1140,20 @@ function renderNotes() {
     if (note) {
       const created = new Date(note.createdAt).toLocaleString("en-US", { month: "short", day: "numeric", hour: "numeric", minute: "2-digit" });
       const updated = new Date(note.updatedAt || note.createdAt).toLocaleString("en-US", { month: "short", day: "numeric", hour: "numeric", minute: "2-digit" });
-      document.getElementById("note-meta").textContent = `Created: ${created}  ·  Last edited: ${updated}`;
+      const meta = document.getElementById("note-meta");
+      meta.textContent = `Created: ${created}  ·  Last edited: ${updated}`;
+      // Backlinks: other notes that link here with [[ ]]
+      const backlinks = notes.filter(n => n.id !== note.id && (n.content || "").includes(`data-note-id="${note.id}"`));
+      if (backlinks.length) {
+        meta.append("  ·  Linked from: ");
+        backlinks.forEach((n, i) => {
+          const a = document.createElement("a");
+          a.href = "#"; a.className = "note-backlink"; a.textContent = n.title || "Untitled";
+          a.onclick = e => { e.preventDefault(); openNote(n.id); };
+          if (i) meta.append(", ");
+          meta.append(a);
+        });
+      }
     }
   }
 }
@@ -1144,7 +1193,7 @@ function openNote(id) {
   // Load content into editor
   setTimeout(() => {
     document.getElementById("note-title").value = note.title || "";
-    document.getElementById("note-content").innerHTML = note.content || "";
+    document.getElementById("note-content").innerHTML = notesClean(note.content || "");
   }, 10);
 }
 
@@ -1189,6 +1238,347 @@ function formatNote(command) {
   document.execCommand(command, false, null);
   document.getElementById("note-content").focus();
 }
+
+// ── NOTE LINKS & EMBEDS ──
+// Notes are stored as HTML and synced to other devices, so every note is cleaned
+// when it opens and every paste is cleaned before it lands: only plain formatting,
+// safe links and embeds rebuilt from a known list of providers survive.
+const NOTE_DROP_TAGS = new Set(["SCRIPT", "STYLE", "IFRAME", "OBJECT", "EMBED", "LINK", "META", "BASE", "FORM", "INPUT", "BUTTON", "TEXTAREA", "SELECT", "OPTION", "SVG", "MATH", "TEMPLATE", "FRAME", "FRAMESET", "NOSCRIPT", "AUDIO", "VIDEO", "CANVAS", "TITLE", "HEAD"]);
+const NOTE_KEEP_TAGS = new Set(["B", "STRONG", "I", "EM", "U", "S", "STRIKE", "DEL", "A", "UL", "OL", "LI", "P", "DIV", "BR", "SPAN", "H1", "H2", "H3", "H4", "H5", "H6", "BLOCKQUOTE", "CODE", "PRE", "HR", "IMG", "SUB", "SUP", "MARK", "TABLE", "THEAD", "TBODY", "TR", "TH", "TD"]);
+const NOTE_SAFE_HREF = /^(https?:|mailto:)/i;
+let notePickerRange = null;
+let notePickerIndex = 0;
+let notePickerItems = [];
+let notePickerFromTyping = false;
+
+function noteEsc(s) { return String(s).replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c])); }
+
+function notesClean(html) {
+  const tpl = document.createElement("template");   // parsed inert: nothing runs or loads
+  tpl.innerHTML = html;
+  const walk = parent => {
+    [...parent.children].forEach(el => {
+      if (el.classList.contains("note-embed")) {
+        const fresh = el.dataset.embedUrl ? noteEmbedEl(el.dataset.embedUrl) : null;
+        if (fresh) el.replaceWith(fresh); else el.remove();
+        return;
+      }
+      if (NOTE_DROP_TAGS.has(el.tagName)) { el.remove(); return; }
+      if (!NOTE_KEEP_TAGS.has(el.tagName)) { walk(el); el.replaceWith(...el.childNodes); return; }
+      if (el.tagName === "A" && el.classList.contains("note-link")) { el.replaceWith(noteChipEl(el.dataset.noteId, el.dataset.vaultRel, el.textContent)); return; }
+      const keep = {};
+      if (el.tagName === "A") {
+        const h = (el.getAttribute("href") || "").trim();
+        if (!NOTE_SAFE_HREF.test(h)) { walk(el); el.replaceWith(...el.childNodes); return; }
+        keep.href = h;
+      }
+      if (el.tagName === "IMG") {
+        const s = (el.getAttribute("src") || "").trim();
+        if (!/^(https?:|data:image\/(png|jpe?g|gif|webp);)/i.test(s)) { el.remove(); return; }
+        keep.src = s; keep.alt = el.getAttribute("alt") || "";
+      }
+      if (el.tagName === "OL" && el.getAttribute("start")) keep.start = el.getAttribute("start");
+      [...el.attributes].forEach(a => el.removeAttribute(a.name));
+      Object.entries(keep).forEach(([k, v]) => el.setAttribute(k, v));
+      walk(el);
+    });
+  };
+  walk(tpl.content);
+  return tpl.innerHTML;
+}
+
+// A [[link]] chip to a local note (by id) or a vault note (by path). Titles are
+// refreshed from the current notes, so renaming a note updates every link to it.
+function noteChipEl(noteId, vaultRel, fallbackText) {
+  const a = document.createElement("a");
+  a.className = "note-link";
+  a.contentEditable = "false";
+  if (vaultRel) {
+    a.classList.add("vault");
+    a.dataset.vaultRel = vaultRel;
+    a.textContent = "📓 " + vaultRel.split("/").pop().replace(/\.md$/i, "");
+  } else {
+    const target = notes.find(n => n.id === noteId);
+    a.dataset.noteId = noteId || "";
+    a.textContent = target ? (target.title || "Untitled") : (fallbackText || "Missing note");
+    if (!target) { a.classList.add("broken"); a.title = "This note was deleted"; }
+  }
+  return a;
+}
+
+// Known players get a real embed; images show inline; anything else becomes a link card.
+function noteEmbedInfo(u) {
+  const host = u.hostname.replace(/^(www|m)\./, "");
+  const path = u.pathname;
+  let m;
+  const yt = id => {
+    const t = parseInt(u.searchParams.get("t") || u.searchParams.get("start") || "", 10);
+    return { frame: "https://www.youtube-nocookie.com/embed/" + id + (t > 0 ? "?start=" + t : ""), ratio: "16 / 9", label: "YouTube" };
+  };
+  if (host === "youtu.be" && (m = /^\/([\w-]{11})/.exec(path))) return yt(m[1]);
+  if (/(^|\.)youtube\.com$/.test(host)) {
+    const id = u.searchParams.get("v") || ((m = /^\/(?:shorts|embed|live)\/([\w-]{11})/.exec(path)) && m[1]);
+    if (id && /^[\w-]{11}$/.test(id)) return yt(id);
+  }
+  if (host === "vimeo.com" && (m = /^\/(\d+)/.exec(path))) return { frame: "https://player.vimeo.com/video/" + m[1], ratio: "16 / 9", label: "Vimeo" };
+  if (host === "open.spotify.com" && (m = /^\/(?:intl-[\w-]+\/)?(track|album|playlist|episode|show|artist)\/(\w+)/.exec(path)))
+    return { frame: `https://open.spotify.com/embed/${m[1]}/${m[2]}`, height: m[1] === "track" || m[1] === "episode" ? 152 : 352, label: "Spotify" };
+  if (host === "loom.com" && (m = /^\/share\/(\w+)/.exec(path))) return { frame: "https://www.loom.com/embed/" + m[1], ratio: "16 / 9", label: "Loom" };
+  if (host === "docs.google.com" && (m = /^\/(document|spreadsheets|presentation)\/d\/([\w-]+)/.exec(path)))
+    return { frame: `https://docs.google.com/${m[1]}/d/${m[2]}/preview`, ratio: "4 / 3", label: "Google " + { document: "Doc", spreadsheets: "Sheet", presentation: "Slides" }[m[1]] };
+  if (host === "drive.google.com" && (m = /^\/file\/d\/([\w-]+)/.exec(path))) return { frame: `https://drive.google.com/file/d/${m[1]}/preview`, ratio: "4 / 3", label: "Google Drive" };
+  if (/\.(png|jpe?g|gif|webp|avif|svg)$/i.test(path)) return { img: u.href, label: "Image" };
+  return { card: true, label: host };
+}
+
+function noteEmbedEl(url) {
+  let u;
+  try { u = new URL(url); } catch (e) { return null; }
+  if (!/^https?:$/.test(u.protocol)) return null;
+  const info = noteEmbedInfo(u);
+  const box = document.createElement("div");
+  box.className = "note-embed";
+  box.contentEditable = "false";
+  box.dataset.embedUrl = u.href;
+  if (info.frame) {
+    const f = document.createElement("iframe");
+    f.src = info.frame;
+    f.loading = "lazy";
+    f.allow = "fullscreen; picture-in-picture; encrypted-media; clipboard-write";
+    f.setAttribute("allowfullscreen", "");
+    f.referrerPolicy = "strict-origin-when-cross-origin";
+    if (info.height) f.style.height = info.height + "px"; else f.style.aspectRatio = info.ratio;
+    box.appendChild(f);
+  } else if (info.img) {
+    const img = document.createElement("img");
+    img.src = info.img; img.alt = ""; img.loading = "lazy";
+    box.appendChild(img);
+  } else {
+    const card = document.createElement("div");
+    card.className = "note-card";
+    card.innerHTML = '<span class="note-card-icon">🔗</span><div style="min-width:0;"><div class="note-card-host"></div><div class="note-card-url"></div></div>';
+    card.querySelector(".note-card-host").textContent = info.label;
+    card.querySelector(".note-card-url").textContent = u.href;
+    box.appendChild(card);
+  }
+  const bar = document.createElement("div");
+  bar.className = "note-embed-bar";
+  const open = document.createElement("a");
+  open.href = u.href;
+  open.textContent = "↗ " + (info.card ? "Open link" : info.label + " · open");
+  const rm = document.createElement("button");
+  rm.dataset.act = "remove"; rm.title = "Remove embed"; rm.textContent = "✕";
+  bar.append(open, rm);
+  box.appendChild(bar);
+  return box;
+}
+
+function noteNormalizeUrl(url) {
+  url = (url || "").trim();
+  if (!url) return "";
+  if (NOTE_SAFE_HREF.test(url)) return url;
+  if (/^[\w-]+(\.[\w-]+)+(\/\S*)?$/.test(url)) return "https://" + url;
+  return null;
+}
+
+function noteContentEl() { return document.getElementById("note-content"); }
+
+function noteSelectionRange() {
+  const sel = window.getSelection();
+  if (!sel.rangeCount || !noteContentEl().contains(sel.anchorNode)) return null;
+  return sel.getRangeAt(0).cloneRange();
+}
+
+function noteRestoreRange(range) {
+  const el = noteContentEl();
+  el.focus();
+  const sel = window.getSelection();
+  sel.removeAllRanges();
+  if (range) sel.addRange(range);
+  else { const r = document.createRange(); r.selectNodeContents(el); r.collapse(false); sel.addRange(r); }
+}
+
+function noteLinkAtCaret(range) {
+  if (!range) return null;
+  const n = range.startContainer.nodeType === 1 ? range.startContainer : range.startContainer.parentElement;
+  const a = n && n.closest("a");
+  return a && noteContentEl().contains(a) && !a.classList.contains("note-link") && !a.closest(".note-embed") ? a : null;
+}
+
+function noteInsertLink() {
+  if (!activeNoteId) return;
+  const range = noteSelectionRange();
+  const text = range ? range.toString() : "";
+  const existing = noteLinkAtCaret(range);
+  const answer = prompt(existing ? "Change the link (leave empty to remove it):" : text ? `Link "${text.slice(0, 40)}" to this address:` : "Web address to insert:", existing ? existing.getAttribute("href") : "https://");
+  if (answer === null) return;
+  const url = noteNormalizeUrl(answer === "https://" ? "" : answer);
+  noteRestoreRange(range);
+  if (url === "") { if (existing) existing.replaceWith(...existing.childNodes); autoSaveNote(); return; }
+  if (!url) { alert("Please enter a web address, e.g. https://example.com"); return; }
+  if (existing) existing.setAttribute("href", url);
+  else if (text) document.execCommand("createLink", false, url);
+  else document.execCommand("insertHTML", false, `<a href="${noteEsc(url)}">${noteEsc(url)}</a>&nbsp;`);
+  autoSaveNote();
+}
+
+function noteInsertEmbed() {
+  if (!activeNoteId) return;
+  const range = noteSelectionRange();
+  const existing = noteLinkAtCaret(range);
+  const answer = prompt("Paste a link to embed.\nYouTube, Vimeo, Spotify, Loom, Google Docs/Sheets/Slides/Drive and images play or show inside the note; any other page becomes a link card.", existing ? existing.getAttribute("href") : "");
+  if (answer === null) return;
+  const url = noteNormalizeUrl(answer);
+  const box = url ? noteEmbedEl(url) : null;
+  if (!box) { alert("Please enter a web address, e.g. https://youtu.be/…"); return; }
+  noteRestoreRange(range);
+  const sel = window.getSelection();
+  const r = sel.getRangeAt(0);
+  if (existing && existing.getAttribute("href") === url) { r.setStartBefore(existing); r.setEndAfter(existing); }
+  r.deleteContents();
+  const after = document.createElement("div");
+  after.appendChild(document.createElement("br"));
+  r.insertNode(after);
+  r.insertNode(box);
+  const caret = document.createRange();
+  caret.setStart(after, 0); caret.collapse(true);
+  sel.removeAllRanges(); sel.addRange(caret);
+  autoSaveNote();
+}
+
+// ── [[ note picker ──
+function noteOpenPicker(fromTyping) {
+  if (!activeNoteId) return;
+  notePickerFromTyping = fromTyping;
+  notePickerRange = noteSelectionRange();
+  const picker = document.getElementById("note-picker");
+  const input = document.getElementById("note-picker-input");
+  let rect = notePickerRange && notePickerRange.getBoundingClientRect();
+  if (!rect || (!rect.width && !rect.height && !rect.top)) rect = noteContentEl().getBoundingClientRect();
+  picker.style.left = Math.max(12, Math.min(rect.left, window.innerWidth - 302)) + "px";
+  picker.style.top = Math.max(12, Math.min(rect.bottom + 6, window.innerHeight - 300)) + "px";
+  picker.classList.add("open");
+  input.value = "";
+  notePickerIndex = 0;
+  noteRenderPicker();
+  input.focus();
+}
+
+function noteClosePicker(restoreBrackets) {
+  const picker = document.getElementById("note-picker");
+  if (!picker.classList.contains("open")) return;
+  picker.classList.remove("open");
+  noteRestoreRange(notePickerRange);
+  if (restoreBrackets && notePickerFromTyping) document.execCommand("insertText", false, "[[");
+}
+
+function noteRenderPicker() {
+  const q = document.getElementById("note-picker-input").value.trim().toLowerCase();
+  const list = document.getElementById("note-picker-list");
+  notePickerItems = notes
+    .filter(n => n.id !== activeNoteId && (n.title || "Untitled").toLowerCase().includes(q))
+    .slice(0, 30)
+    .map(n => ({ kind: "note", id: n.id, label: n.title || "Untitled" }));
+  if (typeof vault !== "undefined" && vault.ready) {
+    vault.files.filter(f => /\.md$/i.test(f.rel) && f.rel.toLowerCase().includes(q)).slice(0, 20)
+      .forEach(f => notePickerItems.push({ kind: "vault", rel: f.rel, label: vaultTitle(f), hint: "vault" }));
+  }
+  if (q && !notes.some(n => (n.title || "").toLowerCase() === q)) notePickerItems.push({ kind: "new", label: document.getElementById("note-picker-input").value.trim(), hint: "create note" });
+  notePickerIndex = Math.min(notePickerIndex, Math.max(0, notePickerItems.length - 1));
+  list.textContent = "";
+  if (!notePickerItems.length) { list.innerHTML = '<div class="note-picker-empty">No other notes yet — type a name to create one.</div>'; return; }
+  notePickerItems.forEach((it, i) => {
+    const row = document.createElement("div");
+    row.className = "note-picker-item" + (i === notePickerIndex ? " active" : "");
+    row.textContent = (it.kind === "vault" ? "📓 " : it.kind === "new" ? "＋ " : "") + it.label;
+    if (it.hint) { const s = document.createElement("small"); s.textContent = it.hint; row.appendChild(s); }
+    row.onmousedown = e => { e.preventDefault(); noteChoosePicker(i); };
+    list.appendChild(row);
+  });
+}
+
+function noteChoosePicker(i) {
+  const it = notePickerItems[i];
+  if (!it) return;
+  let chip;
+  if (it.kind === "vault") chip = noteChipEl(null, it.rel);
+  else {
+    let id = it.id;
+    if (it.kind === "new") {
+      const n = { id: genId(), title: it.label, content: "", linkedTaskId: "", createdAt: Date.now(), updatedAt: Date.now() };
+      notes.push(n);
+      id = n.id;
+    }
+    chip = noteChipEl(id);
+  }
+  document.getElementById("note-picker").classList.remove("open");
+  noteRestoreRange(notePickerRange);
+  document.execCommand("insertHTML", false, chip.outerHTML + "&nbsp;");
+  autoSaveNote();
+}
+
+function noteFollowLink(a) {
+  if (a.dataset.vaultRel) {
+    saveCurrentNote();
+    try { localStorage.setItem("command_center_vault_last", JSON.stringify(a.dataset.vaultRel)); } catch (e) {}
+    switchTab("vault");
+    const f = vault.ready && vault.byRel[a.dataset.vaultRel.toLowerCase()];
+    if (f) vaultOpen(f);
+    return;
+  }
+  if (notes.some(n => n.id === a.dataset.noteId)) openNote(a.dataset.noteId);
+  else alert("That note was deleted.");
+}
+
+(function noteWireEditor() {
+  const el = noteContentEl();
+  // Links and chips open on click; the ✕ on an embed removes it.
+  el.addEventListener("click", e => {
+    const rm = e.target.closest("[data-act='remove']");
+    if (rm && el.contains(rm)) { e.preventDefault(); rm.closest(".note-embed").remove(); autoSaveNote(); return; }
+    const a = e.target.closest("a");
+    if (!a || !el.contains(a)) return;
+    e.preventDefault();
+    if (a.classList.contains("note-link")) { noteFollowLink(a); return; }
+    const href = a.getAttribute("href");
+    if (href && NOTE_SAFE_HREF.test(href)) window.open(href, "_blank", "noopener");
+  });
+  // A pasted address becomes a link; pasted rich text is cleaned first.
+  el.addEventListener("paste", e => {
+    const dt = e.clipboardData;
+    if (!dt) return;
+    const text = dt.getData("text/plain").trim();
+    if (/^https?:\/\/\S+$/i.test(text)) {
+      e.preventDefault();
+      if (window.getSelection().toString()) document.execCommand("createLink", false, text);
+      else document.execCommand("insertHTML", false, `<a href="${noteEsc(text)}">${noteEsc(text)}</a>&nbsp;`);
+      autoSaveNote();
+      return;
+    }
+    const html = dt.getData("text/html");
+    if (html) { e.preventDefault(); document.execCommand("insertHTML", false, notesClean(html)); autoSaveNote(); }
+  });
+  // Typing [[ opens the note picker.
+  el.addEventListener("input", e => {
+    if (e.inputType !== "insertText" || e.data !== "[") return;
+    const sel = window.getSelection();
+    const node = sel.anchorNode;
+    if (!node || node.nodeType !== 3 || !node.data.slice(0, sel.anchorOffset).endsWith("[[")) return;
+    node.deleteData(sel.anchorOffset - 2, 2);
+    noteOpenPicker(true);
+  });
+  const input = document.getElementById("note-picker-input");
+  input.addEventListener("input", () => { notePickerIndex = 0; noteRenderPicker(); });
+  input.addEventListener("keydown", e => {
+    if (e.key === "ArrowDown") { e.preventDefault(); notePickerIndex = Math.min(notePickerIndex + 1, notePickerItems.length - 1); noteRenderPicker(); }
+    else if (e.key === "ArrowUp") { e.preventDefault(); notePickerIndex = Math.max(notePickerIndex - 1, 0); noteRenderPicker(); }
+    else if (e.key === "Enter") { e.preventDefault(); noteChoosePicker(notePickerIndex); }
+    else if (e.key === "Escape") { e.preventDefault(); noteClosePicker(true); }
+  });
+  input.addEventListener("blur", () => setTimeout(() => {
+    if (document.activeElement !== input) document.getElementById("note-picker").classList.remove("open");
+  }, 150));
+})();
 
 // ══════════════════════════════════════
 // 5. EVENT HANDLERS
