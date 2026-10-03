@@ -407,6 +407,32 @@ body.link-mode .resize-handle { display: none !important; }
 #vault-panel.drawing #vault-view .board-host { position: absolute; inset: 0; }
 #vault-draw-btn { display: none; }
 
+/* STATS: range, fill, collapsible */
+.stats-head { display: flex; justify-content: space-between; align-items: center; gap: 8px; flex-wrap: wrap; margin-bottom: 4px; }
+.stats-sub { font-size: 11px; color: var(--text2); margin-bottom: 14px; }
+.collapse-head { background: none; color: var(--accent); font-size: 14px; font-weight: 700; letter-spacing: 1px; padding: 0; display: flex; align-items: center; gap: 6px; }
+.collapse-head .caret { display: inline-block; width: 12px; transition: transform 0.15s; }
+.collapse-head[aria-expanded="true"] .caret { transform: rotate(90deg); }
+.collapse-head #completed-count { color: var(--text2); font-weight: 400; font-size: 11px; letter-spacing: 0; }
+#completed-body { display: none; }
+#completed-body.open { display: block; }
+.fill-row { display: flex; align-items: center; gap: 8px; margin-bottom: 6px; font-size: 10px; }
+.fill-row .lbl { width: 74px; color: var(--text2); flex-shrink: 0; text-align: right; }
+.fill-row .lbl.today { color: var(--accent); }
+.fill-track { flex: 1; height: 16px; background: var(--bg1); border: 1px solid var(--border); border-radius: 3px; display: flex; overflow: hidden; gap: 2px; }
+.fill-track i { display: block; height: 100%; }
+.fill-track i.done { background: var(--green); }
+.fill-track i.plan { background: var(--accent); }
+.fill-row .val { width: 128px; color: var(--text2); flex-shrink: 0; }
+.fill-row .val b { color: var(--text); font-weight: 600; }
+.fill-row .val.over b { color: var(--red); }
+.fill-legend { display: flex; gap: 14px; font-size: 10px; color: var(--text2); margin-top: 8px; flex-wrap: wrap; }
+.fill-legend span::before { content: ""; display: inline-block; width: 9px; height: 9px; border-radius: 2px; margin-right: 5px; vertical-align: -1px; background: var(--c); }
+.phone-today { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 10px; margin-bottom: 12px; }
+.phone-lost { background: var(--bg2); border: 1px solid var(--border); border-left: 3px solid var(--red); border-radius: 0 6px 6px 0; padding: 12px 14px; font-size: 12px; line-height: 1.7; color: var(--text); margin-bottom: 14px; }
+.phone-lost b { color: var(--red); }
+.phone-lost small { color: var(--text2); font-size: 10px; display: block; }
+
 /* PHONE USAGE */
 .phone-days { display: flex; align-items: flex-end; gap: 2px; height: 140px; padding-top: 6px; border-bottom: 1px solid var(--border); position: relative; }
 .phone-day { flex: 1; min-width: 2px; height: 100%; display: flex; align-items: flex-end; cursor: default; position: relative; }
@@ -503,8 +529,13 @@ body.link-mode .resize-handle { display: none !important; }
     </div>
 
     <div id="analytics-panel" class="panel">
-      <div class="panel-title">ANALYTICS</div>
+      <div class="stats-head">
+        <div class="panel-title" style="margin-bottom:0;">ANALYTICS</div>
+        <div id="stats-ranges"></div>
+      </div>
+      <div class="stats-sub" id="stats-sub"></div>
       <div class="stat-grid" id="stat-grid"></div>
+      <div class="chart-box" id="fill-box" style="margin-bottom:14px;"></div>
       <div class="chart-row">
         <div class="chart-box"><div class="chart-title">Time by Category</div><div id="pie-area"></div></div>
         <div class="chart-box"><div class="chart-title">Time by Tag</div><div id="bar-area"></div></div>
@@ -512,9 +543,10 @@ body.link-mode .resize-handle { display: none !important; }
       <!-- Completed Tasks Section -->
       <div style="margin-top:20px;">
         <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">
-          <div class="panel-title" style="margin-bottom:0;">COMPLETED TASKS</div>
+          <button class="collapse-head" id="completed-toggle" onclick="toggleCompleted()" aria-expanded="false"><span class="caret">▸</span> COMPLETED TASKS <span id="completed-count"></span></button>
           <button onclick="downloadCompleted()" style="padding:6px 12px;background:var(--bg2);border:1px solid var(--accent);color:var(--accent);border-radius:var(--radius);font-size:10px;font-family:var(--font);">⬇ Download CSV</button>
         </div>
+        <div id="completed-body">
         <div style="display:flex;gap:8px;align-items:center;margin-bottom:12px;flex-wrap:wrap;">
           <label class="form-label" style="margin:0;white-space:nowrap;">Filter by date:</label>
           <input type="date" id="completed-from" style="width:auto;padding:5px 8px;font-size:11px;" onchange="renderAnalytics()" />
@@ -524,6 +556,7 @@ body.link-mode .resize-handle { display: none !important; }
         </div>
         <div id="completed-filters" style="margin-bottom:10px;"></div>
         <div id="completed-list"></div>
+        </div>
       </div>
       <!-- Phone usage (StayFree export) -->
       <div style="margin-top:28px;">
@@ -1091,20 +1124,103 @@ function renderGantt() {
   body.appendChild(svg);
 }
 
+// ── STATS RANGE & HOW FULL THE DAYS ARE ──
+const STATS_RANGES = [["today", "Today"], ["week", "This week"], ["month", "This month"], ["all", "All"]];
+const STATS_RANGE_KEY = "command_center_stats_range";
+const STATS_COMPLETED_KEY = "command_center_completed_open";
+let statsRange = (() => { try { return localStorage.getItem(STATS_RANGE_KEY) || "week"; } catch (e) { return "week"; } })();
+
+function setStatsRange(r) { statsRange = r; try { localStorage.setItem(STATS_RANGE_KEY, r); } catch (e) {} renderAnalytics(); }
+function statsCompletedOpen() { try { return localStorage.getItem(STATS_COMPLETED_KEY) === "1"; } catch (e) { return false; } }
+function toggleCompleted() {
+  try { localStorage.setItem(STATS_COMPLETED_KEY, statsCompletedOpen() ? "0" : "1"); } catch (e) {}
+  renderAnalytics();
+}
+
+function statsRangeBounds() {
+  const now = new Date();
+  if (statsRange === "all") return { from: null, to: null, label: "All tasks, all time" };
+  const view = statsRange === "today" ? "day" : statsRange;
+  const from = getStart(view, now), to = getEnd(view, from);
+  const last = new Date(to - 1);
+  const label = statsRange === "today"
+    ? now.toLocaleDateString("en-US", { weekday: "long", month: "short", day: "numeric" })
+    : fmtDate(from) + " – " + fmtDate(last);
+  return { from: from.getTime(), to: to.getTime(), label: label + " · your day is " + prefs.dayStart + "–" + prefs.dayEnd + " (set in ⏱ Plan)" };
+}
+
+// Per day: available = your day window minus breaks; planned/done = task minutes inside that window.
+function statsFill(range) {
+  const days = [];
+  let avail = 0, planned = 0, free = 0;
+  const now = Date.now();
+  for (let d = new Date(range.from); d.getTime() < range.to; d.setDate(d.getDate() + 1)) {
+    const iso = isoDate(d);
+    const ws = new Date(iso + "T" + prefs.dayStart).getTime(), we = new Date(iso + "T" + prefs.dayEnd).getTime();
+    const clip = (a, b) => Math.max(0, Math.min(b, we) - Math.max(a, ws)) / 60000;
+    const brk = breaks.reduce((t, b) => t + clip(b.start, b.end), 0);
+    const day = { d: new Date(d), avail: Math.max(0, (we - ws) / 60000 - brk), done: 0, plan: 0 };
+    tasks.forEach(t => {
+      const m = clip(t.start, t.start + t.duration * 60000);
+      if (m) { if (t.completed) day.done += m; else day.plan += m; }
+    });
+    // Free time still ahead: the part of the window after now that no task or break covers.
+    if (we > now) {
+      const from = Math.max(ws, now);
+      const busy = [...tasks.map(t => [t.start, t.start + t.duration * 60000]), ...breaks.map(b => [b.start, b.end])]
+        .map(([a, b]) => [Math.max(a, from), Math.min(b, we)]).filter(([a, b]) => b > a).sort((x, y) => x[0] - y[0]);
+      let cur = from, f = 0;
+      busy.forEach(([a, b]) => { if (a > cur) f += a - cur; cur = Math.max(cur, b); });
+      if (we > cur) f += we - cur;
+      free += f / 60000;
+    }
+    avail += day.avail; planned += day.done + day.plan;
+    days.push(day);
+  }
+  return { days, avail: Math.round(avail), planned: Math.round(planned), free: Math.round(free), pct: avail ? Math.round((planned / avail) * 100) : 0 };
+}
+
+function renderFill(fill) {
+  const box = document.getElementById("fill-box");
+  if (!fill) { box.style.display = "none"; return; }
+  box.style.display = "";
+  const todayIso = isoDate(new Date());
+  const rows = fill.days.map(day => {
+    const cap = Math.max(day.avail, day.done + day.plan) || 1;
+    const pct = day.avail ? Math.round(((day.done + day.plan) / day.avail) * 100) : 0;
+    const iso = isoDate(day.d);
+    const lbl = day.d.toLocaleDateString("en-US", { weekday: "short", day: "numeric" });
+    return `<div class="fill-row" title="${esc(lbl)}: ${fmtDur(Math.round(day.done))} done, ${fmtDur(Math.round(day.plan))} still planned, ${fmtDur(Math.round(day.avail))} available">
+      <span class="lbl${iso === todayIso ? " today" : ""}">${iso === todayIso ? "Today" : lbl}</span>
+      <div class="fill-track">${day.done ? `<i class="done" style="width:${(day.done / cap) * 100}%"></i>` : ""}${day.plan ? `<i class="plan" style="width:${(day.plan / cap) * 100}%"></i>` : ""}</div>
+      <span class="val${pct > 100 ? " over" : ""}"><b>${pct}%</b> · ${fmtDur(Math.round(day.done + day.plan))} / ${fmtDur(Math.round(day.avail))}</span>
+    </div>`;
+  }).join("");
+  box.innerHTML = `<div class="chart-title">How full ${statsRange === "today" ? "today is" : "each day is"} · booked vs available</div>${rows}
+    <div class="fill-legend"><span style="--c:var(--green)">Done</span><span style="--c:var(--accent)">Planned, not done</span><span style="--c:var(--bg1)">Free</span><span>Over 100% = booked beyond your day</span></div>`;
+}
+
 function renderAnalytics() {
   const panel = document.getElementById("analytics-panel");
   panel.classList.toggle("active", activeTab === "analytics");
   if (activeTab !== "analytics") return;
-  const realTasks = tasks;
+  const range = statsRangeBounds();
+  document.getElementById("stats-ranges").innerHTML = STATS_RANGES.map(([k, l]) => `<button class="tag-filter-btn${statsRange === k ? " active" : ""}" style="margin:0 2px 0 0" onclick="setStatsRange('${k}')">${l}</button>`).join("");
+  document.getElementById("stats-sub").textContent = range.label;
+  const realTasks = range.from === null ? tasks : tasks.filter(t => t.start >= range.from && t.start < range.to);
   const total = realTasks.length;
   const done = realTasks.filter(t => t.completed).length;
   const totalMin = realTasks.reduce((s, t) => s + t.duration, 0);
   const doneMin = realTasks.filter(t => t.completed).reduce((s, t) => s + t.duration, 0);
+  const fill = range.from === null ? null : statsFill(range);
   document.getElementById("stat-grid").innerHTML = `
-    <div class="stat-box"><div class="stat-value" style="color:var(--accent)">${total}</div><div class="stat-label">Total Tasks</div></div>
+    <div class="stat-box"><div class="stat-value" style="color:var(--accent)">${total}</div><div class="stat-label">Tasks</div></div>
     <div class="stat-box"><div class="stat-value" style="color:var(--green)">${done}</div><div class="stat-label">Completed</div></div>
-    <div class="stat-box"><div class="stat-value" style="color:var(--blue)">${fmtDur(totalMin)}</div><div class="stat-label">Total Time</div></div>
-    <div class="stat-box"><div class="stat-value" style="color:var(--purple)">${fmtDur(doneMin)}</div><div class="stat-label">Time Done</div></div>`;
+    <div class="stat-box"><div class="stat-value" style="color:var(--blue)">${fmtDur(totalMin)}</div><div class="stat-label">Planned Time</div></div>
+    <div class="stat-box"><div class="stat-value" style="color:var(--purple)">${fmtDur(doneMin)}</div><div class="stat-label">Time Done</div></div>
+    ${fill ? `<div class="stat-box"><div class="stat-value" style="color:${fill.pct > 100 ? "var(--red)" : "var(--text)"}">${fill.pct}%</div><div class="stat-label">Filled · ${fmtDur(fill.avail)} available</div></div>
+    <div class="stat-box"><div class="stat-value" style="color:var(--text)">${fmtDur(fill.free)}</div><div class="stat-label">${statsRange === "today" ? "Free left today" : "Free time left"}</div></div>` : ""}`;
+  renderFill(fill);
   const catMap = {};
   realTasks.forEach(t => { catMap[t.category] = (catMap[t.category] || 0) + t.duration; });
   const catEntries = Object.entries(catMap).sort((a, b) => b[1] - a[1]);
@@ -1126,7 +1242,11 @@ function renderAnalytics() {
   });
   document.getElementById("bar-area").innerHTML = barHtml || '<div style="color:var(--text2);font-size:11px;">Add tags to tasks to see data here.</div>';
 
-  // ── Completed tasks section ──
+  // ── Completed tasks section (collapsible; the open/closed state is per device) ──
+  const open = statsCompletedOpen();
+  document.getElementById("completed-body").classList.toggle("open", open);
+  document.getElementById("completed-toggle").setAttribute("aria-expanded", open);
+  document.getElementById("completed-count").textContent = "(" + tasks.filter(t => t.completed).length + ")";
   let completedTasks = tasks.filter(t => t.completed).sort((a, b) => b.start - a.start);
 
   // Date filter
@@ -1289,13 +1409,11 @@ function createNote() {
   save();
   renderNotes();
   noteApplyMode();
-  // Focus the title field
-  setTimeout(() => {
-    const titleEl = document.getElementById("note-title");
-    if (titleEl) { titleEl.value = ""; titleEl.focus(); }
-    const contentEl = document.getElementById("note-content");
-    if (contentEl) contentEl.innerHTML = "";
-  }, 50);
+  // Clear the editor now (a delayed clear would wipe anything typed straight away), then focus the title.
+  const titleEl = document.getElementById("note-title");
+  titleEl.value = "";
+  document.getElementById("note-content").innerHTML = "";
+  setTimeout(() => titleEl.focus(), 0);
 }
 
 function openNote(id) {
@@ -2975,6 +3093,24 @@ function phoneRender() {
   const apps = {};
   days.forEach(d => Object.entries(d.apps).forEach(([k, v]) => { apps[k] = (apps[k] || 0) + v; }));
   const top = Object.entries(apps).filter(([k]) => k !== "Other").sort((a, b) => b[1] - a[1]).slice(0, 10);
+  // Today (or the newest day in the import) and the time it adds up to.
+  const latestIso = all[all.length - 1], latest = phone.days[latestIso];
+  const isToday = latestIso === isoDate(new Date());
+  const latestTop = Object.entries(latest.apps || {}).filter(([k]) => k !== "Other").sort((a, b) => b[1] - a[1]).slice(0, 3);
+  const dayWord = isToday ? "Today" : "Latest day (" + fmtDate(lastDay) + ")";
+  const WAKING_H = 16;
+  const lostH = total / 3600, perYearDays = (avg * 365) / 86400;
+  const allSec = all.reduce((t, k) => t + phone.days[k].t, 0);
+  const todayHtml = `
+    <div class="phone-today">
+      <div class="stat-box"><div class="stat-value" style="color:var(--blue)">${fmtSec(latest.t)}</div><div class="stat-label">${dayWord} · screen time${avg ? " · " + (latest.t >= avg ? "+" : "−") + fmtSec(Math.abs(latest.t - avg)) + " vs avg" : ""}</div></div>
+      <div class="stat-box"><div class="stat-value" style="color:var(--accent)">${latest.u || 0}</div><div class="stat-label">${dayWord} · unlocks</div></div>
+      <div class="stat-box"><div class="stat-value" style="color:var(--text);font-size:13px;line-height:1.5">${latestTop.map(([n, v]) => esc(n) + " " + fmtSec(v)).join("<br>") || "—"}</div><div class="stat-label">${dayWord} · top apps</div></div>
+    </div>
+    <div class="phone-lost">In these ${days.length} days you spent <b>${Math.round(lostH)} hours</b> on your phone — <b>${(lostH / 24).toFixed(1)} full days</b>, or <b>${Math.round((total / (days.length * WAKING_H * 3600)) * 100)}%</b> of your waking hours.
+      At this pace that's <b>${Math.round(perYearDays)} days a year</b>.
+      <small>All imported data: ${Math.round(allSec / 3600)} h over ${all.length} days (${(allSec / 86400).toFixed(1)} days). Waking hours assumed ${WAKING_H} h/day. ${isToday ? "" : "Import a fresh StayFree export to see today."}</small>
+    </div>`;
   const max = Math.max(...days.map(d => d.t), 1);
   const dayLabel = d => d.toLocaleDateString("en-US", { weekday: "short", month: "short", day: "numeric" });
   let bars = "";
@@ -2988,7 +3124,7 @@ function phoneRender() {
   top.forEach(([name, sec]) => {
     appRows += `<div class="bar-row" title="${esc(name)}: ${fmtSec(sec)} total"><span class="bar-label" style="width:110px">${esc(name)}</span><div class="bar-track"><div class="bar-fill" style="width:${(sec / top[0][1]) * 100}%;background:var(--blue)"></div></div><span style="width:120px;font-size:10px;color:var(--text2);flex-shrink:0">${fmtSec(sec / days.length)}/day · ${Math.round((sec / (total || 1)) * 100)}%</span></div>`;
   });
-  area.innerHTML = `
+  area.innerHTML = todayHtml + `
     <div class="stat-grid">
       <div class="stat-box"><div class="stat-value" style="color:var(--blue)">${fmtSec(avg)}</div><div class="stat-label">Avg screen time / day</div></div>
       <div class="stat-box"><div class="stat-value" style="color:var(--accent)">${Math.round(unl)}</div><div class="stat-label">Avg unlocks / day</div></div>
