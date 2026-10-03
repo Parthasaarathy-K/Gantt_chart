@@ -325,6 +325,94 @@ body.link-mode .resize-handle { display: none !important; }
   #vault-panel.editing.mobile-preview #vault-editor { display: none; }
   #vault-panel.editing.mobile-preview #vault-view { display: block; }
 }
+
+/* PLAN / TIMEBOX */
+.plan-lead { font-size: 11px; color: var(--text2); line-height: 1.6; margin: -8px 0 14px; }
+.plan-lead b { color: var(--text); font-weight: 600; }
+.plan-add, .plan-settings { display: flex; gap: 6px; align-items: center; flex-wrap: wrap; margin-bottom: 10px; }
+.plan-add #plan-title { flex: 1; min-width: 200px; }
+.plan-add label { display: flex; align-items: center; gap: 4px; font-size: 10px; color: var(--text2); }
+.plan-add #plan-est { width: 64px; padding: 6px; }
+.plan-add select { width: auto; padding: 7px 6px; }
+.plan-settings { font-size: 11px; color: var(--text2); margin-bottom: 14px; }
+.plan-settings input { width: auto; padding: 5px 7px; font-size: 11px; }
+.plan-primary { padding: 7px 12px; background: var(--accent); color: #000; font-weight: 700; border-radius: var(--radius); font-size: 11px; }
+.plan-ghost { padding: 6px 11px; background: var(--bg2); border: 1px solid var(--accent); color: var(--accent); border-radius: var(--radius); font-size: 10px; }
+.plan-ghost.small, .plan-x { padding: 3px 7px; font-size: 10px; }
+.plan-x { background: none; color: var(--text2); border: 1px solid var(--border); border-radius: 3px; }
+.plan-x:hover { color: var(--text); border-color: var(--text2); }
+.plan-table { width: 100%; border-collapse: collapse; font-size: 11px; min-width: 760px; }
+#plan-table-wrap { overflow-x: auto; margin-bottom: 14px; }
+.plan-table th { text-align: left; font-weight: 600; font-size: 9px; color: var(--text2); text-transform: uppercase; letter-spacing: 0.8px; padding: 6px 6px; border-bottom: 1px solid var(--border); white-space: nowrap; }
+.plan-table td { padding: 6px; border-bottom: 1px solid #1c1c1c; vertical-align: middle; }
+.plan-table tr.dim td { opacity: 0.5; }
+.plan-table select { width: 44px; padding: 3px 2px; font-size: 11px; text-align: center; }
+.plan-table input.plan-est-in { width: 56px; padding: 3px 4px; font-size: 11px; }
+.plan-table .plan-title-cell { min-width: 180px; color: var(--text); }
+.plan-verdict { display: inline-block; padding: 2px 7px; border-radius: 10px; font-size: 9px; letter-spacing: 0.4px; white-space: nowrap; border: 1px solid var(--border); color: var(--text2); }
+.plan-verdict.do { color: var(--green); border-color: rgba(52,199,123,0.4); }
+.plan-verdict.batch { color: var(--blue); border-color: rgba(74,144,217,0.4); }
+.plan-verdict.drop { color: var(--text2); }
+.plan-flag { display: block; font-size: 9px; color: var(--text2); margin-top: 3px; white-space: nowrap; }
+.plan-flag.warn { color: var(--accent); }
+.plan-slot { color: var(--accent); white-space: nowrap; }
+.plan-help { margin-top: 18px; font-size: 11px; color: var(--text2); line-height: 1.7; max-width: 760px; }
+.plan-help summary { cursor: pointer; color: var(--text); }
+.plan-help ul { padding-left: 18px; margin-top: 6px; }
+.plan-help b { color: var(--text); }
+
+/* STUCK PROTOCOL */
+.stuck-card { background: var(--bg2); border: 1px solid var(--border); border-radius: 6px; padding: 16px; max-width: 760px; margin-bottom: 16px; }
+.stuck-step { font-size: 9px; color: var(--accent); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; }
+.stuck-q { font-size: 14px; color: var(--text); margin-bottom: 10px; line-height: 1.5; }
+.stuck-hint { font-size: 11px; color: var(--text2); line-height: 1.6; margin: 8px 0; }
+.stuck-chain { margin: 0 0 12px; padding: 0; list-style: none; }
+.stuck-chain li { position: relative; padding: 6px 10px 6px 26px; font-size: 12px; color: var(--text); border-left: 2px solid var(--border); margin-left: 8px; }
+.stuck-chain li::before { content: attr(data-k); position: absolute; left: -10px; top: 5px; width: 18px; height: 18px; border-radius: 50%; background: var(--bg1); border: 1px solid var(--border); color: var(--text2); font-size: 9px; display: flex; align-items: center; justify-content: center; }
+.stuck-chain li.root { border-left-color: var(--accent); color: var(--accent); }
+.stuck-chain li .rm { background: none; color: var(--text2); font-size: 12px; margin-left: 6px; opacity: 0.5; }
+.stuck-row { display: flex; gap: 6px; flex-wrap: wrap; align-items: center; margin-top: 8px; }
+.stuck-blocks { display: grid; grid-template-columns: repeat(auto-fill, minmax(210px, 1fr)); gap: 8px; }
+.stuck-block { text-align: left; background: var(--bg1); border: 1px solid var(--border); border-radius: var(--radius); padding: 10px; color: var(--text); font-size: 12px; }
+.stuck-block:hover { border-color: var(--accent); }
+.stuck-block small { display: block; color: var(--text2); font-size: 10px; margin-top: 4px; line-height: 1.4; }
+.stuck-tip { border-left: 3px solid var(--accent); background: var(--accent-dim); padding: 8px 12px; font-size: 11px; color: var(--text); line-height: 1.6; margin-bottom: 12px; border-radius: 0 var(--radius) var(--radius) 0; }
+.stuck-field { margin-bottom: 10px; }
+.stuck-field label { display: block; font-size: 11px; color: var(--text); margin-bottom: 4px; }
+.stuck-log-item { display: flex; gap: 10px; align-items: flex-start; padding: 10px 12px; background: var(--bg2); border: 1px solid var(--border); border-radius: var(--radius); margin-bottom: 6px; max-width: 760px; }
+.stuck-log-item.done { opacity: 0.55; }
+.stuck-log-item .main { flex: 1; min-width: 0; font-size: 12px; color: var(--text); }
+.stuck-log-item .meta { font-size: 10px; color: var(--text2); margin-top: 3px; line-height: 1.5; }
+
+/* NOTES: text / whiteboard */
+.note-mode { display: inline-flex; border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; flex-shrink: 0; }
+.note-mode button { background: var(--bg2); color: var(--text2); padding: 4px 9px; font-size: 10px; }
+.note-mode button.active { background: var(--accent-dim); color: var(--accent); }
+.board-wrap { display: none; flex: 1; min-height: 320px; position: relative; }
+#note-edit-area.draw .board-wrap { display: block; }
+#note-edit-area.draw #note-content, #note-edit-area.draw #note-toolbar { display: none !important; }
+.board-wrap > .board-host { position: absolute; inset: 0; }
+.board-msg { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; color: var(--text2); font-size: 12px; text-align: center; padding: 20px; }
+#vault-panel.drawing #vault-view { padding: 0; overflow: hidden; position: relative; display: block; }
+#vault-panel.drawing #vault-view .board-host { position: absolute; inset: 0; }
+#vault-draw-btn { display: none; }
+
+/* PHONE USAGE */
+.phone-days { display: flex; align-items: flex-end; gap: 2px; height: 140px; padding-top: 6px; border-bottom: 1px solid var(--border); position: relative; }
+.phone-day { flex: 1; min-width: 2px; height: 100%; display: flex; align-items: flex-end; cursor: default; position: relative; }
+.phone-day > i { display: block; width: 100%; background: var(--blue); border-radius: 3px 3px 0 0; min-height: 1px; }
+.phone-day:hover > i { background: var(--accent); }
+.phone-day.wkend > i { opacity: 0.6; }
+.phone-avg { position: absolute; left: 0; right: 0; border-top: 1px dashed var(--text2); pointer-events: none; }
+.phone-avg span { position: absolute; right: 0; top: -14px; font-size: 9px; color: var(--text2); background: var(--bg2); padding: 0 3px; }
+.phone-axis { display: flex; justify-content: space-between; font-size: 9px; color: var(--text2); margin-top: 4px; }
+.phone-row { grid-template-columns: 3fr 2fr; align-items: start; }
+#phone-tip { position: fixed; z-index: 50; pointer-events: none; background: #222; border: 1px solid #444; border-radius: 4px; padding: 5px 8px; font-size: 10px; color: #eee; display: none; white-space: nowrap; }
+@media (max-width: 700px) {
+  .note-mode button { padding: 4px 6px; }
+  .stuck-blocks { grid-template-columns: 1fr; }
+  .phone-row { grid-template-columns: 1fr; }
+}
 </style>
 </head>
 <body>
@@ -336,10 +424,9 @@ body.link-mode .resize-handle { display: none !important; }
     </div>
     <div id="tab-bar">
       <button class="tab-btn active" data-tab="tasks" onclick="switchTab('tasks')">Tasks</button>
-      <button class="tab-btn" data-tab="todo" onclick="switchTab('todo')">✓</button>
+      <button class="tab-btn" data-tab="plan" onclick="switchTab('plan')" title="Plan & timebox">⏱</button>
       <button class="tab-btn" data-tab="analytics" onclick="switchTab('analytics')">Stats</button>
-      <button class="tab-btn" data-tab="achievements" onclick="switchTab('achievements')">★</button>
-      <button class="tab-btn" data-tab="decide" onclick="switchTab('decide')">⚖</button>
+      <button class="tab-btn" data-tab="stuck" onclick="switchTab('stuck')" title="Stuck protocol">🧩</button>
       <button class="tab-btn" data-tab="notes" onclick="switchTab('notes')">📝</button>
       <button class="tab-btn" data-tab="vault" onclick="switchTab('vault')" title="Obsidian vault">📓</button>
       <button class="tab-btn" data-tab="sync" onclick="switchTab('sync')">⚙</button>
@@ -377,19 +464,32 @@ body.link-mode .resize-handle { display: none !important; }
       </div>
     </div>
 
-    <!-- Todo Panel -->
-    <div id="todo-panel" class="panel">
-      <div class="panel-title">QUICK TODO</div>
-      <div style="display:flex;gap:8px;margin-bottom:16px;">
-        <input id="todo-input" placeholder="Type a task and press Enter..." style="flex:1;padding:10px;font-size:13px;" onkeydown="if(event.key==='Enter'){event.preventDefault();addTodo()}" />
-        <button onclick="addTodo()" style="padding:10px 16px;background:var(--accent);color:#000;font-weight:700;border-radius:var(--radius);font-size:12px;">Add</button>
+    <!-- Plan / Timebox Panel -->
+    <div id="plan-panel" class="panel">
+      <div class="panel-title">PLAN &amp; TIMEBOX</div>
+      <p class="plan-lead"><b>Importance</b> picks the task · <b>Urgency</b> sets the order · <b>Effort</b> and <b>aversiveness</b> set the timing and whether to break it down.</p>
+      <div class="plan-add">
+        <input id="plan-title" placeholder="Add a task to plan, press Enter…" onkeydown="if(event.key==='Enter'){event.preventDefault();planAdd()}" />
+        <label title="Estimated minutes">Est <input id="plan-est" type="number" min="5" step="5" value="30" /></label>
+        <select id="plan-cat" title="Category"></select>
+        <button class="plan-primary" onclick="planAdd()">Add</button>
       </div>
-      <div style="display:flex;gap:8px;margin-bottom:12px;">
-        <button class="tag-filter-btn active" id="todo-filter-all" onclick="setTodoFilter('all')">All</button>
-        <button class="tag-filter-btn" id="todo-filter-unscheduled" onclick="setTodoFilter('unscheduled')">Unscheduled</button>
-        <button class="tag-filter-btn" id="todo-filter-scheduled" onclick="setTodoFilter('scheduled')">Scheduled</button>
+      <div class="plan-settings">
+        <span>Plan</span><input type="date" id="plan-date" onchange="planSuggestion=null;renderPlan()" />
+        <span>from</span><input type="time" id="plan-from" onchange="planSetPref('dayStart',this.value)" />
+        <span>to</span><input type="time" id="plan-to" onchange="planSetPref('dayEnd',this.value)" />
+        <button class="plan-primary" onclick="planSuggest()">Suggest schedule</button>
+        <button id="plan-place-all" class="plan-ghost" onclick="planPlaceAll()" style="display:none">Place all on timeline</button>
       </div>
-      <div id="todo-list"></div>
+      <div id="plan-table-wrap"></div>
+      <details class="plan-help"><summary>How the suggestion works</summary>
+        <ul>
+          <li><b>Importance</b> (1–5) decides <i>whether</i>: 3+ is scheduled; low importance with high urgency is batched into a short box at the end; low on both is marked <i>Drop?</i> and left out.</li>
+          <li><b>Urgency</b> (1–5) decides <i>order</i>: more urgent tasks get earlier boxes.</li>
+          <li><b>Effort</b> and <b>aversiveness</b> decide <i>timing and shape</i>: among equally urgent tasks the harder or more dreaded one goes first, into your fresher hours ("eat the frog"). Effort 4+ with aversiveness 4+, or anything over 90 min, is split into 25-minute boxes with 5-minute gaps.</li>
+          <li>Boxes fill the free time between your start and end times, around existing tasks and breaks. Nothing is placed until you press <b>Place</b>.</li>
+        </ul>
+      </details>
     </div>
 
     <div id="analytics-panel" class="panel">
@@ -415,24 +515,32 @@ body.link-mode .resize-handle { display: none !important; }
         <div id="completed-filters" style="margin-bottom:10px;"></div>
         <div id="completed-list"></div>
       </div>
-    </div>
-
-    <div id="achievements-panel" class="panel">
-      <div class="panel-title">ACHIEVEMENTS</div>
-      <div id="achieve-filters"></div>
-      <div id="achieve-list"></div>
-    </div>
-
-    <div id="decide-panel" class="panel">
-      <div class="panel-title">DECISION ENGINE</div>
-      <div class="form-group"><input id="decision-title" placeholder="What decision are you facing?" /></div>
-      <div id="decision-questions"></div>
-      <div style="display:flex;gap:8px;margin-bottom:8px;">
-        <input id="new-question" placeholder="Add a question..." style="flex:1" />
-        <button onclick="addQuestion()" style="padding:8px 14px;background:var(--bg2);border:1px solid var(--border);color:var(--accent);border-radius:var(--radius);">+</button>
+      <!-- Phone usage (StayFree export) -->
+      <div style="margin-top:28px;">
+        <div style="display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:12px;">
+          <div class="panel-title" style="margin-bottom:0;">PHONE USAGE</div>
+          <div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap;">
+            <span id="phone-ranges"></span>
+            <button onclick="document.getElementById('phone-file').click()" class="plan-ghost">⬆ Import StayFree export</button>
+          </div>
+        </div>
+        <input type="file" id="phone-file" accept=".xls,.xlsx,.csv" style="display:none" onchange="phoneImport(event)" />
+        <div id="phone-area"></div>
       </div>
-      <button id="eval-btn" onclick="evaluateDecision()">EVALUATE</button>
-      <div class="result-box" id="result-box"><div class="result-pct" id="result-pct"></div><div class="result-verdict" id="result-verdict"></div></div>
+    </div>
+
+    <!-- Stuck Protocol Panel -->
+    <div id="stuck-panel" class="panel">
+      <div class="panel-title">STUCK PROTOCOL</div>
+      <div id="stuck-body"></div>
+      <details class="plan-help"><summary>Where this comes from</summary>
+        <ul>
+          <li><b>5 Whys</b> (Taiichi Ohno, Toyota): keep asking why until you reach a cause you can act on, usually within about five steps.</li>
+          <li><b>Task aversiveness</b> (Tim Pychyl's research on procrastination): we avoid tasks that feel boring, frustrating, difficult, ambiguous, unstructured or lacking meaning. Naming which one is at work points to the fix.</li>
+          <li><b>Next physical action</b> (David Allen, GTD): a stuck project moves again once the next visible step is small and concrete.</li>
+          <li><b>Implementation intentions</b> (Peter Gollwitzer): deciding <i>when</i> and <i>where</i> you'll do it makes follow-through much more likely, so the protocol ends by putting the action on your timeline.</li>
+        </ul>
+      </details>
     </div>
 
     <!-- Notes Panel -->
@@ -459,9 +567,12 @@ body.link-mode .resize-handle { display: none !important; }
               <select id="note-link-task" style="width:auto;padding:5px 8px;font-size:10px;max-width:180px;" onchange="autoSaveNote()">
                 <option value="">No linked task</option>
               </select>
+              <div class="note-mode" title="Switch this note between text and a whiteboard">
+                <button id="note-mode-text" onclick="noteSetMode('text')">✎ Text</button><button id="note-mode-draw" onclick="noteSetMode('draw')">◇ Board</button>
+              </div>
               <button onclick="deleteNote()" style="background:none;border:1px solid var(--red);color:var(--red);padding:4px 10px;border-radius:var(--radius);font-size:10px;cursor:pointer;font-family:var(--font);">Delete</button>
             </div>
-            <div style="padding:4px 16px 0;display:flex;flex-wrap:wrap;gap:4px;border-bottom:1px solid var(--border);padding-bottom:6px;">
+            <div id="note-toolbar" style="padding:4px 16px 0;display:flex;flex-wrap:wrap;gap:4px;border-bottom:1px solid var(--border);padding-bottom:6px;">
               <button onclick="formatNote('bold')" title="Bold" style="background:var(--bg2);border:1px solid var(--border);color:var(--text);padding:4px 8px;border-radius:3px;font-size:11px;font-weight:700;">B</button>
               <button onclick="formatNote('italic')" title="Italic" style="background:var(--bg2);border:1px solid var(--border);color:var(--text);padding:4px 8px;border-radius:3px;font-size:11px;font-style:italic;">I</button>
               <button onclick="formatNote('insertUnorderedList')" title="Bullet list" style="background:var(--bg2);border:1px solid var(--border);color:var(--text);padding:4px 8px;border-radius:3px;font-size:11px;">• List</button>
@@ -469,10 +580,12 @@ body.link-mode .resize-handle { display: none !important; }
               <button onmousedown="event.preventDefault()" onclick="noteInsertLink()" title="Add a web link (select text first to link it)" style="background:var(--bg2);border:1px solid var(--border);color:var(--text);padding:4px 8px;border-radius:3px;font-size:11px;">🔗 Link</button>
               <button onmousedown="event.preventDefault()" onclick="noteInsertEmbed()" title="Embed a video, song, document, image or web page" style="background:var(--bg2);border:1px solid var(--border);color:var(--text);padding:4px 8px;border-radius:3px;font-size:11px;">▣ Embed</button>
               <button onmousedown="event.preventDefault()" onclick="noteOpenPicker(false)" title="Link to another note (or type [[)" style="background:var(--bg2);border:1px solid var(--border);color:var(--text);padding:4px 8px;border-radius:3px;font-size:11px;">[[ ]] Note</button>
+              <button onmousedown="event.preventDefault()" onclick="noteCreateTask()" title="Select text, then click to turn it into a task starting now" style="background:var(--accent-dim);border:1px solid var(--accent);color:var(--accent);padding:4px 8px;border-radius:3px;font-size:11px;">＋ Task</button>
               <span style="flex:1;"></span>
               <span id="note-saved-indicator" style="font-size:9px;color:var(--text2);align-self:center;">Saved</span>
             </div>
             <div id="note-content" contenteditable="true" style="flex:1;padding:16px;font-size:12px;line-height:1.8;color:var(--text);overflow-y:auto;outline:none;min-height:200px;" oninput="autoSaveNote()"></div>
+            <div id="note-board" class="board-wrap"><div class="board-msg">Loading whiteboard…</div></div>
             <div id="note-meta" style="padding:8px 16px;border-top:1px solid var(--border);font-size:9px;color:var(--text2);"></div>
             <div id="note-picker" class="note-picker">
               <input id="note-picker-input" placeholder="Link to note…" autocomplete="off" />
@@ -489,6 +602,7 @@ body.link-mode .resize-handle { display: none !important; }
         <div id="vault-side-head">
           <input id="vault-search" placeholder="Search notes..." oninput="vaultRenderTree()" />
           <button class="vault-icon-btn" title="New note" onclick="vaultNewNote()">＋</button>
+          <button class="vault-icon-btn" title="New drawing (Excalidraw)" onclick="vaultNewDrawing()">◇</button>
           <button class="vault-icon-btn" title="Refresh from GitHub" onclick="vaultRefresh()">⟳</button>
           <button class="vault-icon-btn" title="Vault settings" onclick="vaultShowSettings()">⚙</button>
         </div>
@@ -500,6 +614,7 @@ body.link-mode .resize-handle { display: none !important; }
           <div id="vault-path"></div>
           <span id="vault-status"></span>
           <div class="vault-actions" id="vault-actions-view">
+            <button class="vault-btn primary" id="vault-draw-btn" onclick="vaultEditDrawing()">✎ Edit drawing</button>
             <button class="vault-btn primary" id="vault-edit-btn" onclick="vaultEdit()">Edit</button>
             <button class="vault-btn" id="vault-rename-btn" onclick="vaultRename()">Rename</button>
             <button class="vault-btn danger" id="vault-delete-btn" onclick="vaultDelete()">Delete</button>
@@ -632,13 +747,10 @@ let sidebarCollapsed = window.innerWidth < 600;
 let linkMode = false;       // Are we in "link tasks" mode?
 let linkSourceId = null;    // First task clicked in link mode
 
-let decisionQuestions = [
-  { id: "q1", text: "How crucial is this? (1-5)", weight: 2, answer: 0 },
-  { id: "q2", text: "Time it consumes? (1=lot, 5=little)", weight: 1.5, answer: 0 },
-  { id: "q3", text: "Can it be done later? (1=yes, 5=no)", weight: 1.5, answer: 0 },
-  { id: "q4", text: "Impact on my life? (1-5)", weight: 2, answer: 0 },
-  { id: "q5", text: "Will it help me learn? (1-5)", weight: 1, answer: 0 },
-];
+let backlog = [];   // Plan tab: { id, title, category, imp, urg, eff, avr, est, notes, createdAt }
+let stuckLog = [];  // Stuck tab: { id, problem, whys[], block, answers{}, action, actionMin, taskId, step, done, createdAt, updatedAt }
+let phone = null;   // StayFree import: { device, importedAt, days: { "YYYY-MM-DD": { t: sec, u: unlocks, o: opens, apps: { name: sec } } } }
+let prefs = { dayStart: "09:00", dayEnd: "18:00" };
 
 // ══════════════════════════════════════
 // 2. CONSTANTS
@@ -652,6 +764,10 @@ const ROW_H = 46;
 const STORAGE_KEY = "command_center_v3";
 const BREAKS_KEY = "command_center_breaks";
 const NOTES_KEY = "command_center_notes";
+const BACKLOG_KEY = "command_center_backlog";
+const STUCK_KEY = "command_center_stuck";
+const PHONE_KEY = "command_center_phone";
+const PREFS_KEY = "command_center_prefs";
 
 // Responsive: calculate MPP based on available screen width
 function getMPP() {
@@ -694,7 +810,11 @@ function fmtDur(m) { if (m < 60) return m + "m"; const h = Math.floor(m / 60), r
 function fmtDate(d) { return d.toLocaleDateString("en-US", { month: "short", day: "numeric" }); }
 function fmtTime(d) { return d.toLocaleTimeString("en-US", { hour: "numeric", minute: "2-digit", hour12: true }); }
 function fmtTimeShort(d) { return d.toLocaleTimeString("en-US", { hour: "numeric", hour12: true }); }
-function isoDate(d) { return d.toISOString().slice(0, 10); }
+// Local calendar date (toISOString would give the UTC date, a day off late at night / early morning).
+function isoDate(d) { d = new Date(d); return d.getFullYear() + "-" + String(d.getMonth() + 1).padStart(2, "0") + "-" + String(d.getDate()).padStart(2, "0"); }
+function esc(s) { return String(s == null ? "" : s).replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c])); }
+// Now, rounded up to the next 5 minutes.
+function nowRounded() { const d = new Date(); d.setSeconds(0, 0); d.setMinutes(Math.ceil(d.getMinutes() / 5) * 5); return d; }
 function timeStr(d) { return d.toTimeString().slice(0, 5); }
 
 function getStart(view, ref) {
@@ -716,6 +836,10 @@ function save() {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(tasks));
     localStorage.setItem(BREAKS_KEY, JSON.stringify(breaks));
     localStorage.setItem(NOTES_KEY, JSON.stringify(notes));
+    localStorage.setItem(BACKLOG_KEY, JSON.stringify(backlog));
+    localStorage.setItem(STUCK_KEY, JSON.stringify(stuckLog));
+    localStorage.setItem(PREFS_KEY, JSON.stringify(prefs));
+    if (phone) localStorage.setItem(PHONE_KEY, JSON.stringify(phone)); else localStorage.removeItem(PHONE_KEY);
   } catch(e) {}
   if (window.cloudSchedulePush) window.cloudSchedulePush();
 }
@@ -735,6 +859,10 @@ function load() {
     if (b) breaks = JSON.parse(b);
     const n = localStorage.getItem(NOTES_KEY);
     if (n) notes = JSON.parse(n);
+    backlog = JSON.parse(localStorage.getItem(BACKLOG_KEY) || "[]");
+    stuckLog = JSON.parse(localStorage.getItem(STUCK_KEY) || "[]");
+    phone = JSON.parse(localStorage.getItem(PHONE_KEY) || "null");
+    prefs = { ...prefs, ...JSON.parse(localStorage.getItem(PREFS_KEY) || "{}") };
   } catch(e) {}
 }
 
@@ -751,10 +879,9 @@ function renderAll() {
   renderSidebar();
   renderToolbar();
   if (activeTab === "tasks") renderGantt();
-  if (activeTab === "todo") renderTodo();
+  if (activeTab === "plan") renderPlan();
   if (activeTab === "analytics") renderAnalytics();
-  if (activeTab === "achievements") renderAchievements();
-  if (activeTab === "decide") renderDecision();
+  if (activeTab === "stuck") renderStuck();
   if (activeTab === "notes") renderNotes();
   if (activeTab === "vault") renderVault();
   if (activeTab === "sync") { document.getElementById("sync-panel").classList.add("active"); }
@@ -766,8 +893,8 @@ function renderSidebar() {
   document.getElementById("collapse-btn").textContent = sidebarCollapsed ? "→" : "←";
   document.querySelectorAll(".tab-btn").forEach(btn => {
     btn.classList.toggle("active", btn.dataset.tab === activeTab);
-    const icons = { tasks: "☰", todo: "✓", analytics: "◐", achievements: "★", decide: "⚖", notes: "📝", vault: "📓", sync: "⚙" };
-    const labels = { tasks: "Tasks", todo: "✓", analytics: "Stats", achievements: "★", decide: "⚖", notes: "📝", vault: "📓", sync: "⚙" };
+    const icons = { tasks: "☰", plan: "⏱", analytics: "◐", stuck: "🧩", notes: "📝", vault: "📓", sync: "⚙" };
+    const labels = { tasks: "Tasks", plan: "⏱", analytics: "Stats", stuck: "🧩", notes: "📝", vault: "📓", sync: "⚙" };
     btn.textContent = sidebarCollapsed ? icons[btn.dataset.tab] : labels[btn.dataset.tab];
   });
   const listEl = document.getElementById("task-list-items");
@@ -1036,44 +1163,15 @@ function renderAnalytics() {
     });
   }
   document.getElementById("completed-list").innerHTML = compHtml;
-}
-
-function renderAchievements() {
-  const panel = document.getElementById("achievements-panel");
-  panel.classList.toggle("active", activeTab === "achievements");
-  if (activeTab !== "achievements") return;
-  const done = tasks.filter(t => t.completed);
-  const allTags = [...new Set(done.flatMap(t => t.tags || []))];
-  let filterHtml = `<button class="tag-filter-btn${!window._achFilter ? ' active' : ''}" onclick="filterAch(null)">All (${done.length})</button>`;
-  allTags.forEach(tag => { filterHtml += `<button class="tag-filter-btn${window._achFilter === tag ? ' active' : ''}" onclick="filterAch('${tag}')">${tag}</button>`; });
-  document.getElementById("achieve-filters").innerHTML = filterHtml;
-  const filtered = window._achFilter ? done.filter(t => t.tags && t.tags.includes(window._achFilter)) : done;
-  let listHtml = "";
-  if (!filtered.length) listHtml = '<div style="color:var(--text2);font-size:12px;text-align:center;padding:40px;">Complete tasks to see achievements here.</div>';
-  filtered.forEach(t => { const col = COLORS[t.category] || "#666";
-    listHtml += `<div class="achievement-card" style="border-left-color:${col}"><div style="font-size:12px;color:var(--text)">✓ ${t.title}</div><div style="font-size:10px;color:var(--text2);margin-top:4px">${fmtDur(t.duration)} · ${t.category}${t.tags?.length ? " · " + t.tags.join(", ") : ""}</div></div>`;
-  });
-  document.getElementById("achieve-list").innerHTML = listHtml;
-}
-
-function renderDecision() {
-  const panel = document.getElementById("decide-panel");
-  panel.classList.toggle("active", activeTab === "decide");
-  if (activeTab !== "decide") return;
-  let html = "";
-  decisionQuestions.forEach((q, qi) => {
-    let btns = "";
-    for (let v = 1; v <= 5; v++) btns += `<button class="rating-btn${q.answer === v ? ' active' : ''}" onclick="rateQ(${qi},${v})">${v}</button>`;
-    html += `<div class="decision-card"><div class="decision-q"><span>${q.text}</span><button onclick="removeQ(${qi})" style="background:none;color:var(--red);font-size:14px;border:none;cursor:pointer">×</button></div><div style="display:flex;gap:6px">${btns}</div></div>`;
-  });
-  document.getElementById("decision-questions").innerHTML = html;
+  phoneRender();
 }
 
 // ── NOTES ──
 function renderNotes() {
   const panel = document.getElementById("notes-panel");
   panel.classList.toggle("active", activeTab === "notes");
-  if (activeTab !== "notes") return;
+  if (activeTab !== "notes") { noteBoardClose(); return; }
+  if (!activeNoteId) noteBoardClose();
 
   // Search filter
   const searchEl = document.getElementById("note-search");
@@ -1101,7 +1199,7 @@ function renderNotes() {
   filtered.forEach(n => {
     const isActive = activeNoteId === n.id;
     const linkedTask = n.linkedTaskId ? tasks.find(t => t.id === n.linkedTaskId) : null;
-    const preview = (n.content || "")
+    const preview = n.mode === "draw" ? "◇ whiteboard" : (n.content || "")
       .replace(/<div class="note-embed-bar">[\s\S]*?<\/div>/g, " ")   // embed buttons aren't note text
       .replace(/<[^>]*>/g, "").replace(/&nbsp;/g, " ").trim().slice(0, 60);
     const dateStr = new Date(n.updatedAt || n.createdAt).toLocaleDateString("en-US", { month: "short", day: "numeric" });
@@ -1171,10 +1269,12 @@ function createNote() {
     createdAt: Date.now(),
     updatedAt: Date.now(),
   };
+  if (activeNoteId) saveCurrentNote();
   notes.unshift(note);
   activeNoteId = note.id;
   save();
   renderNotes();
+  noteApplyMode();
   // Focus the title field
   setTimeout(() => {
     const titleEl = document.getElementById("note-title");
@@ -1198,6 +1298,7 @@ function openNote(id) {
   setTimeout(() => {
     document.getElementById("note-title").value = note.title || "";
     document.getElementById("note-content").innerHTML = notesClean(note.content || "");
+    noteApplyMode();
   }, 10);
 }
 
@@ -1232,6 +1333,7 @@ function autoSaveNote() {
 function deleteNote() {
   if (!activeNoteId) return;
   if (!confirm("Delete this note?")) return;
+  if (noteBoard) { noteBoard.pending = null; noteBoardClose(); }
   notes = notes.filter(n => n.id !== activeNoteId);
   activeNoteId = null;
   save();
@@ -1241,6 +1343,153 @@ function deleteNote() {
 function formatNote(command) {
   document.execCommand(command, false, null);
   document.getElementById("note-content").focus();
+}
+
+// Selected note text → a new task starting now.
+function noteCreateTask() {
+  const el = document.getElementById("note-content");
+  const sel = window.getSelection();
+  let text = "";
+  if (sel.rangeCount && el.contains(sel.getRangeAt(0).commonAncestorContainer)) text = sel.toString().trim();
+  if (!text) { alert("Select some text in the note first, then press ＋ Task."); return; }
+  saveCurrentNote();
+  const note = notes.find(n => n.id === activeNoteId);
+  const first = text.split(/\n+/).map(l => l.trim()).find(Boolean) || text;
+  const title = first.replace(/^([-*•]|\d+[.)])\s+/, "").slice(0, 120);
+  const from = note && note.title ? `From note "${note.title}"` : "From a note";
+  openModal(null, { title, notes: text.length > title.length + 2 ? from + "\n\n" + text : from, fromNote: activeNoteId });
+}
+
+// ── EXCALIDRAW (whiteboard notes + vault drawings) ──
+// Loaded on first use from a CDN; nothing to install.
+const EX_VER = "0.18.1";
+const EX_CDN = "https://cdn.jsdelivr.net/npm/@excalidraw/excalidraw@" + EX_VER + "/dist/prod/";
+let exLibPromise = null;
+function exLoad() {
+  if (!exLibPromise) {
+    window.EXCALIDRAW_ASSET_PATH = EX_CDN;   // fonts
+    const css = document.createElement("link");
+    css.rel = "stylesheet"; css.href = EX_CDN + "index.css";
+    document.head.appendChild(css);
+    const deps = "?deps=react@18.3.1,react-dom@18.3.1";
+    exLibPromise = Promise.all([
+      import("https://esm.sh/react@18.3.1"),
+      import("https://esm.sh/react-dom@18.3.1/client"),
+      import("https://esm.sh/@excalidraw/excalidraw@" + EX_VER + deps),
+    ]).then(([R, RD, EX]) => ({ React: R.default || R, createRoot: RD.createRoot || RD.default.createRoot, EX }));
+    exLibPromise.catch(() => { exLibPromise = null; });
+  }
+  return exLibPromise;
+}
+// Mounts an editor into host (which must already be in the page and sized).
+async function exMount(host, scene, onChange) {
+  const { React, createRoot, EX } = await exLoad();
+  const root = createRoot(host);
+  let api = null;
+  await new Promise((resolve, reject) => {
+    const t = setTimeout(() => reject(new Error("The drawing editor took too long to start")), 30000);
+    root.render(React.createElement(EX.Excalidraw, {
+      initialData: { elements: scene.elements || [], appState: { ...(scene.appState || {}), theme: "dark" }, files: scene.files || {}, scrollToContent: true },
+      theme: "dark",
+      excalidrawAPI: a => { api = a; clearTimeout(t); resolve(); },
+      onChange: (els, st, files) => onChange && onChange(els, st, files),
+      UIOptions: { canvasActions: { loadScene: false, saveToActiveFile: false } },
+    }));
+  });
+  return { api, EX, unmount: () => root.unmount() };
+}
+function exVersion(EX, els) { return EX.hashElementsVersion ? EX.hashElementsVersion(els) : EX.getSceneVersion(els); }
+
+// ── NOTE WHITEBOARD ──
+// A note is "text" or "draw" (note.mode); a drawing lives in note.scene and syncs like any note.
+const BOARD_MAX_BYTES = 700000;   // the whole cloud document is capped at 1 MB
+let noteBoard = null;             // { noteId, handle, timer, pending, ver }
+
+function noteApplyMode() {
+  const note = notes.find(n => n.id === activeNoteId);
+  const draw = !!note && note.mode === "draw";
+  document.getElementById("note-edit-area").classList.toggle("draw", draw);
+  document.getElementById("note-mode-text").classList.toggle("active", !draw);
+  document.getElementById("note-mode-draw").classList.toggle("active", draw);
+  if (draw) noteBoardOpen(note); else noteBoardClose();
+}
+
+function noteSetMode(mode) {
+  const note = notes.find(n => n.id === activeNoteId);
+  if (!note) return;
+  saveCurrentNote();
+  note.mode = mode === "draw" ? "draw" : "text";
+  note.updatedAt = Date.now();
+  save();
+  noteApplyMode();
+  renderNotes();
+}
+
+async function noteBoardOpen(note) {
+  if (noteBoard && noteBoard.noteId === note.id) return;
+  noteBoardClose();
+  const wrap = document.getElementById("note-board");
+  wrap.innerHTML = "";
+  const msg = document.createElement("div");
+  msg.className = "board-msg"; msg.textContent = "Loading whiteboard…";
+  const host = document.createElement("div");
+  host.className = "board-host";
+  wrap.append(host, msg);
+  const board = noteBoard = { noteId: note.id, handle: null, timer: null, pending: null, ver: null };
+  try {
+    const scene = note.scene || {};
+    const handle = await exMount(host, scene, (els, st, files) => noteBoardChanged(board, els, st, files));
+    if (noteBoard !== board) { handle.unmount(); return; }
+    board.ver = exVersion(handle.EX, handle.api.getSceneElements());   // baseline: what was loaded
+    board.handle = handle;
+    msg.remove();
+  } catch (e) {
+    if (noteBoard === board) msg.textContent = "⚠ Couldn't load the whiteboard: " + e.message + " — are you offline?";
+  }
+}
+
+function noteBoardChanged(board, els, st, files) {
+  if (!board.handle) return;                              // still mounting
+  const ver = exVersion(board.handle.EX, els);
+  if (ver === board.ver) return;                          // only the view moved
+  board.ver = ver;
+  board.pending = { els, st, files };
+  const ind = document.getElementById("note-saved-indicator");
+  if (ind) ind.textContent = "Saving...";
+  clearTimeout(board.timer);
+  board.timer = setTimeout(() => noteBoardFlush(board), 800);
+}
+
+function noteBoardFlush(board) {
+  clearTimeout(board.timer); board.timer = null;
+  if (!board.pending) return;
+  const { els, st, files } = board.pending;
+  board.pending = null;
+  const note = notes.find(n => n.id === board.noteId);
+  if (!note) return;
+  const elements = JSON.parse(JSON.stringify(els.filter(e => !e.isDeleted)));
+  const used = {};
+  elements.forEach(e => { if (e.fileId && files[e.fileId]) { const f = files[e.fileId]; used[e.fileId] = { id: f.id, mimeType: f.mimeType, dataURL: f.dataURL, created: f.created }; } });
+  let scene = { elements, appState: { viewBackgroundColor: st.viewBackgroundColor, gridSize: st.gridSize || null }, files: used };
+  let warn = "";
+  if (JSON.stringify(scene).length > BOARD_MAX_BYTES) {
+    scene = { ...scene, files: {} };
+    warn = "⚠ Images are too large to sync — they weren't saved";
+  }
+  note.scene = scene;
+  note.updatedAt = Date.now();
+  save();
+  const ind = document.getElementById("note-saved-indicator");
+  if (ind) ind.textContent = warn || "Saved ✓";
+}
+
+function noteBoardClose() {
+  const board = noteBoard;
+  if (!board) return;
+  noteBoard = null;
+  noteBoardFlush(board);
+  if (board.handle) board.handle.unmount();
+  document.getElementById("note-board").innerHTML = "";
 }
 
 // ── NOTE LINKS & EMBEDS ──
@@ -1643,7 +1892,6 @@ function handleBarClick(id) {
     renderAll();
   }
 }
-function filterAch(tag) { window._achFilter = tag; renderAchievements(); }
 
 // Completed tasks filters and actions
 function filterCompletedCat(cat) { window._completedCatFilter = cat; renderAnalytics(); }
@@ -1910,8 +2158,10 @@ function endDrag() {
 let lastClickId = null, lastClickTime = 0;
 
 // ── MODAL ──
-function openModal(id) {
+// preset (new tasks only): { title, notes, duration, category, fromNote }
+function openModal(id, preset) {
   editingTaskId = id;
+  window._modalFromNote = (!id && preset && preset.fromNote) || null;
   document.getElementById("modal-overlay").classList.add("open");
   const sel = document.getElementById("f-category");
   sel.innerHTML = CATEGORIES.map(c => `<option value="${c}">${c}</option>`).join("");
@@ -1928,14 +2178,16 @@ function openModal(id) {
     document.getElementById("f-completed").checked = t.completed;
     document.getElementById("delete-btn").style.display = "";
   } else {
+    const p = preset || {};
+    const start = nowRounded();   // new tasks start now
     document.getElementById("modal-title").textContent = "New Task";
-    document.getElementById("f-title").value = "";
-    document.getElementById("f-category").value = "Work";
-    document.getElementById("f-duration").value = 60;
-    document.getElementById("f-date").value = isoDate(new Date());
-    document.getElementById("f-time").value = "09:00";
+    document.getElementById("f-title").value = p.title || "";
+    document.getElementById("f-category").value = p.category || "Work";
+    document.getElementById("f-duration").value = p.duration || 60;
+    document.getElementById("f-date").value = isoDate(start);
+    document.getElementById("f-time").value = timeStr(start);
     window._modalTags = [];
-    document.getElementById("f-notes").value = "";
+    document.getElementById("f-notes").value = p.notes || "";
     document.getElementById("f-completed").checked = false;
     document.getElementById("delete-btn").style.display = "none";
   }
@@ -1951,7 +2203,7 @@ function renderDeps() {
     .join("") || '<span style="font-size:10px;color:var(--text2)">No active tasks to link</span>';
 }
 function toggleDep(id) { const i = window._modalDeps.indexOf(id); if (i >= 0) window._modalDeps.splice(i, 1); else window._modalDeps.push(id); renderDeps(); }
-function closeModal() { document.getElementById("modal-overlay").classList.remove("open"); editingTaskId = null; }
+function closeModal() { document.getElementById("modal-overlay").classList.remove("open"); editingTaskId = null; window._modalFromNote = null; }
 
 function saveTask() {
   const title = document.getElementById("f-title").value.trim(); if (!title) return;
@@ -1975,7 +2227,12 @@ function saveTask() {
     }
   });
   cascadeForward(taskData.id);
+  // A task made from a note links back to it (unless the note already links elsewhere).
+  const fromNote = window._modalFromNote && notes.find(n => n.id === window._modalFromNote);
+  if (fromNote && !fromNote.linkedTaskId) { fromNote.linkedTaskId = taskData.id; fromNote.updatedAt = Date.now(); }
+  window._modalFromNote = null;
   save(); closeModal(); renderAll();
+  if (fromNote) setTimeout(() => { const t = document.getElementById("note-saved-indicator"); if (t) t.textContent = "✓ Task created"; }, 0);
 }
 
 function deleteTask() {
@@ -2006,36 +2263,605 @@ function saveBreak() {
 }
 function deleteBreak(id) { breaks = breaks.filter(b => b.id !== id); save(); renderAll(); }
 
-// ── Decision ──
-function rateQ(qi, val) { decisionQuestions[qi].answer = val; renderDecision(); }
-function removeQ(qi) { decisionQuestions.splice(qi, 1); renderDecision(); }
-function addQuestion() { const inp = document.getElementById("new-question"); const t = inp.value.trim(); if (!t) return; decisionQuestions.push({ id: genId(), text: t, weight: 1, answer: 0 }); inp.value = ""; renderDecision(); }
-function evaluateDecision() {
-  let score = 0, maxScore = 0;
-  decisionQuestions.forEach(q => { score += (q.answer || 3) * q.weight; maxScore += 5 * q.weight; });
-  const pct = Math.round((score / (maxScore || 1)) * 100);
-  let verdict = pct >= 80 ? "DO IT NOW — high priority, high impact." : pct >= 60 ? "SCHEDULE IT — important but can be planned." : pct >= 40 ? "DELEGATE OR BATCH — moderate priority." : "SKIP OR DEFER — low impact, save your energy.";
-  document.getElementById("result-box").style.display = "block";
-  document.getElementById("result-pct").textContent = pct + "%";
-  document.getElementById("result-verdict").textContent = verdict;
+// ── PLAN & TIMEBOX ──
+// Importance picks the task, urgency sets the order, effort and aversiveness set
+// the timing and whether to break it down. Suggestions are only placed on the
+// timeline when you press Place.
+let planSuggestion = null;   // { date, slots: { backlogId: [{ start, dur }] }, unplaced: [ids] }
+const PLAN_GAP_MIN = 5;
+
+function planVerdict(b) {
+  const v = { kind: "do", label: "Do", timing: "", split: false };
+  if (b.imp <= 2 && b.urg <= 2) return { ...v, kind: "drop", label: "Drop?" };
+  if (b.imp <= 2) { v.kind = "batch"; v.label = "Batch · quick box"; }
+  if ((b.eff >= 4 && b.avr >= 4) || b.est > 90) v.split = true;
+  if (b.avr >= 4) v.timing = "First — eat the frog";
+  else if (b.eff >= 4) v.timing = "Fresh hours (early)";
+  else if (b.eff <= 2 && b.avr <= 2) v.timing = "Low-energy slot";
+  return v;
+}
+
+// Minutes per box: one box, or 25-min boxes for hard/dreaded work (50-min for long but easy work).
+function planBoxes(b, v) {
+  let total = Math.max(5, Math.round(b.est || 30));
+  if (v.kind === "batch") total = Math.min(total, 15);
+  if (!v.split) return [total];
+  const size = b.avr >= 4 || b.eff >= 4 ? 25 : 50;
+  const out = [];
+  while (total > 0) { out.push(Math.min(size, total)); total -= size; }
+  return out;
+}
+
+function planSorted() {
+  const rank = b => { const v = planVerdict(b); return v.kind === "drop" ? 2 : v.kind === "batch" ? 1 : 0; };
+  return [...backlog].sort((a, b) => rank(a) - rank(b) || b.urg - a.urg || b.imp - a.imp || (b.eff + b.avr) - (a.eff + a.avr) || a.createdAt - b.createdAt);
+}
+
+function planDateValue() {
+  const el = document.getElementById("plan-date");
+  if (!el.value) el.value = isoDate(new Date());
+  return el.value;
+}
+
+function renderPlan() {
+  const panel = document.getElementById("plan-panel");
+  panel.classList.toggle("active", activeTab === "plan");
+  if (activeTab !== "plan") return;
+  const cat = document.getElementById("plan-cat");
+  if (!cat.options.length) cat.innerHTML = CATEGORIES.map(c => `<option${c === "Work" ? " selected" : ""}>${c}</option>`).join("");
+  planDateValue();
+  document.getElementById("plan-from").value = prefs.dayStart;
+  document.getElementById("plan-to").value = prefs.dayEnd;
+  const wrap = document.getElementById("plan-table-wrap");
+  if (!backlog.length) {
+    wrap.innerHTML = '<div class="vault-empty" style="text-align:left;padding:14px 0;">Nothing to plan yet. Add tasks above — or send them here from 🧩 Stuck.</div>';
+    document.getElementById("plan-place-all").style.display = "none";
+    return;
+  }
+  const sel = (id, f, val) => `<select title="${f}" onchange="planUpdate('${id}','${f}',this.value)">${[1, 2, 3, 4, 5].map(n => `<option${n === val ? " selected" : ""}>${n}</option>`).join("")}</select>`;
+  const sug = planSuggestion && planSuggestion.date === planDateValue() ? planSuggestion : null;
+  let rows = "";
+  planSorted().forEach((b, i) => {
+    const v = planVerdict(b);
+    const boxes = planBoxes(b, v);
+    const flags = [];
+    if (v.timing) flags.push(`<span class="plan-flag">${v.timing}</span>`);
+    if (v.split) flags.push(`<span class="plan-flag warn">✂ Break down · ${boxes.length} × ${boxes[0]} min</span>`);
+    let slot = '<span style="color:var(--text2)">—</span>';
+    if (sug) {
+      const s = sug.slots[b.id];
+      if (s) slot = '<span class="plan-slot">' + s.map(x => fmtTime(new Date(x.start)) + "–" + fmtTime(new Date(x.start + x.dur * 60000))).join("<br>") + "</span>";
+      else if (v.kind !== "drop") slot = '<span style="color:var(--red)">Doesn\'t fit</span>';
+    }
+    rows += `<tr class="${v.kind === "drop" ? "dim" : ""}">
+      <td style="color:var(--text2)">${i + 1}</td>
+      <td class="plan-title-cell" ondblclick="planRename('${b.id}')" title="Double-click to rename">${esc(b.title)}<span class="plan-flag">${esc(b.category)}</span></td>
+      <td>${sel(b.id, "imp", b.imp)}</td><td>${sel(b.id, "urg", b.urg)}</td><td>${sel(b.id, "eff", b.eff)}</td><td>${sel(b.id, "avr", b.avr)}</td>
+      <td><input class="plan-est-in" type="number" min="5" step="5" value="${b.est}" onchange="planUpdate('${b.id}','est',this.value)"></td>
+      <td><span class="plan-verdict ${v.kind}">${v.label}</span>${flags.join("")}</td>
+      <td>${slot}</td>
+      <td style="white-space:nowrap">
+        ${sug && sug.slots[b.id] ? `<button class="plan-ghost small" onclick="planPlace('${b.id}')">Place</button>` : ""}
+        <button class="plan-x" title="Break into smaller steps" onclick="planBreakDown('${b.id}')">✂</button>
+        <button class="plan-x" title="Stuck on it? Run the stuck protocol" onclick="planToStuck('${b.id}')">🧩</button>
+        <button class="plan-x" title="Remove" onclick="planDelete('${b.id}')">×</button>
+      </td></tr>`;
+  });
+  wrap.innerHTML = `<table class="plan-table"><thead><tr><th>#</th><th>Task</th><th title="Importance: picks the task">Imp</th><th title="Urgency: sets the order">Urg</th><th title="Effort">Eff</th><th title="Aversiveness: how much you dread it">Avr</th><th>Est (min)</th><th>Verdict</th><th>Suggested box</th><th></th></tr></thead><tbody>${rows}</tbody></table>`;
+  document.getElementById("plan-place-all").style.display = sug && Object.keys(sug.slots).length ? "" : "none";
+}
+
+function planAdd(item) {
+  const titleEl = document.getElementById("plan-title");
+  const b = item || {
+    title: titleEl.value.trim(),
+    est: parseInt(document.getElementById("plan-est").value) || 30,
+    category: document.getElementById("plan-cat").value || "Work",
+  };
+  if (!b.title) return;
+  backlog.push({ id: genId(), imp: 3, urg: 3, eff: 3, avr: 3, notes: "", createdAt: Date.now(), category: "Work", est: 30, ...b });
+  if (!item) titleEl.value = "";
+  planSuggestion = null;
+  save(); renderPlan();
+  if (!item) titleEl.focus();
+}
+
+function planUpdate(id, field, value) {
+  const b = backlog.find(x => x.id === id);
+  if (!b) return;
+  b[field] = field === "est" ? Math.max(5, parseInt(value) || 30) : parseInt(value);
+  planSuggestion = null;
+  save(); renderPlan();
+}
+
+function planRename(id) {
+  const b = backlog.find(x => x.id === id);
+  if (!b) return;
+  const t = prompt("Rename task:", b.title);
+  if (t && t.trim()) { b.title = t.trim(); save(); renderPlan(); }
+}
+
+function planDelete(id) {
+  backlog = backlog.filter(x => x.id !== id);
+  if (planSuggestion) delete planSuggestion.slots[id];
+  save(); renderPlan();
+}
+
+function planSetPref(key, value) {
+  if (!value) return;
+  prefs[key] = value;
+  planSuggestion = null;
+  save(); renderPlan();
+}
+
+function planBreakDown(id) {
+  const b = backlog.find(x => x.id === id);
+  if (!b) return;
+  const text = prompt(`Break "${b.title}" into smaller steps.\nSeparate steps with ; (semicolon).`, "");
+  if (!text) return;
+  const steps = text.split(/;|\n/).map(s => s.trim()).filter(Boolean);
+  if (!steps.length) return;
+  const est = Math.max(5, Math.round(b.est / steps.length / 5) * 5);
+  const at = backlog.indexOf(b);
+  const parts = steps.map((t, i) => ({ ...b, id: genId(), title: t, est, eff: Math.max(1, b.eff - 1), createdAt: Date.now() + i }));
+  backlog.splice(at, 1, ...parts);
+  planSuggestion = null;
+  save(); renderPlan();
+}
+
+function planToStuck(id) {
+  const b = backlog.find(x => x.id === id);
+  if (!b) return;
+  if (stuckStart(b.title, b.id)) switchTab("stuck");
+}
+
+// Free time on the plan day between your start and end, around tasks and breaks.
+function planFreeGaps(date) {
+  let from = new Date(date + "T" + prefs.dayStart).getTime();
+  const to = new Date(date + "T" + prefs.dayEnd).getTime();
+  if (date === isoDate(new Date())) from = Math.max(from, nowRounded().getTime());
+  const busy = [
+    ...tasks.filter(t => !t.completed).map(t => [t.start, t.start + t.duration * 60000]),
+    ...breaks.map(b => [b.start, b.end]),
+  ].filter(([s, e]) => e > from && s < to).sort((a, b) => a[0] - b[0]);
+  const gaps = [];
+  let cur = from;
+  busy.forEach(([s, e]) => { if (s > cur) gaps.push([cur, s]); cur = Math.max(cur, e); });
+  if (to > cur) gaps.push([cur, to]);
+  return gaps;
+}
+
+function planSuggest() {
+  const date = planDateValue();
+  const gaps = planFreeGaps(date);
+  const slots = {}, unplaced = [];
+  planSorted().forEach(b => {
+    const v = planVerdict(b);
+    if (v.kind === "drop") return;
+    const boxes = planBoxes(b, v);
+    const taken = [];
+    for (const dur of boxes) {
+      const need = dur * 60000;
+      const g = gaps.find(([s, e]) => e - s >= need);
+      if (!g) break;
+      taken.push({ gap: g, from: g[0], start: g[0], dur });
+      g[0] += need + (boxes.length > 1 ? PLAN_GAP_MIN * 60000 : 0);
+    }
+    if (taken.length === boxes.length) slots[b.id] = taken.map(x => ({ start: x.start, dur: x.dur }));
+    else {
+      // Doesn't fit as a whole: give the time back (latest first) and move on.
+      for (let i = taken.length - 1; i >= 0; i--) taken[i].gap[0] = taken[i].from;
+      unplaced.push(b.id);
+    }
+  });
+  planSuggestion = { date, slots, unplaced };
+  renderPlan();
+  if (!Object.keys(slots).length) alert("Nothing fits: no free time left between " + prefs.dayStart + " and " + prefs.dayEnd + " on that day (or every task is marked Drop?).");
+}
+
+function planPlace(id, quiet) {
+  const b = backlog.find(x => x.id === id);
+  const boxes = planSuggestion && planSuggestion.slots[id];
+  if (!b || !boxes) return;
+  boxes.forEach((x, i) => tasks.push({
+    id: genId(), title: b.title + (boxes.length > 1 ? ` (${i + 1}/${boxes.length})` : ""), category: b.category,
+    start: x.start, duration: x.dur, dependencies: [], notes: b.notes || "", tags: ["Timebox"], completed: false,
+  }));
+  backlog = backlog.filter(x => x.id !== id);
+  delete planSuggestion.slots[id];
+  if (!quiet) { save(); renderAll(); }
+}
+
+function planPlaceAll() {
+  if (!planSuggestion) return;
+  Object.keys(planSuggestion.slots).forEach(id => planPlace(id, true));
+  save(); renderAll();
+}
+
+// ── STUCK PROTOCOL ──
+// Stuck on X → why? → why? … → root cause → which kind of block → unpack it →
+// smallest next physical action → on the timeline.
+const STUCK_BLOCKS = {
+  ambiguous:  { label: "Unclear what “done” looks like", desc: "Fuzzy goal, vague request, no finish line",
+    tip: "Ambiguity is one of the strongest procrastination triggers. A rough definition of done beats a perfect one you never write.",
+    qs: ["Describe the finished result in one sentence — what will exist when it's done?", "Who could clarify it — or what's your best guess to go with for now?"] },
+  unstructured: { label: "Don't know where to start", desc: "Big blob, no obvious first step",
+    tip: "Turn the blob into a list. The first step only has to be obvious, not important.",
+    qs: ["List the steps you can see, roughly.", "Which of those is the smallest, most obvious one?"] },
+  difficult:  { label: "Too hard / missing skill or info", desc: "You don't know how, or lack something",
+    tip: "Name the exact gap. Then spend one short box closing only that gap.",
+    qs: ["What exactly don't you know or can't do yet?", "Where could you learn it fastest — a person, a doc, an example, a search?"] },
+  boring:     { label: "Boring / tedious", desc: "You can do it, you just don't want to",
+    tip: "Shrink it and make it a game: a timer, music, a small reward at the end.",
+    qs: ["What's the minimum version that's good enough?", "What would make it more bearable (timer, music, batching, a reward)?"] },
+  frustrating: { label: "Frustrating — keeps failing", desc: "Tried, hit a wall, getting annoyed",
+    tip: "Repeating the same attempt rarely works. Change the approach, or ask someone.",
+    qs: ["What have you tried, and what happened?", "What's one different approach — or who could you ask?"] },
+  meaning:    { label: "Don't see the point", desc: "Feels pointless or not yours",
+    tip: "Reconnect it to something you care about — or decide to drop it. Dropping is a valid outcome.",
+    qs: ["Why does this matter — what does it get you or someone else?", "What happens if you never do it? (If nothing — consider dropping it.)"] },
+  fear:       { label: "Afraid of doing it badly", desc: "Perfectionism, judgement, high stakes",
+    tip: "Aim for a deliberately rough first draft. You can't edit a blank page.",
+    qs: ["What's the worst realistic outcome — and how would you handle it?", "What would a quick, rough first version look like?"] },
+  waiting:    { label: "Waiting on someone / something", desc: "Blocked by a reply, access, a decision",
+    tip: "Make the ask now, and work on something else in the meantime.",
+    qs: ["Who or what exactly are you waiting for?", "What message or request could you send right now?"] },
+  energy:     { label: "Tired / low energy / overwhelmed", desc: "Running on empty",
+    tip: "Rest is a legitimate next action. Move the hard part to your fresher hours.",
+    qs: ["When did you last rest, eat or move?", "What low-effort task could you do instead right now?"] },
+};
+let stuckSaveTimer = null;
+
+function stuckActive() { return stuckLog.find(s => !s.done && s.step !== "closed"); }
+
+// Returns true when a session was started.
+function stuckStart(problem, planId) {
+  problem = (problem || "").trim();
+  if (!problem) return false;
+  const cur = stuckActive();
+  if (cur && !confirm("Replace the stuck session you're in the middle of?")) return false;
+  if (cur) stuckLog = stuckLog.filter(s => s !== cur);
+  stuckLog.unshift({ id: genId(), problem, whys: [], block: "", answers: {}, action: "", actionMin: 10, taskId: null, planId: planId || null, step: "why", done: false, createdAt: Date.now(), updatedAt: Date.now() });
+  save();
+  if (activeTab === "stuck") renderStuck();
+  return true;
+}
+
+function stuckSet(field, value, rerender) {
+  const s = stuckActive();
+  if (!s) return;
+  if (field.startsWith("a:")) s.answers[field.slice(2)] = value; else s[field] = value;
+  s.updatedAt = Date.now();
+  clearTimeout(stuckSaveTimer);
+  if (rerender) { save(); renderStuck(); } else stuckSaveTimer = setTimeout(save, 600);
+}
+
+function stuckAddWhy() {
+  const s = stuckActive();
+  const inp = document.getElementById("stuck-why");
+  const t = inp && inp.value.trim();
+  if (!s || !t) return;
+  s.whys.push(t);
+  stuckSet("updatedAt", Date.now(), true);
+}
+
+function stuckUndoWhy() { const s = stuckActive(); if (s && s.whys.length) { s.whys.pop(); stuckSet("updatedAt", Date.now(), true); } }
+
+function stuckFinish(kind) {
+  const s = stuckActive();
+  if (!s) return;
+  const action = document.getElementById("stuck-action").value.trim();
+  const mins = parseInt(document.getElementById("stuck-mins").value) || 10;
+  if (!action) { alert("Write the next action first — one small, physical step, starting with a verb."); return; }
+  s.action = action; s.actionMin = mins;
+  if (kind === "task") {
+    const t = { id: genId(), title: action, category: "Work", start: nowRounded().getTime(), duration: mins, dependencies: [], notes: "Stuck on: " + s.problem + (s.whys.length ? "\nRoot cause: " + s.whys[s.whys.length - 1] : ""), tags: ["Stuck"], completed: false };
+    tasks.push(t);
+    s.taskId = t.id;
+  } else if (kind === "plan") {
+    backlog.push({ id: genId(), title: action, category: "Work", imp: 4, urg: 4, eff: 1, avr: 2, est: mins, notes: "Next action for: " + s.problem, createdAt: Date.now() });
+  }
+  s.step = "closed"; s.updatedAt = Date.now();
+  save();
+  renderAll();
+  if (kind === "task") setTimeout(() => alert("✓ “" + action + "” is on your timeline, starting now. Go."), 50);
+}
+
+function stuckReopen(id) {
+  if (stuckActive()) { alert("Finish or discard the current stuck session first."); return; }
+  const s = stuckLog.find(x => x.id === id);
+  if (!s) return;
+  s.step = "action"; s.done = false;
+  save(); renderStuck();
+}
+function stuckToggleDone(id) { const s = stuckLog.find(x => x.id === id); if (s) { s.done = !s.done; save(); renderStuck(); } }
+function stuckDelete(id) { if (!confirm("Delete this stuck session?")) return; stuckLog = stuckLog.filter(x => x.id !== id); save(); renderStuck(); }
+function stuckDiscard() { const s = stuckActive(); if (s && confirm("Discard this session?")) { stuckLog = stuckLog.filter(x => x !== s); save(); renderStuck(); } }
+
+function renderStuck() {
+  const panel = document.getElementById("stuck-panel");
+  panel.classList.toggle("active", activeTab === "stuck");
+  if (activeTab !== "stuck") return;
+  const s = stuckActive();
+  let html = "";
+  if (!s) {
+    html += `<div class="stuck-card">
+      <div class="stuck-step">Step 1 · Name it</div>
+      <div class="stuck-q">What are you stuck on?</div>
+      <textarea id="stuck-problem" rows="2" placeholder="e.g. Writing the MM configuration notes for chapter 3"></textarea>
+      <div class="stuck-row"><button class="plan-primary" onclick="stuckStart(document.getElementById('stuck-problem').value)">Start →</button></div>
+      <div class="stuck-hint">You'll ask “why?” until you hit the real cause, name the kind of block, and leave with one small action on your timeline.</div>
+    </div>`;
+  } else {
+    const chain = `<ul class="stuck-chain"><li data-k="!">Stuck on: ${esc(s.problem)}</li>${s.whys.map((w, i) => `<li data-k="${i + 1}" class="${i === s.whys.length - 1 && s.step !== "why" ? "root" : ""}">${esc(w)}</li>`).join("")}</ul>`;
+    const back = st => `<button class="plan-x" onclick="stuckSet('step','${st}',true)">← Back</button>`;
+    const discard = `<button class="plan-x" onclick="stuckDiscard()">Discard</button>`;
+    if (s.step === "why") {
+      const n = s.whys.length;
+      html += `<div class="stuck-card"><div class="stuck-step">Step 2 · Ask why${n ? " · " + n + (n === 1 ? " why" : " whys") + " so far" : ""}</div>${chain}
+        <div class="stuck-q">${n ? "And why is that?" : "Why are you stuck on this?"}</div>
+        <input id="stuck-why" placeholder="Because…" onkeydown="if(event.key==='Enter'){event.preventDefault();stuckAddWhy()}" />
+        <div class="stuck-row">
+          <button class="plan-ghost" onclick="stuckAddWhy()">Add why</button>
+          ${n ? `<button class="plan-primary" onclick="stuckSet('step','block',true)">That's the root cause →</button><button class="plan-x" onclick="stuckUndoWhy()">Undo last</button>` : ""}
+          <span style="flex:1"></span>${discard}
+        </div>
+        <div class="stuck-hint">${n >= 5 ? "Five whys in — the last answer is usually the root. Stop here unless it still isn't something you can act on." : "Short, honest answers. Stop when the answer is something you can act on — or something outside your control."}</div>
+      </div>`;
+    } else if (s.step === "block") {
+      html += `<div class="stuck-card"><div class="stuck-step">Step 3 · What kind of block is it?</div>${chain}
+        <div class="stuck-q">Which of these best describes the root cause?</div>
+        <div class="stuck-blocks">${Object.entries(STUCK_BLOCKS).map(([k, b]) => `<button class="stuck-block" onclick="stuckSet('block','${k}');stuckSet('step','unpack',true)">${b.label}<small>${b.desc}</small></button>`).join("")}</div>
+        <div class="stuck-row">${back("why")}<span style="flex:1"></span>${discard}</div></div>`;
+    } else if (s.step === "unpack") {
+      const b = STUCK_BLOCKS[s.block] || STUCK_BLOCKS.unstructured;
+      html += `<div class="stuck-card"><div class="stuck-step">Step 4 · Break it down · ${b.label}</div>${chain}
+        <div class="stuck-tip">${b.tip}</div>
+        ${b.qs.map((q, i) => `<div class="stuck-field"><label>${q}</label><textarea rows="2" oninput="stuckSet('a:${i}',this.value)">${esc(s.answers[i] || "")}</textarea></div>`).join("")}
+        <div class="stuck-row">${back("block")}<button class="plan-primary" onclick="stuckSet('step','action',true)">Next →</button><span style="flex:1"></span>${discard}</div></div>`;
+    } else {
+      const b = STUCK_BLOCKS[s.block];
+      const answers = b ? b.qs.map((q, i) => s.answers[i] ? `<div class="stuck-hint"><b style="color:var(--text)">${q}</b><br>${esc(s.answers[i])}</div>` : "").join("") : "";
+      html += `<div class="stuck-card"><div class="stuck-step">Step 5 · Next physical action</div>${chain}${answers}
+        <div class="stuck-q">What's the smallest next physical action?</div>
+        <input id="stuck-action" value="${esc(s.action)}" placeholder="Starts with a verb, takes ≤ 10 min — e.g. “Email Ravi asking for the template”" oninput="stuckSet('action',this.value)" />
+        <div class="stuck-row">
+          <select id="stuck-mins" style="width:auto">${[5, 10, 15, 25].map(m => `<option value="${m}"${m === (s.actionMin || 10) ? " selected" : ""}>${m} min</option>`).join("")}</select>
+          <button class="plan-primary" onclick="stuckFinish('task')">Put it on the timeline now</button>
+          <button class="plan-ghost" onclick="stuckFinish('plan')">Add to Plan instead</button>
+          <button class="plan-x" onclick="stuckFinish('save')">Just save</button>
+          <span style="flex:1"></span>${back("unpack")}
+        </div></div>`;
+    }
+  }
+  const past = stuckLog.filter(x => x !== s);
+  if (past.length) {
+    html += `<div class="panel-title" style="font-size:12px;margin-top:6px;">PAST SESSIONS</div>`;
+    past.forEach(x => {
+      const task = x.taskId && tasks.find(t => t.id === x.taskId);
+      const b = STUCK_BLOCKS[x.block];
+      html += `<div class="stuck-log-item${x.done ? " done" : ""}">
+        <input type="checkbox" ${x.done ? "checked" : ""} title="Resolved" onchange="stuckToggleDone('${x.id}')" style="width:auto;accent-color:var(--accent);margin-top:2px;">
+        <div class="main">${esc(x.problem)}
+          <div class="meta">${x.whys.length ? "Root: " + esc(x.whys[x.whys.length - 1]) + "<br>" : ""}${b ? b.label + " · " : ""}${x.action ? "Next: " + esc(x.action) + (task ? (task.completed ? " ✓ done" : " · on timeline") : "") : "No action yet"} · ${fmtDate(new Date(x.createdAt))}</div>
+        </div>
+        <button class="plan-x" onclick="stuckReopen('${x.id}')">Reopen</button>
+        <button class="plan-x" onclick="stuckDelete('${x.id}')">×</button>
+      </div>`;
+    });
+  }
+  document.getElementById("stuck-body").innerHTML = html;
+  const focus = document.getElementById("stuck-why") || (!s && document.getElementById("stuck-problem"));
+  if (focus && !isTouch()) focus.focus();
+}
+function isTouch() { return window.matchMedia && matchMedia("(pointer: coarse)").matches; }
+
+// ── PHONE USAGE (StayFree export) ──
+// StayFree has no API: export "Total Usage" from the phone app (Excel or CSV) and
+// import it here. Sheets: "Usage Time" (app × day, "1h 2m 3s"), "Usage Count"
+// (app × day opens) and "Device Unlocks" (one row × day). Re-imports merge by day.
+const SHEETJS_URL = "https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js";
+let phoneRange = 30;   // days; 0 = all
+let phoneLibPromise = null;
+
+function phoneLoadLib() {
+  if (window.XLSX) return Promise.resolve();
+  if (!phoneLibPromise) {
+    phoneLibPromise = new Promise((ok, fail) => {
+      const s = document.createElement("script");
+      s.src = SHEETJS_URL; s.onload = ok;
+      s.onerror = () => { phoneLibPromise = null; fail(new Error("Could not load the spreadsheet reader — are you offline?")); };
+      document.head.appendChild(s);
+    });
+  }
+  return phoneLibPromise;
+}
+
+function phoneSecs(v) {
+  if (typeof v === "number") return Math.round(v);
+  const s = String(v || "");
+  const h = /(\d+)\s*h/.exec(s), m = /(\d+)\s*m(?![a-z])/i.exec(s), sec = /(\d+)\s*s(?![a-z])/i.exec(s);
+  if (!h && !m && !sec) return /^\d+$/.test(s.trim()) ? parseInt(s) : 0;
+  return (h ? +h[1] * 3600 : 0) + (m ? +m[1] * 60 : 0) + (sec ? +sec[1] : 0);
+}
+function phoneCleanName(s) { return String(s || "").replace(/[​-‏‪-‮⁦-⁩﻿]/g, "").trim(); }
+function phoneDateCols(head) {
+  const cols = [];
+  head.forEach((h, c) => {
+    if (!h || !/\d{4}/.test(h)) return;
+    const d = new Date(h);
+    if (!isNaN(d)) cols.push([c, isoDate(d)]);
+  });
+  return cols;
+}
+
+function phoneParse(usage, counts, unlocks) {
+  const head = usage[0] || [];
+  const dateCols = phoneDateCols(head);
+  if (!dateCols.length) throw new Error("No date columns found — export “Total Usage” from StayFree");
+  const deviceCol = head.findIndex(h => /device/i.test(h));
+  const days = {};
+  let device = "";
+  const day = iso => days[iso] || (days[iso] = { t: 0, u: 0, o: 0, apps: {} });
+  const isFooter = n => !n || /^(total usage|created by|creation date)/i.test(n);
+  for (let r = 1; r < usage.length; r++) {
+    const name = phoneCleanName(usage[r][0]);
+    if (isFooter(name)) continue;
+    if (deviceCol > 0 && usage[r][deviceCol]) device = usage[r][deviceCol];
+    dateCols.forEach(([c, iso]) => {
+      const sec = phoneSecs(usage[r][c]);
+      if (sec > 0) { const d = day(iso); d.apps[name] = (d.apps[name] || 0) + sec; d.t += sec; }
+    });
+  }
+  if (counts && counts.length) {
+    const cc = phoneDateCols(counts[0] || []);
+    for (let r = 1; r < counts.length; r++) {
+      if (isFooter(phoneCleanName(counts[r][0]))) continue;
+      cc.forEach(([c, iso]) => { const n = parseInt(counts[r][c]) || 0; if (n > 0) day(iso).o += n; });
+    }
+  }
+  if (unlocks && unlocks.length) {
+    const uc = phoneDateCols(unlocks[0] || []);
+    const row = unlocks.find(r => /unlock/i.test(r[0]));
+    if (row) uc.forEach(([c, iso]) => { const n = parseInt(row[c]) || 0; if (n > 0) day(iso).u = n; });
+  }
+  return { device, days };
+}
+
+async function phoneImport(event) {
+  const file = event.target.files[0];
+  event.target.value = "";
+  if (!file) return;
+  const area = document.getElementById("phone-area");
+  area.innerHTML = '<div class="vault-empty" style="text-align:left">Reading ' + esc(file.name) + "…</div>";
+  try {
+    await phoneLoadLib();
+    const wb = XLSX.read(await file.arrayBuffer(), { type: "array" });
+    const rows = name => wb.Sheets[name] ? XLSX.utils.sheet_to_json(wb.Sheets[name], { header: 1, raw: false, defval: "" }) : null;
+    const usage = rows("Usage Time") || rows(wb.SheetNames[0]);
+    const parsed = phoneParse(usage, rows("Usage Count"), rows("Device Unlocks"));
+    const isos = Object.keys(parsed.days).sort();
+    if (!isos.length) throw new Error("The file has no usage in it");
+    phone = phone || { days: {} };
+    isos.forEach(iso => { phone.days[iso] = parsed.days[iso]; });
+    phone.device = parsed.device || phone.device || "";
+    phone.importedAt = Date.now();
+    save();
+    renderAnalytics();
+    alert(`Imported ${isos.length} days of phone usage (${fmtDate(new Date(isos[0] + "T00:00"))} – ${fmtDate(new Date(isos[isos.length - 1] + "T00:00"))}).`);
+  } catch (e) {
+    alert("Couldn't read that file: " + e.message);
+    renderAnalytics();
+  }
+}
+
+function fmtSec(s) {
+  if (s < 60) return Math.round(s) + "s";
+  const mins = Math.round(s / 60), h = Math.floor(mins / 60), m = mins % 60;
+  return h ? h + "h" + (m ? " " + m + "m" : "") : m + "m";
+}
+
+function phoneSetRange(n) { phoneRange = n; renderAnalytics(); }
+
+function phoneRender() {
+  const area = document.getElementById("phone-area");
+  const ranges = document.getElementById("phone-ranges");
+  const all = phone ? Object.keys(phone.days).sort() : [];
+  if (!all.length) {
+    ranges.innerHTML = "";
+    area.innerHTML = `<div class="vault-empty" style="text-align:left;line-height:1.7;padding:6px 0;">No phone data yet. In <b>StayFree</b> on your phone: <b>Settings → Backup &amp; Restore → Export data</b> (Total Usage), send the file to this device, then press <b>Import StayFree export</b>. Re-import any time — newer days are merged in and synced to your other devices.</div>`;
+    return;
+  }
+  ranges.innerHTML = [[7, "7d"], [30, "30d"], [90, "90d"], [0, "All"]].map(([n, l]) => `<button class="tag-filter-btn${phoneRange === n ? " active" : ""}" style="margin:0 2px 0 0" onclick="phoneSetRange(${n})">${l}</button>`).join("");
+  const firstDay = new Date(all[0] + "T00:00"), lastDay = new Date(all[all.length - 1] + "T00:00");
+  const span = Math.round((lastDay - firstDay) / 864e5) + 1;
+  const count = phoneRange ? Math.min(phoneRange, span) : span;
+  const days = [];
+  for (let i = count - 1; i >= 0; i--) {
+    const d = new Date(lastDay); d.setDate(d.getDate() - i);
+    const iso = isoDate(d);
+    days.push({ iso, d, ...(phone.days[iso] || { t: 0, u: 0, o: 0, apps: {} }) });
+  }
+  const total = days.reduce((s, d) => s + d.t, 0);
+  const avg = total / days.length;
+  const unl = days.reduce((s, d) => s + (d.u || 0), 0) / days.length;
+  const busiest = days.reduce((a, b) => (b.t > a.t ? b : a), days[0]);
+  const apps = {};
+  days.forEach(d => Object.entries(d.apps).forEach(([k, v]) => { apps[k] = (apps[k] || 0) + v; }));
+  const top = Object.entries(apps).sort((a, b) => b[1] - a[1]).slice(0, 10);
+  const max = Math.max(...days.map(d => d.t), 1);
+  const dayLabel = d => d.toLocaleDateString("en-US", { weekday: "short", month: "short", day: "numeric" });
+  let bars = "";
+  days.forEach(d => {
+    const tip = `${dayLabel(d.d)} · ${fmtSec(d.t)}${d.u ? " · " + d.u + " unlocks" : ""}`;
+    const wk = d.d.getDay() === 0 || d.d.getDay() === 6;
+    bars += `<div class="phone-day${wk ? " wkend" : ""}" data-tip="${esc(tip)}"><i style="height:${(d.t / max) * 100}%"></i></div>`;
+  });
+  const avgPct = (avg / max) * 100;
+  let appRows = "";
+  top.forEach(([name, sec]) => {
+    appRows += `<div class="bar-row" title="${esc(name)}: ${fmtSec(sec)} total"><span class="bar-label" style="width:110px">${esc(name)}</span><div class="bar-track"><div class="bar-fill" style="width:${(sec / top[0][1]) * 100}%;background:var(--blue)"></div></div><span style="width:120px;font-size:10px;color:var(--text2);flex-shrink:0">${fmtSec(sec / days.length)}/day · ${Math.round((sec / (total || 1)) * 100)}%</span></div>`;
+  });
+  area.innerHTML = `
+    <div class="stat-grid">
+      <div class="stat-box"><div class="stat-value" style="color:var(--blue)">${fmtSec(avg)}</div><div class="stat-label">Avg screen time / day</div></div>
+      <div class="stat-box"><div class="stat-value" style="color:var(--accent)">${Math.round(unl)}</div><div class="stat-label">Avg unlocks / day</div></div>
+      <div class="stat-box"><div class="stat-value" style="color:var(--red)">${fmtSec(busiest.t)}</div><div class="stat-label">Busiest · ${fmtDate(busiest.d)}</div></div>
+      <div class="stat-box"><div class="stat-value" style="color:var(--purple);font-size:15px;line-height:1.9;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${top[0] ? esc(top[0][0]) : "—"}</div><div class="stat-label">Top app${top[0] ? " · " + fmtSec(top[0][1] / days.length) + "/day" : ""}</div></div>
+    </div>
+    <div class="chart-row phone-row">
+      <div class="chart-box"><div class="chart-title">Screen time per day</div>
+        <div class="phone-days" id="phone-days">${bars}<div class="phone-avg" style="bottom:${avgPct}%"><span>avg ${fmtSec(avg)}</span></div></div>
+        <div class="phone-axis"><span>${fmtDate(days[0].d)}</span><span>${fmtDate(days[days.length - 1].d)}</span></div>
+      </div>
+      <div class="chart-box"><div class="chart-title">Top apps · average per day</div>${appRows || '<div style="color:var(--text2);font-size:11px">No app usage in this range.</div>'}</div>
+    </div>
+    <div style="font-size:10px;color:var(--text2);margin-top:8px;">Data through ${fmtDate(lastDay)}${phone.device ? " · " + esc(phone.device) : ""} · imported ${new Date(phone.importedAt).toLocaleDateString("en-US", { month: "short", day: "numeric" })} · weekend bars are lighter. Hover a bar for details.</div>`;
+  phoneWireTip();
+}
+
+function phoneWireTip() {
+  let tip = document.getElementById("phone-tip");
+  if (!tip) { tip = document.createElement("div"); tip.id = "phone-tip"; document.body.appendChild(tip); }
+  const box = document.getElementById("phone-days");
+  if (!box) return;
+  const show = e => {
+    const day = e.target.closest(".phone-day");
+    if (!day) { tip.style.display = "none"; return; }
+    tip.textContent = day.dataset.tip;
+    tip.style.display = "block";
+    const x = Math.min(e.clientX + 12, window.innerWidth - tip.offsetWidth - 8);
+    tip.style.left = x + "px"; tip.style.top = (e.clientY - 34) + "px";
+  };
+  box.addEventListener("mousemove", show);
+  box.addEventListener("click", show);
+  box.addEventListener("mouseleave", () => { tip.style.display = "none"; });
 }
 
 // ── Export / Import / Clear ──
+// One place lists everything that is backed up, copied and synced.
+function getAllData() {
+  return { tasks, breaks, notes, backlog, stuck: stuckLog, phone, prefs };
+}
+function setAllData(data) {
+  if (data.tasks) tasks = data.tasks.map(t => ({ ...t, start: new Date(t.start).getTime() }));
+  if (data.breaks) breaks = data.breaks;
+  if (data.notes) notes = data.notes;
+  if (data.backlog) backlog = data.backlog;
+  if (data.stuck) stuckLog = data.stuck;
+  if ("phone" in data) phone = data.phone;
+  if (data.prefs) prefs = { ...prefs, ...data.prefs };
+  // Older backups/devices still carry the removed Quick Todo list.
+  if (data.todos) migrateTodos(data.todos);
+}
+
 function exportData() {
-  const data = {
-    version: 5,
-    exportedAt: new Date().toISOString(),
-    tasks: tasks,
-    breaks: breaks,
-    notes: notes,
-    todos: todos,
-    decisionQuestions: decisionQuestions,
-  };
+  const data = { version: 6, exportedAt: new Date().toISOString(), ...getAllData() };
   const blob = new Blob([JSON.stringify(data, null, 2)], { type: "application/json" });
   const url = URL.createObjectURL(blob);
   const a = document.createElement("a");
   a.href = url;
-  a.download = "command-center-backup-" + new Date().toISOString().slice(0, 10) + ".json";
+  a.download = "command-center-backup-" + isoDate(new Date()) + ".json";
   a.click();
   URL.revokeObjectURL(url);
 }
@@ -2046,14 +2872,7 @@ function importData(event) {
   const reader = new FileReader();
   reader.onload = function(e) {
     try {
-      const data = JSON.parse(e.target.result);
-      if (data.tasks) {
-        tasks = data.tasks.map(t => ({ ...t, start: new Date(t.start).getTime() }));
-      }
-      if (data.breaks) breaks = data.breaks;
-      if (data.notes) notes = data.notes;
-      if (data.todos) { todos = data.todos; saveTodos(); }
-      if (data.decisionQuestions) decisionQuestions = data.decisionQuestions;
+      setAllData(JSON.parse(e.target.result));
       save();
       renderAll();
       alert("Data imported successfully!");
@@ -2066,11 +2885,11 @@ function importData(event) {
 }
 
 function clearAllData() {
-  if (!confirm("This will delete ALL tasks, breaks, notes, and settings. Are you sure?")) return;
+  if (!confirm("This will delete ALL tasks, breaks, notes, plans, stuck sessions and phone usage. Are you sure?")) return;
   if (!confirm("Really? This cannot be undone.")) return;
-  tasks = []; breaks = []; notes = []; todos = [];
+  tasks = []; breaks = []; notes = []; backlog = []; stuckLog = []; phone = null;
   activeNoteId = null; selectedTaskId = null;
-  save(); saveTodos(); renderAll();
+  save(); renderAll();
 }
 
 // ── PRESET TAGS ──
@@ -2113,155 +2932,51 @@ function addCustomTag() {
   inp.value = "";
 }
 
-// ── TODO LIST ──
-let todos = [];  // { id, title, scheduled: false, taskId: null, createdAt }
-let todoFilter = "all";
+// ── QUICK TODO (removed) → Plan backlog ──
+// Unscheduled todos move into the Plan tab; scheduled ones are already tasks.
 const TODOS_KEY = "command_center_todos";
-
-function renderTodo() {
-  const panel = document.getElementById("todo-panel");
-  panel.classList.toggle("active", activeTab === "todo");
-  if (activeTab !== "todo") return;
-
-  ["all", "unscheduled", "scheduled"].forEach(f => {
-    const btn = document.getElementById("todo-filter-" + f);
-    if (btn) btn.classList.toggle("active", todoFilter === f);
+function migrateTodos(list) {
+  let moved = 0;
+  (list || []).forEach(td => {
+    if (td.taskId || backlog.some(b => b.id === td.id)) return;
+    backlog.push({ id: td.id, title: td.title, category: "Work", imp: 3, urg: 3, eff: 3, avr: 3, est: 30, notes: "", createdAt: td.createdAt || Date.now() });
+    moved++;
   });
-
-  let filtered = [...todos];
-  if (todoFilter === "unscheduled") filtered = todos.filter(t => !t.taskId);
-  if (todoFilter === "scheduled") filtered = todos.filter(t => t.taskId);
-
-  let html = "";
-  if (!filtered.length) {
-    html = '<div style="color:var(--text2);font-size:12px;text-align:center;padding:30px;">Type a task above and press Enter.<br>Schedule it later from here.</div>';
-  }
-  filtered.forEach(td => {
-    const linkedTask = td.taskId ? tasks.find(t => t.id === td.taskId) : null;
-    const scheduled = linkedTask && !linkedTask.completed;
-    const completed = linkedTask && linkedTask.completed;
-    const catColor = linkedTask ? (COLORS[linkedTask.category] || "#666") : "var(--border)";
-
-    html += `<div style="
-      display:flex; align-items:flex-start; gap:12px; padding:12px 14px;
-      background:var(--bg2); border:1px solid var(--border);
-      border-left:3px solid ${catColor};
-      border-radius:0 var(--radius) var(--radius) 0;
-      margin-bottom:6px; max-width:700px;
-      ${completed ? 'opacity:0.45;' : ''}
-    ">
-      <input type="checkbox" ${completed ? 'checked' : ''}
-        onchange="toggleTodoComplete('${td.id}')"
-        style="accent-color:var(--accent); width:18px; height:18px; margin-top:1px; flex-shrink:0; cursor:pointer;" />
-      <div style="flex:1; min-width:0;">
-        <div style="font-size:13px; color:var(--text); font-weight:500;
-          ${completed ? 'text-decoration:line-through; color:var(--text2);' : ''}
-        ">${td.title}</div>
-        ${scheduled ? `<div style="font-size:10px; color:var(--accent); margin-top:4px;">
-          📅 ${fmtTime(new Date(linkedTask.start))} — ${fmtTime(new Date(linkedTask.start + linkedTask.duration * 60000))} · ${fmtDur(linkedTask.duration)} · ${linkedTask.category}
-        </div>` : ''}
-        ${completed ? '<div style="font-size:10px; color:var(--green); margin-top:4px;">✓ Completed</div>' : ''}
-        ${!td.taskId ? '<div style="font-size:10px; color:var(--text2); margin-top:4px;">Not scheduled yet</div>' : ''}
-      </div>
-      <div style="display:flex; gap:6px; align-items:center; flex-shrink:0;">
-        ${!td.taskId ? `<button onclick="scheduleTodo('${td.id}')" style="
-          padding:6px 12px; background:var(--accent-dim); border:1px solid var(--accent);
-          color:var(--accent); border-radius:var(--radius); font-size:10px;
-          cursor:pointer; font-family:var(--font); white-space:nowrap;
-        ">📅 Schedule</button>` : ''}
-        <button onclick="deleteTodo('${td.id}')" style="
-          background:none; border:none; color:var(--red); font-size:16px;
-          cursor:pointer; opacity:0.4; padding:2px 4px;
-        " onmouseover="this.style.opacity=1" onmouseout="this.style.opacity=0.4">×</button>
-      </div>
-    </div>`;
-  });
-  document.getElementById("todo-list").innerHTML = html;
+  return moved;
 }
-
-function addTodo() {
-  const inp = document.getElementById("todo-input");
-  const title = inp.value.trim();
-  if (!title) return;
-  todos.push({ id: genId(), title, taskId: null, createdAt: Date.now() });
-  inp.value = "";
-  saveTodos();
-  renderTodo();
-}
-
-function scheduleTodo(todoId) {
-  const td = todos.find(t => t.id === todoId);
-  if (!td) return;
-  // Create a task from this todo and open the modal for time assignment
-  const taskId = genId();
-  const newTask = {
-    id: taskId, title: td.title, category: "Work",
-    start: new Date().setHours(9, 0, 0, 0), duration: 60,
-    dependencies: [], notes: "", tags: [], completed: false,
-  };
-  tasks.push(newTask);
-  td.taskId = taskId;
-  saveTodos(); save();
-  // Open modal to let user set the time
-  editingTaskId = taskId;
-  openModal(taskId);
-}
-
-function toggleTodoComplete(todoId) {
-  const td = todos.find(t => t.id === todoId);
-  if (!td || !td.taskId) return;
-  const task = tasks.find(t => t.id === td.taskId);
-  if (task) {
-    task.completed = !task.completed;
-    save();
-  }
-  renderTodo();
-}
-
-function deleteTodo(todoId) {
-  todos = todos.filter(t => t.id !== todoId);
-  saveTodos();
-  renderTodo();
-}
-
-function setTodoFilter(f) { todoFilter = f; renderTodo(); }
-
-function saveTodos() {
-  try { localStorage.setItem(TODOS_KEY, JSON.stringify(todos)); } catch(e) {}
-  if (window.cloudSchedulePush) window.cloudSchedulePush();
+function migrateLocalTodos() {
+  try {
+    const s = localStorage.getItem(TODOS_KEY);
+    if (!s) return;
+    if (migrateTodos(JSON.parse(s))) save();
+    localStorage.removeItem(TODOS_KEY);
+  } catch (e) {}
 }
 
 // ── CLOUD SYNC BRIDGE (used by the Firebase module below) ──
 function getSyncData() {
-  return { tasks, breaks, notes, todos };
+  return getAllData();
 }
 
 function applySyncData(data) {
-  if (data.tasks) tasks = data.tasks.map(t => ({ ...t, start: new Date(t.start).getTime() }));
-  if (data.breaks) breaks = data.breaks;
-  if (data.notes) notes = data.notes;
-  if (data.todos) todos = data.todos;
+  setAllData(data);
   if (activeNoteId && !notes.some(n => n.id === activeNoteId)) activeNoteId = null;
   if (selectedTaskId && !tasks.some(t => t.id === selectedTaskId)) selectedTaskId = null;
   try {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(tasks));
     localStorage.setItem(BREAKS_KEY, JSON.stringify(breaks));
     localStorage.setItem(NOTES_KEY, JSON.stringify(notes));
-    localStorage.setItem(TODOS_KEY, JSON.stringify(todos));
+    localStorage.setItem(BACKLOG_KEY, JSON.stringify(backlog));
+    localStorage.setItem(STUCK_KEY, JSON.stringify(stuckLog));
+    localStorage.setItem(PREFS_KEY, JSON.stringify(prefs));
+    if (phone) localStorage.setItem(PHONE_KEY, JSON.stringify(phone)); else localStorage.removeItem(PHONE_KEY);
   } catch(e) {}
   renderAll();
 }
 
-function loadTodos() {
-  try { const s = localStorage.getItem(TODOS_KEY); if (s) todos = JSON.parse(s); } catch(e) {}
-}
-
 // ── COPY / PASTE SYNC ──
 function copyDataToClipboard() {
-  const data = {
-    version: 5, exportedAt: new Date().toISOString(),
-    tasks, breaks, notes, todos, decisionQuestions,
-  };
+  const data = { version: 6, exportedAt: new Date().toISOString(), ...getAllData() };
   const text = JSON.stringify(data);
   navigator.clipboard.writeText(text).then(() => {
     const st = document.getElementById("copy-status");
@@ -2291,13 +3006,8 @@ function pasteDataFromClipboard() {
   const text = document.getElementById("paste-input").value.trim();
   if (!text) return;
   try {
-    const data = JSON.parse(text);
-    if (data.tasks) tasks = data.tasks.map(t => ({ ...t, start: new Date(t.start).getTime() }));
-    if (data.breaks) breaks = data.breaks;
-    if (data.notes) notes = data.notes;
-    if (data.todos) todos = data.todos;
-    if (data.decisionQuestions) decisionQuestions = data.decisionQuestions;
-    save(); saveTodos();
+    setAllData(JSON.parse(text));
+    save();
     document.getElementById("paste-input").value = "";
     document.getElementById("paste-area").style.display = "none";
     renderAll();
@@ -2557,17 +3267,20 @@ function vaultSetHeader(label) {
     const dir = vaultDir(cur.file.rel);
     if (dir) pathEl.append(dir.replace(/\//g, " / "));
     const b = document.createElement("b");
-    b.textContent = vaultTitle(cur.file) + (vault.dirty ? " •" : "");
+    b.textContent = vaultTitle(cur.file) + (vault.dirty || (vaultDraw && vaultDraw.dirty) ? " •" : "");
     pathEl.append(b);
   }
   const showNote = !label && cur;
   const drawing = cur && vaultIsDrawing(cur.file);
-  document.getElementById("vault-actions-view").classList.toggle("show", !!showNote && !vault.editing);
-  document.getElementById("vault-actions-edit").classList.toggle("show", !!showNote && vault.editing);
+  const drawEdit = !!vaultDraw;
+  document.getElementById("vault-actions-view").classList.toggle("show", !!showNote && !vault.editing && !drawEdit);
+  document.getElementById("vault-actions-edit").classList.toggle("show", !!showNote && (vault.editing || drawEdit));
   ["vault-edit-btn", "vault-rename-btn", "vault-delete-btn"].forEach(id => { document.getElementById(id).style.display = drawing ? "none" : ""; });
+  document.getElementById("vault-draw-btn").style.display = drawing ? "inline-block" : "none";
+  document.getElementById("vault-split-btn").style.display = drawEdit ? "none" : "";
   const narrow = window.innerWidth <= 700;
   document.getElementById("vault-split-btn").textContent = narrow ? (vault.mobilePreview ? "Write" : "Preview") : (vault.split ? "Hide preview" : "Preview");
-  document.getElementById("vault-save-btn").textContent = vault.dirty ? "Save" : "Done";
+  document.getElementById("vault-save-btn").textContent = (drawEdit ? vaultDraw.dirty : vault.dirty) ? "Save" : "Done";
 }
 
 // ── Markdown ──
@@ -2663,10 +3376,10 @@ function vaultRenderDrawing(view, file) {
     vaultLoadImage(el, img);
     const p = document.createElement("p");
     p.style.cssText = "color:var(--text2);font-size:11px;margin-top:10px;";
-    p.textContent = "Drawings are view-only here — edit them in Obsidian.";
+    p.textContent = "Press ✎ Edit drawing to change it here — it saves back to the vault, so Obsidian sees it too.";
     slot.appendChild(p);
   } else {
-    slot.innerHTML = '<div class="vault-missing">No exported image found for this drawing. In Obsidian, turn on Excalidraw → Settings → Embedding &amp; export → <b>Auto-export SVG</b>, then open and save the drawing once.</div>';
+    slot.innerHTML = '<div class="vault-missing">No preview image for this drawing yet. Press <b>✎ Edit drawing</b> and Save once (that writes one), or in Obsidian turn on Excalidraw → Settings → Embedding &amp; export → <b>Auto-export SVG</b>, then open and save the drawing once.</div>';
   }
 }
 
@@ -2814,7 +3527,7 @@ async function vaultRefresh(silent) {
         const changed = f.sha !== cur.sha;
         cur.file = f;
         // While editing, keep the base sha: saving will detect the newer version.
-        if (changed && !vault.editing && !vault.taskTimer) await vaultOpen(f, { keepScroll: true });
+        if (changed && !vault.editing && !vaultDraw && !vault.taskTimer) await vaultOpen(f, { keepScroll: true });
       }
     }
     vaultRenderTree();
@@ -2837,6 +3550,8 @@ function vaultShowEmpty() {
 
 async function vaultOpen(f, opts = {}) {
   if (vault.editing && vault.dirty && !confirm('Discard unsaved changes to "' + vaultTitle(vault.current.file) + '"?\n(A draft is kept on this device.)')) return;
+  if (vaultDraw && vaultDraw.dirty && !confirm("Discard your unsaved drawing changes?")) return;
+  vaultCloseDrawing();
   vaultStopEditing();
   document.getElementById("vault-panel").classList.remove("show-tree");
   const seq = ++vault.openSeq;
@@ -3003,6 +3718,11 @@ function vaultStopEditing() {
 }
 
 function vaultCancelEdit() {
+  if (vaultDraw) {
+    if (vaultDraw.dirty && !confirm("Discard your drawing changes?")) return;
+    vaultCloseDrawing(); vaultRenderCurrent();
+    return;
+  }
   if (vault.dirty && !confirm("Discard your changes?")) return;
   vaultClearDraft(vault.current.file.rel);
   vaultStopEditing();
@@ -3010,6 +3730,7 @@ function vaultCancelEdit() {
 }
 
 async function vaultSaveEdit() {
+  if (vaultDraw) return vaultSaveDrawing();
   const cur = vault.current;
   const text = document.getElementById("vault-textarea").value;
   if (!vault.dirty || text === cur.text) {
@@ -3045,9 +3766,200 @@ async function vaultSaveEdit() {
       ta.dispatchEvent(new Event("input"));
     }
   });
-  window.addEventListener("beforeunload", e => { if (vault.editing && vault.dirty) { e.preventDefault(); e.returnValue = ""; } });
+  window.addEventListener("beforeunload", e => { if ((vault.editing && vault.dirty) || (vaultDraw && vaultDraw.dirty)) { e.preventDefault(); e.returnValue = ""; } });
   window.addEventListener("resize", () => { if (activeTab === "vault" && vault.editing) vaultSetHeader(); });
 })();
+
+// ── Drawing editor (Excalidraw files in the vault) ──
+// Opens "X.excalidraw.md" (Obsidian Excalidraw plugin) or plain ".excalidraw"
+// files in a full editor and saves them back in the plugin's own format, so
+// Obsidian on any PC keeps working with them. Also refreshes the exported SVG
+// that the viewer and note embeds use.
+const LZ_URL = "https://esm.sh/lz-string@1.5.0";
+let vaultLzPromise = null;
+let vaultDraw = null;   // { cur, parsed: { fmt, json }, text, handle, ver, dirty, orig: Map }
+
+function vaultLz() {
+  if (!vaultLzPromise) {
+    vaultLzPromise = import(LZ_URL).then(m => m.default || m);
+    vaultLzPromise.catch(() => { vaultLzPromise = null; });
+  }
+  return vaultLzPromise;
+}
+function vaultChunk(s) { return s.match(/.{1,256}/g).join("\n\n"); }   // the plugin's layout
+
+function vaultParseDrawing(text, rel, LZ) {
+  if (!/\.md$/i.test(rel)) return { fmt: "json", json: JSON.parse(text) };
+  const body = text.slice(Math.max(0, text.indexOf("## Drawing")));
+  let m = /```compressed-json\r?\n([\s\S]*?)\r?\n```/.exec(body);
+  if (m) return { fmt: "compressed", json: JSON.parse(LZ.decompressFromBase64(m[1].replace(/\s/g, ""))) };
+  m = /```json\r?\n([\s\S]*?)\r?\n```/.exec(body);
+  if (m) return { fmt: "plain", json: JSON.parse(m[1]) };
+  throw new Error("This file has no drawing data I can read");
+}
+
+// Images in an Obsidian drawing are separate vault files, listed under "## Embedded Files".
+async function vaultDrawingFiles(text, rel) {
+  const files = {};
+  const re = /^([0-9a-zA-Z]{20,}):\s*\[\[([^\]|]+)/gm;
+  const jobs = [];
+  let m;
+  while ((m = re.exec(text))) {
+    const id = m[1], f = vaultResolve(m[2], rel);
+    if (!f || !VAULT_IMG.test(f.rel)) continue;
+    jobs.push((async () => {
+      const blob = await (await vaultApi(vaultContentsUrl(f), { accept: "application/vnd.github.raw" })).blob();
+      const dataURL = await new Promise(ok => { const r = new FileReader(); r.onload = () => ok(r.result); r.readAsDataURL(blob); });
+      const ext = f.rel.split(".").pop().toLowerCase();
+      const mimeType = ext === "svg" ? "image/svg+xml" : ext === "jpg" ? "image/jpeg" : "image/" + ext;
+      files[id] = { id, mimeType, dataURL: dataURL.replace(/^data:[^;]*/, "data:" + mimeType), created: Date.now() };
+    })().catch(() => {}));
+  }
+  await Promise.all(jobs);
+  return files;
+}
+
+async function vaultEditDrawing() {
+  const cur = vault.current;
+  if (!cur || !vaultIsDrawing(cur.file) || vaultDraw) return;
+  vaultStatus("Opening drawing…");
+  try {
+    const [LZ, j] = await Promise.all([vaultLz(), vaultApi(vaultContentsUrl(cur.file)).then(r => r.json())]);
+    let text = "";
+    if (j.encoding === "base64" && j.content) text = vaultB64ToText(j.content);
+    else text = await (await vaultApi(vaultContentsUrl(cur.file), { accept: "application/vnd.github.raw" })).text();
+    if (vault.current !== cur) return;
+    cur.text = text; cur.sha = cur.file.sha = j.sha;
+    const parsed = vaultParseDrawing(text, cur.file.rel, LZ);
+    const files = await vaultDrawingFiles(text, cur.file.rel);
+    if (vault.current !== cur) return;
+    const draw = vaultDraw = { cur, parsed, text, handle: null, ver: null, dirty: false, orig: new Map(parsed.json.elements.map(e => [e.id, e])) };
+    document.getElementById("vault-panel").classList.add("drawing");
+    const view = document.getElementById("vault-view");
+    view.innerHTML = "";
+    const host = document.createElement("div");
+    host.className = "board-host";
+    view.appendChild(host);
+    vaultSetHeader();
+    const st = parsed.json.appState || {};
+    const handle = await exMount(host, { elements: parsed.json.elements, appState: { viewBackgroundColor: st.viewBackgroundColor, gridSize: st.gridSize }, files }, els => {
+      if (!draw.handle) return;
+      const v = exVersion(draw.handle.EX, els);
+      if (v !== draw.ver) { draw.ver = v; if (!draw.dirty) { draw.dirty = true; vaultSetHeader(); } }
+    });
+    if (vaultDraw !== draw) { handle.unmount(); return; }
+    draw.ver = exVersion(handle.EX, handle.api.getSceneElements());
+    draw.handle = handle;
+    vaultStatus("Editing — Save writes it back to the vault", "var(--text2)", true);
+  } catch (e) {
+    vaultCloseDrawing();
+    if (vault.current === cur) vaultRenderCurrent();
+    vaultStatus("⚠ " + e.message, "var(--red)");
+  }
+}
+
+function vaultCloseDrawing() {
+  const d = vaultDraw;
+  vaultDraw = null;
+  if (d && d.handle) d.handle.unmount();
+  document.getElementById("vault-panel").classList.remove("drawing");
+}
+
+// Rebuild the file: keep everything Obsidian wrote, swap in the new elements,
+// regenerate "## Text Elements" (Obsidian reads text from there) and the data block.
+async function vaultBuildDrawing(d, els, st) {
+  const LZ = await vaultLz();
+  const out = JSON.parse(JSON.stringify(els));
+  out.forEach(e => {
+    const o = d.orig.get(e.id);
+    if (o) for (const k in o) if (!(k in e)) e[k] = o[k];   // plugin-only fields (rawText, …)
+    if (e.type === "text" && d.parsed.fmt !== "json") {
+      if (o && o.originalText !== e.originalText) e.rawText = e.originalText;   // edited here
+      if (e.rawText === undefined) e.rawText = e.originalText !== undefined ? e.originalText : e.text;
+    }
+  });
+  const app0 = d.parsed.json.appState || {};
+  const json = { ...d.parsed.json, elements: out, appState: { ...app0, viewBackgroundColor: st.viewBackgroundColor, gridSize: st.gridSize != null ? st.gridSize : (app0.gridSize != null ? app0.gridSize : null) } };
+  if (d.parsed.fmt === "json") return JSON.stringify(json, null, 2);
+  let text = d.text;
+  const h = text.indexOf("## Text Elements");
+  if (h >= 0) {
+    const bodyStart = text.indexOf("\n", h) + 1;
+    const ends = ["\n## Element Links", "\n## Embedded Files", "\n%%\n## Drawing", "\n## Drawing", "\n%%\r\n## Drawing"]
+      .map(c => text.indexOf(c, bodyStart - 1)).filter(i => i >= 0);
+    if (ends.length) {
+      const end = Math.min(...ends);
+      const te = out.filter(e => e.type === "text").map(e => `${e.rawText} ^${e.id}\n\n`).join("");
+      text = text.slice(0, bodyStart) + te + text.slice(end + 1);
+    }
+  }
+  const di = text.indexOf("## Drawing");
+  if (di < 0) throw new Error("Couldn't find the drawing data block to update");
+  const data = d.parsed.fmt === "compressed" ? vaultChunk(LZ.compressToBase64(JSON.stringify(json))) : JSON.stringify(json, null, "\t");
+  const tail = text.slice(di).replace(/(```(?:compressed-json|json)\r?\n)[\s\S]*?(\r?\n```)/, (_, a, b) => a + data + b);
+  return text.slice(0, di) + tail;
+}
+
+async function vaultWriteDrawingSvg(file, EX, els, st, files) {
+  const existing = vaultDrawingImage(file);
+  if (existing && !/\.svg$/i.test(existing.rel)) return;   // a PNG export: leave it to Obsidian
+  const svg = await EX.exportToSvg({ elements: els, appState: { ...st, exportBackground: true, exportWithDarkMode: false }, files });
+  const rel = existing ? existing.rel : file.rel.replace(/\.md$/i, "") + ".svg";
+  const sha = await vaultPut(vaultFullPath(rel), svg.outerHTML, existing ? existing.sha : null, "Export " + rel);
+  if (existing) existing.sha = sha;
+  else { vault.files.push({ path: vaultFullPath(rel), rel, sha, size: 0 }); vaultIndex(); }
+}
+
+async function vaultSaveDrawing() {
+  const d = vaultDraw;
+  if (!d || !d.handle) return;
+  if (!d.dirty) { vaultCloseDrawing(); vaultRenderCurrent(); return; }
+  const btn = document.getElementById("vault-save-btn");
+  btn.disabled = true;
+  try {
+    const api = d.handle.api;
+    const els = api.getSceneElements(), st = api.getAppState(), files = api.getFiles();
+    const text = await vaultBuildDrawing(d, els, st);
+    d.dirty = false;   // vaultSave may open a conflict copy; don't ask "discard?" for this drawing
+    const ok = await vaultSave(d.cur, text, "Edit drawing " + d.cur.file.rel, d.cur.sha);
+    if (!ok) { if (vaultDraw === d) { d.dirty = true; vaultSetHeader(); } return; }
+    d.text = text;
+    try { await vaultWriteDrawingSvg(d.cur.file, d.handle.EX, els, st, files); }
+    catch (e) { vaultStatus("⚠ Saved, but the preview image couldn't be updated: " + e.message, "var(--red)"); }
+    if (vaultDraw === d) { vaultCloseDrawing(); vaultRenderCurrent(); vaultRenderTree(); }
+  } catch (e) {
+    if (vaultDraw === d) { d.dirty = true; vaultSetHeader(); }
+    vaultStatus("⚠ Save failed: " + e.message, "var(--red)");
+  } finally {
+    btn.disabled = false;
+  }
+}
+
+async function vaultNewDrawing() {
+  if (!vault.ready) return;
+  if ((vault.editing && vault.dirty) || (vaultDraw && vaultDraw.dirty)) { alert("Save or cancel your current edit first."); return; }
+  const suggest = vault.current ? vaultDir(vault.current.file.rel) : "";
+  let name = prompt("New drawing name (use folder/name to put it in a folder):", suggest);
+  if (name === null) return;
+  name = name.trim().replace(/^\/+/, "").replace(/(\.excalidraw)?(\.md)?$/i, "");
+  if (!name || name.endsWith("/")) return;
+  if (/[\\:*?"<>|#^\[\]]/.test(name)) { alert('Names can\'t contain \\ : * ? " < > | # ^ [ ]'); return; }
+  const rel = name + ".excalidraw.md";
+  if (vault.byRel[rel.toLowerCase()]) { alert("A drawing with that name already exists."); return; }
+  try {
+    vaultStatus("Creating…");
+    const LZ = await vaultLz();
+    const json = { type: "excalidraw", version: 2, source: "https://github.com/zsviczian/obsidian-excalidraw-plugin/releases/tag/2.27.3", elements: [], appState: { gridSize: null, viewBackgroundColor: "#ffffff" }, files: {} };
+    const text = "---\n\nexcalidraw-plugin: parsed\ntags: [excalidraw]\n\n---\n==⚠  Switch to EXCALIDRAW VIEW in the MORE OPTIONS menu of this document. ⚠==\n\n\n# Excalidraw Data\n\n## Text Elements\n%%\n## Drawing\n```compressed-json\n" + vaultChunk(LZ.compressToBase64(JSON.stringify(json))) + "\n```\n%%";
+    const sha = await vaultPut(vaultFullPath(rel), text, null, "New drawing " + rel);
+    const f = { path: vaultFullPath(rel), rel, sha, size: text.length };
+    vault.files.push(f); vaultIndex();
+    await vaultOpen(f);
+    vaultEditDrawing();
+  } catch (e) {
+    vaultStatus("⚠ " + e.message, "var(--red)");
+  }
+}
 
 // ── New / rename / delete ──
 async function vaultNewNote(suggest) {
@@ -3192,7 +4104,7 @@ function vaultForget() {
 // 6. INIT
 // ══════════════════════════════════════
 load();
-loadTodos();
+migrateLocalTodos();
 renderAll();
 setTimeout(scrollToNow, 100); // Scroll to current time on load
 window.addEventListener("resize", () => { if (activeTab === "tasks") renderGantt(); });
