@@ -874,6 +874,7 @@ function load() {
     backlog = JSON.parse(localStorage.getItem(BACKLOG_KEY) || "[]");
     stuckLog = JSON.parse(localStorage.getItem(STUCK_KEY) || "[]");
     phone = JSON.parse(localStorage.getItem(PHONE_KEY) || "null");
+    phoneCompact();
     prefs = { ...prefs, ...JSON.parse(localStorage.getItem(PREFS_KEY) || "{}") };
   } catch(e) {}
 }
@@ -2911,6 +2912,7 @@ async function phoneImport(event) {
     isos.forEach(iso => { phone.days[iso] = parsed.days[iso]; });
     phone.device = parsed.device || phone.device || "";
     phone.importedAt = Date.now();
+    phoneCompact();
     save();
     renderAnalytics();
     alert(`Imported ${isos.length} days of phone usage (${fmtDate(new Date(isos[0] + "T00:00"))} – ${fmtDate(new Date(isos[isos.length - 1] + "T00:00"))}).`);
@@ -2918,6 +2920,25 @@ async function phoneImport(event) {
     alert("Couldn't read that file: " + e.message);
     renderAnalytics();
   }
+}
+
+// Keep only what the charts need: per day the totals plus the top apps (the rest
+// becomes "Other"), and only the last PHONE_KEEP_DAYS days. Small enough to sync.
+const PHONE_TOP_APPS = 10, PHONE_KEEP_DAYS = 180;
+function phoneCompact() {
+  if (!phone || !phone.days) return;
+  const isos = Object.keys(phone.days).sort();
+  const cutoff = new Date(isos[isos.length - 1] + "T00:00");
+  cutoff.setDate(cutoff.getDate() - PHONE_KEEP_DAYS + 1);
+  isos.forEach(iso => {
+    if (new Date(iso + "T00:00") < cutoff) { delete phone.days[iso]; return; }
+    const d = phone.days[iso];
+    const apps = Object.entries(d.apps || {}).sort((a, b) => b[1] - a[1]);
+    if (apps.length <= PHONE_TOP_APPS) return;
+    const keep = Object.fromEntries(apps.slice(0, PHONE_TOP_APPS));
+    keep.Other = (keep.Other || 0) + apps.slice(PHONE_TOP_APPS).reduce((t, [, v]) => t + v, 0);
+    d.apps = keep;
+  });
 }
 
 function fmtSec(s) {
@@ -2953,7 +2974,7 @@ function phoneRender() {
   const busiest = days.reduce((a, b) => (b.t > a.t ? b : a), days[0]);
   const apps = {};
   days.forEach(d => Object.entries(d.apps).forEach(([k, v]) => { apps[k] = (apps[k] || 0) + v; }));
-  const top = Object.entries(apps).sort((a, b) => b[1] - a[1]).slice(0, 10);
+  const top = Object.entries(apps).filter(([k]) => k !== "Other").sort((a, b) => b[1] - a[1]).slice(0, 10);
   const max = Math.max(...days.map(d => d.t), 1);
   const dayLabel = d => d.toLocaleDateString("en-US", { weekday: "short", month: "short", day: "numeric" });
   let bars = "";
