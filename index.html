@@ -136,6 +136,16 @@ body.link-mode .resize-handle { display: none !important; }
 #note-content a { color: var(--blue); text-decoration: underline; cursor: pointer; }
 #note-content a.note-link { color: var(--accent); background: var(--accent-dim); border-radius: 3px; padding: 0 5px; text-decoration: none; white-space: nowrap; }
 #note-content a.note-link.vault { color: var(--purple); background: rgba(139,111,192,0.15); }
+#note-content a.note-task { color: var(--accent); text-decoration: none; border-bottom: 2px solid var(--accent); cursor: pointer; padding: 0 1px; }
+#note-content a.note-task::before { content: "☐ "; font-size: 10px; }
+#note-content a.note-task.done { color: var(--green); border-bottom-color: var(--green); text-decoration: line-through; }
+#note-content a.note-task.done::before { content: "✓ "; }
+#note-content a.note-task.gone { color: var(--text2); border-bottom: 1px dashed var(--text2); }
+#note-content a.note-task.gone::before { content: "⊘ "; }
+#note-board-task { display: none; }
+#note-edit-area.draw #note-board-task { display: inline-block; }
+#f-note-link { display: none; font-size: 11px; margin: -4px 0 12px; }
+#f-note-link a { color: var(--accent); cursor: pointer; }
 #note-content a.note-link.broken { color: var(--text2); background: var(--bg2); text-decoration: line-through; }
 #note-content img { max-width: 100%; border-radius: var(--radius); }
 .note-embed { margin: 10px 0; max-width: 640px; border: 1px solid var(--border); border-radius: 6px; overflow: hidden; background: var(--bg1); user-select: none; line-height: 1.4; }
@@ -570,6 +580,7 @@ body.link-mode .resize-handle { display: none !important; }
               <div class="note-mode" title="Switch this note between text and a whiteboard">
                 <button id="note-mode-text" onclick="noteSetMode('text')">✎ Text</button><button id="note-mode-draw" onclick="noteSetMode('draw')">◇ Board</button>
               </div>
+              <button id="note-board-task" onclick="noteBoardCreateTask()" title="Select a text or a shape with text on the board, then click" style="background:var(--accent-dim);border:1px solid var(--accent);color:var(--accent);padding:4px 9px;border-radius:var(--radius);font-size:10px;">＋ Task</button>
               <button onclick="deleteNote()" style="background:none;border:1px solid var(--red);color:var(--red);padding:4px 10px;border-radius:var(--radius);font-size:10px;cursor:pointer;font-family:var(--font);">Delete</button>
             </div>
             <div id="note-toolbar" style="padding:4px 16px 0;display:flex;flex-wrap:wrap;gap:4px;border-bottom:1px solid var(--border);padding-bottom:6px;">
@@ -702,6 +713,7 @@ body.link-mode .resize-handle { display: none !important; }
       <div id="f-active-tags" style="display:flex;flex-wrap:wrap;gap:4px;margin-top:6px;"></div>
     </div>
     <div class="form-group"><label class="form-label">Notes</label><textarea id="f-notes" rows="3" placeholder="Notes about this task..."></textarea></div>
+    <div id="f-note-link">📝 From note <a onclick="openTaskNote()"></a></div>
     <div class="form-group"><label style="display:flex;align-items:center;gap:8px;cursor:pointer;"><input type="checkbox" id="f-completed" style="accent-color:var(--accent)" /><span style="font-size:12px;">Mark as completed</span></label></div>
     <div style="display:flex;gap:8px;">
       <button id="save-btn" onclick="saveTask()">Save</button>
@@ -1172,6 +1184,7 @@ function renderNotes() {
   panel.classList.toggle("active", activeTab === "notes");
   if (activeTab !== "notes") { noteBoardClose(); return; }
   if (!activeNoteId) noteBoardClose();
+  noteRefreshTaskChips();
 
   // Search filter
   const searchEl = document.getElementById("note-search");
@@ -1298,6 +1311,7 @@ function openNote(id) {
   setTimeout(() => {
     document.getElementById("note-title").value = note.title || "";
     document.getElementById("note-content").innerHTML = notesClean(note.content || "");
+    noteRefreshTaskChips();
     noteApplyMode();
   }, 10);
 }
@@ -1357,7 +1371,43 @@ function noteCreateTask() {
   const first = text.split(/\n+/).map(l => l.trim()).find(Boolean) || text;
   const title = first.replace(/^([-*•]|\d+[.)])\s+/, "").slice(0, 120);
   const from = note && note.title ? `From note "${note.title}"` : "From a note";
-  openModal(null, { title, notes: text.length > title.length + 2 ? from + "\n\n" + text : from, fromNote: activeNoteId });
+  const noteRange = sel.getRangeAt(0).cloneRange();
+  openModal(null, { title, notes: text.length > title.length + 2 ? from + "\n\n" + text : from, fromNote: activeNoteId, noteRange });
+}
+
+// Wrap the words a task was made from in a chip that links to the task.
+function noteWrapTaskRange(range, taskId) {
+  const el = document.getElementById("note-content");
+  if (!el.contains(range.commonAncestorContainer) || range.collapsed) return;
+  if (range.commonAncestorContainer.parentElement && range.commonAncestorContainer.parentElement.closest("a.note-task")) return;
+  const a = document.createElement("a");
+  a.className = "note-task";
+  a.dataset.taskId = taskId;
+  try { range.surroundContents(a); }
+  catch (e) { a.appendChild(range.extractContents()); range.insertNode(a); }   // selection crossed tags
+  a.querySelectorAll("a.note-task").forEach(inner => inner.replaceWith(...inner.childNodes));
+  window.getSelection().removeAllRanges();
+  noteRefreshTaskChips();
+  saveCurrentNote();
+}
+
+// Chip look follows the task: open, done, or deleted.
+function noteRefreshTaskChips() {
+  const el = document.getElementById("note-content");
+  if (!el) return;
+  el.querySelectorAll("a.note-task").forEach(a => {
+    const t = tasks.find(x => x.id === a.dataset.taskId);
+    a.classList.toggle("done", !!(t && t.completed));
+    a.classList.toggle("gone", !t);
+    a.title = !t ? "This task was deleted" : (t.completed ? "Done · " : "Task · ") + fmtDate(new Date(t.start)) + " " + fmtTime(new Date(t.start)) + " · click to open";
+  });
+}
+
+function noteOpenTaskChip(a) {
+  const t = tasks.find(x => x.id === a.dataset.taskId);
+  if (!t) { if (confirm("This task was deleted. Remove the task link and keep the text?")) { a.replaceWith(...a.childNodes); autoSaveNote(); } return; }
+  saveCurrentNote();
+  openModal(t.id);
 }
 
 // ── EXCALIDRAW (whiteboard notes + vault drawings) ──
@@ -1382,7 +1432,7 @@ function exLoad() {
   return exLibPromise;
 }
 // Mounts an editor into host (which must already be in the page and sized).
-async function exMount(host, scene, onChange) {
+async function exMount(host, scene, onChange, onLinkOpen) {
   const { React, createRoot, EX } = await exLoad();
   const root = createRoot(host);
   let api = null;
@@ -1393,6 +1443,7 @@ async function exMount(host, scene, onChange) {
       theme: "dark",
       excalidrawAPI: a => { api = a; clearTimeout(t); resolve(); },
       onChange: (els, st, files) => onChange && onChange(els, st, files),
+      onLinkOpen: (el, ev) => { if (onLinkOpen && onLinkOpen(el.link || "", el)) ev.preventDefault(); },
       UIOptions: { canvasActions: { loadScene: false, saveToActiveFile: false } },
     }));
   });
@@ -1438,7 +1489,7 @@ async function noteBoardOpen(note) {
   const board = noteBoard = { noteId: note.id, handle: null, timer: null, pending: null, ver: null };
   try {
     const scene = note.scene || {};
-    const handle = await exMount(host, scene, (els, st, files) => noteBoardChanged(board, els, st, files));
+    const handle = await exMount(host, { ...scene, elements: boardRecolor(scene.elements || []) }, (els, st, files) => noteBoardChanged(board, els, st, files), boardOpenTask);
     if (noteBoard !== board) { handle.unmount(); return; }
     board.ver = exVersion(handle.EX, handle.api.getSceneElements());   // baseline: what was loaded
     board.handle = handle;
@@ -1446,6 +1497,87 @@ async function noteBoardOpen(note) {
   } catch (e) {
     if (noteBoard === board) msg.textContent = "⚠ Couldn't load the whiteboard: " + e.message + " — are you offline?";
   }
+}
+
+// Excalidraw's own palette colors (they read well in its dark mode too).
+const BOARD_TASK_COLORS = { open: "#e8590c", done: "#2f9e44", gone: "#868e96" };
+function boardTaskColor(taskId) {
+  const t = tasks.find(x => x.id === taskId);
+  return !t ? BOARD_TASK_COLORS.gone : t.completed ? BOARD_TASK_COLORS.done : BOARD_TASK_COLORS.open;
+}
+function boardTaskLink(link) { const m = /^#task-([a-z0-9]+)$/i.exec(link || ""); return m ? m[1] : null; }
+
+// Recolor task-linked text to match its task before the board opens.
+function boardRecolor(elements) {
+  return elements.map(e => {
+    const id = e.customData && e.customData.taskId;
+    if (!id || e.type !== "text") return e;
+    const c = boardTaskColor(id);
+    return e.strokeColor === c ? e : { ...e, strokeColor: c };
+  });
+}
+
+function boardOpenTask(link) {
+  const id = boardTaskLink(link);
+  if (!id) return false;
+  if (tasks.some(t => t.id === id)) openModal(id); else alert("This task was deleted.");
+  return true;
+}
+
+// Text of the selected elements (a text, or a shape/arrow with a label).
+function noteBoardSelection() {
+  const h = noteBoard && noteBoard.handle;
+  if (!h) return null;
+  const all = h.api.getSceneElements();
+  const byId = new Map(all.map(e => [e.id, e]));
+  const sel = Object.keys(h.api.getAppState().selectedElementIds || {}).filter(id => byId.has(id));
+  const texts = [], ids = [];
+  sel.forEach(id => {
+    const e = byId.get(id);
+    if (e.type === "text") {
+      if (e.containerId && sel.includes(e.containerId)) return;   // counted with its shape
+      texts.push(e.originalText || e.text); ids.push(e.containerId || e.id);
+      return;
+    }
+    const bound = (e.boundElements || []).find(b => b.type === "text");
+    const t = bound && byId.get(bound.id);
+    if (t) { texts.push(t.originalText || t.text); ids.push(e.id); }
+  });
+  return { texts: texts.filter(Boolean), ids };
+}
+
+function noteBoardCreateTask() {
+  const s = noteBoardSelection();
+  if (!s || !s.texts.length) { alert("Select a text — or a shape with text in it — on the board first, then press ＋ Task."); return; }
+  const note = notes.find(n => n.id === activeNoteId);
+  const text = s.texts.join("\n");
+  const title = text.split(/\n+/).map(l => l.trim()).find(Boolean).slice(0, 120);
+  const from = note && note.title ? `From whiteboard "${note.title}"` : "From a whiteboard";
+  openModal(null, { title, notes: text.length > title.length + 2 ? from + "\n\n" + text : from, fromNote: activeNoteId, boardIds: s.ids });
+}
+
+// Link the elements to the task (link icon opens it) and color their text.
+function noteBoardMarkTask(ids, taskId) {
+  const h = noteBoard && noteBoard.handle;
+  if (!h) return;
+  const all = h.api.getSceneElementsIncludingDeleted();
+  const byId = new Map(all.map(e => [e.id, e]));
+  const linkIds = new Set(ids), textIds = new Set();
+  ids.forEach(id => {
+    const e = byId.get(id);
+    if (!e) return;
+    if (e.type === "text") textIds.add(e.id);
+    (e.boundElements || []).forEach(b => { if (b.type === "text") textIds.add(b.id); });
+  });
+  const bump = (e, props) => ({ ...e, ...props, version: e.version + 1, versionNonce: Math.floor(Math.random() * 2 ** 31), updated: Date.now() });
+  h.api.updateScene({
+    elements: all.map(e => {
+      let props = null;
+      if (textIds.has(e.id)) props = { strokeColor: BOARD_TASK_COLORS.open, customData: { ...(e.customData || {}), taskId } };
+      if (linkIds.has(e.id)) props = { ...(props || {}), link: "#task-" + taskId };
+      return props ? bump(e, props) : e;
+    }),
+  });
 }
 
 function noteBoardChanged(board, els, st, files) {
@@ -1519,6 +1651,13 @@ function notesClean(html) {
       if (NOTE_DROP_TAGS.has(el.tagName)) { el.remove(); return; }
       if (!NOTE_KEEP_TAGS.has(el.tagName)) { walk(el); el.replaceWith(...el.childNodes); return; }
       if (el.tagName === "A" && el.classList.contains("note-link")) { el.replaceWith(noteChipEl(el.dataset.noteId, el.dataset.vaultRel, el.textContent)); return; }
+      if (el.tagName === "A" && el.classList.contains("note-task") && /^[a-z0-9]+$/i.test(el.dataset.taskId || "")) {
+        const id = el.dataset.taskId;
+        [...el.attributes].forEach(a => el.removeAttribute(a.name));
+        el.className = "note-task"; el.dataset.taskId = id;
+        walk(el);
+        return;
+      }
       const keep = {};
       if (el.tagName === "A") {
         const h = (el.getAttribute("href") || "").trim();
@@ -1792,6 +1931,7 @@ function noteFollowLink(a) {
     const a = e.target.closest("a");
     if (!a || !el.contains(a)) return;
     e.preventDefault();
+    if (a.classList.contains("note-task")) { noteOpenTaskChip(a); return; }
     if (a.classList.contains("note-link")) { noteFollowLink(a); return; }
     const href = a.getAttribute("href");
     if (href && NOTE_SAFE_HREF.test(href)) window.open(href, "_blank", "noopener");
@@ -2158,10 +2298,16 @@ function endDrag() {
 let lastClickId = null, lastClickTime = 0;
 
 // ── MODAL ──
-// preset (new tasks only): { title, notes, duration, category, fromNote }
+// preset (new tasks only): { title, notes, duration, category, fromNote, noteRange, boardIds }
 function openModal(id, preset) {
   editingTaskId = id;
   window._modalFromNote = (!id && preset && preset.fromNote) || null;
+  window._modalNoteRange = (!id && preset && preset.noteRange) || null;
+  window._modalBoardIds = (!id && preset && preset.boardIds) || null;
+  const srcNote = id ? notes.find(n => n.id === (tasks.find(t => t.id === id) || {}).noteId) : null;
+  const nl = document.getElementById("f-note-link");
+  nl.style.display = srcNote ? "block" : "none";
+  if (srcNote) { nl.querySelector("a").textContent = srcNote.title || "Untitled"; nl.dataset.noteId = srcNote.id; }
   document.getElementById("modal-overlay").classList.add("open");
   const sel = document.getElementById("f-category");
   sel.innerHTML = CATEGORIES.map(c => `<option value="${c}">${c}</option>`).join("");
@@ -2176,7 +2322,7 @@ function openModal(id, preset) {
     window._modalTags = [...(t.tags || [])];
     document.getElementById("f-notes").value = t.notes || "";
     document.getElementById("f-completed").checked = t.completed;
-    document.getElementById("delete-btn").style.display = "";
+    document.getElementById("delete-btn").style.display = "inline-block";   // the stylesheet hides it by default
   } else {
     const p = preset || {};
     const start = nowRounded();   // new tasks start now
@@ -2203,12 +2349,21 @@ function renderDeps() {
     .join("") || '<span style="font-size:10px;color:var(--text2)">No active tasks to link</span>';
 }
 function toggleDep(id) { const i = window._modalDeps.indexOf(id); if (i >= 0) window._modalDeps.splice(i, 1); else window._modalDeps.push(id); renderDeps(); }
-function closeModal() { document.getElementById("modal-overlay").classList.remove("open"); editingTaskId = null; window._modalFromNote = null; }
+function closeModal() { document.getElementById("modal-overlay").classList.remove("open"); editingTaskId = null; window._modalFromNote = null; window._modalNoteRange = null; window._modalBoardIds = null; }
+function openTaskNote() {
+  const id = document.getElementById("f-note-link").dataset.noteId;
+  closeModal();
+  if (!notes.some(n => n.id === id)) return;
+  switchTab("notes");
+  openNote(id);
+}
 
 function saveTask() {
   const title = document.getElementById("f-title").value.trim(); if (!title) return;
   const startDt = new Date(document.getElementById("f-date").value + "T" + document.getElementById("f-time").value);
+  const prev = editingTaskId ? tasks.find(t => t.id === editingTaskId) : null;
   const taskData = {
+    ...(prev || {}),   // keep fields this form doesn't show (noteId, …)
     id: editingTaskId || genId(), title, category: document.getElementById("f-category").value,
     start: startDt.getTime(), duration: parseInt(document.getElementById("f-duration").value) || 60,
     dependencies: window._modalDeps || [], notes: document.getElementById("f-notes").value,
@@ -2227,12 +2382,22 @@ function saveTask() {
     }
   });
   cascadeForward(taskData.id);
-  // A task made from a note links back to it (unless the note already links elsewhere).
+  // A task made from a note links both ways: the task remembers the note, and
+  // the selected words (or board elements) become a link to the task.
   const fromNote = window._modalFromNote && notes.find(n => n.id === window._modalFromNote);
-  if (fromNote && !fromNote.linkedTaskId) { fromNote.linkedTaskId = taskData.id; fromNote.updatedAt = Date.now(); }
-  window._modalFromNote = null;
+  const range = window._modalNoteRange, boardIds = window._modalBoardIds;
+  if (fromNote) {
+    taskData.noteId = fromNote.id;
+    if (!fromNote.linkedTaskId) fromNote.linkedTaskId = taskData.id;
+    fromNote.updatedAt = Date.now();
+  }
   save(); closeModal(); renderAll();
-  if (fromNote) setTimeout(() => { const t = document.getElementById("note-saved-indicator"); if (t) t.textContent = "✓ Task created"; }, 0);
+  if (fromNote && activeNoteId === fromNote.id) {
+    if (range) noteWrapTaskRange(range, taskData.id);
+    if (boardIds) noteBoardMarkTask(boardIds, taskData.id);
+    const t = document.getElementById("note-saved-indicator");
+    if (t) t.textContent = "✓ Task created";
+  }
 }
 
 function deleteTask() {
@@ -3846,6 +4011,12 @@ async function vaultEditDrawing() {
       if (!draw.handle) return;
       const v = exVersion(draw.handle.EX, els);
       if (v !== draw.ver) { draw.ver = v; if (!draw.dirty) { draw.dirty = true; vaultSetHeader(); } }
+    }, link => {
+      const m = /^\[\[([^\]|#]+)/.exec(link);
+      if (!m) return false;
+      const f = vaultResolve(m[1], cur.file.rel);
+      if (f) vaultOpen(f); else alert("No note called “" + m[1] + "” in the vault.");
+      return true;
     });
     if (vaultDraw !== draw) { handle.unmount(); return; }
     draw.ver = exVersion(handle.EX, handle.api.getSceneElements());
@@ -4157,10 +4328,16 @@ function isTyping() {
 
 async function push() {
   if (!userRef) return;
+  const payload = JSON.stringify(getSyncData());
+  // Firestore caps a document at 1 MB; whiteboards with images are the usual culprit.
+  if (new Blob([payload]).size > 1000000) {
+    setStatus("⚠ Sync paused: your data is over the 1 MB cloud limit — remove images from whiteboards or delete old phone data", "var(--red)");
+    return;
+  }
   lastRev = Date.now() + "-" + Math.random().toString(36).slice(2, 8);
   try {
     await setDoc(userRef, {
-      payload: JSON.stringify(getSyncData()),
+      payload,
       rev: lastRev,
       updatedAt: serverTimestamp(),
     });
