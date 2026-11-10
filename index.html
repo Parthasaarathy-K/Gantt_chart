@@ -522,7 +522,8 @@ body.sb-collapsed #divert-fab { display: flex; }
 #board-bar { display: none; align-items: center; gap: 8px; padding: 5px 12px; border-bottom: 1px solid var(--border); flex-wrap: wrap; font-size: 10px; }
 #note-edit-area.draw #board-bar { display: flex; }
 #board-status { flex: 1; display: flex; gap: 12px; flex-wrap: wrap; color: var(--text2); min-width: 200px; }
-#board-status .ok { color: var(--green); } #board-status .warn { color: var(--accent); } #board-status .bad { color: var(--red); }
+#board-status .ok { color: var(--green); }
+#board-status a.board-link, #storage-line a { color: var(--accent); cursor: pointer; text-decoration: underline; } #board-status .warn { color: var(--accent); } #board-status .bad { color: var(--red); }
 .board-actions { display: flex; gap: 5px; align-items: center; }
 .board-actions > button, .board-menu > summary { background: var(--bg2); border: 1px solid var(--border); color: var(--text); padding: 4px 9px; border-radius: var(--radius); font-size: 10px; cursor: pointer; list-style: none; }
 .board-menu { position: relative; }
@@ -824,7 +825,8 @@ body.sb-collapsed #divert-fab { display: flex; }
         <p style="font-size:11px;color:var(--text2);line-height:1.6;margin-bottom:12px;">
           Sign in with the same Google account on every device. Changes sync automatically in real time.
         </p>
-        <div id="cloud-status" style="font-size:11px;color:var(--text2);margin-bottom:10px;">Loading sync…</div>
+        <div id="cloud-status" style="font-size:11px;color:var(--text2);margin-bottom:6px;">Loading sync…</div>
+        <div id="storage-line" style="font-size:11px;color:var(--text2);margin-bottom:10px;"></div>
         <button id="cloud-signin-btn" onclick="window.cloudSignIn && window.cloudSignIn()" style="display:none;width:100%;padding:10px;background:var(--green);color:#000;font-weight:700;border-radius:var(--radius);font-size:12px;">🔐 Sign in with Google</button>
         <button id="cloud-signout-btn" onclick="window.cloudSignOut && window.cloudSignOut()" style="display:none;width:100%;padding:10px;background:var(--bg1);border:1px solid var(--border);color:var(--text2);font-weight:700;border-radius:var(--radius);font-size:12px;">Sign out</button>
       </div>
@@ -1135,7 +1137,7 @@ function renderAll() {
   if (activeTab === "stuck") renderStuck();
   if (activeTab === "notes") renderNotes();
   if (activeTab === "vault") renderVault();
-  if (activeTab === "sync") { document.getElementById("sync-panel").classList.add("active"); }
+  if (activeTab === "sync") { document.getElementById("sync-panel").classList.add("active"); renderStorageLine(); }
 }
 
 function renderSidebar() {
@@ -1890,7 +1892,7 @@ function boardStatus(override) {
     : cs.syncedAt ? `<span class="ok">☁ Synced ${new Date(cs.syncedAt).toLocaleTimeString([], { hour: "numeric", minute: "2-digit", second: "2-digit" })}</span>` : `<span>☁ Connecting…</span>`;
   const total = cloudBytes();
   const pct = Math.round((total / CLOUD_MAX_BYTES) * 100);
-  el.innerHTML = `${local}${cloud}<span class="${pct >= 85 ? "bad" : pct >= 60 ? "warn" : ""}" title="This board / everything you sync, of the 1 MB cloud limit">${fmtKB(noteSceneBytes(note))} board · ${pct}% of cloud space</span>${b.warn ? `<span class="bad">${esc(b.warn)}</span>` : ""}`;
+  el.innerHTML = `${local}${cloud}<span>This board ${fmtKB(noteSceneBytes(note))}</span><span class="${pct >= 85 ? "bad" : pct >= 60 ? "warn" : ""}" title="Everything you sync — all notes, boards, tasks and logs together — against Firebase's 1 MB limit">All synced data ${fmtKB(total)} · ${pct}% of 1 MB · <a class="board-link" onclick="openStorage()">What's using it?</a></span>${b.warn ? `<span class="bad">${esc(b.warn)}</span>` : ""}`;
 }
 document.addEventListener("cloudstatus", () => boardStatus());
 
@@ -2034,6 +2036,129 @@ function pickFromList(title, items) {
     draw();
     setTimeout(() => search.focus(), 0);
   });
+}
+
+// ── CLOUD SPACE: what uses it, and shrinking pictures ──
+// Firebase keeps everything in one document per account, capped at 1 MB. Pictures
+// are what fill it: a screenshot pasted into a note is stored inside the note.
+const IMG_MAX_SIDE = 1280, IMG_QUALITY = 0.8;
+function byteSize(v) { return v == null ? 0 : new Blob([typeof v === "string" ? v : JSON.stringify(v)]).size; }
+function noteImageCount(n) {
+  if (n.mode === "draw") return Object.keys(noteScene(n).files || {}).length;
+  return ((n.content || "").match(/src="data:image\//g) || []).length;
+}
+
+function storageBreakdown() {
+  const items = notes.map(n => ({ kind: n.mode === "draw" ? "Whiteboard" : "Note", label: n.title || "Untitled", bytes: byteSize(n), noteId: n.id, images: noteImageCount(n) }));
+  [["Tasks", tasks], ["Plan backlog", backlog], ["Habits", habits], ["Diversion log", diversions], ["Stuck sessions", stuckLog], ["Breaks", breaks], ["Phone usage (StayFree)", phone], ["Settings", prefs]]
+    .forEach(([label, v]) => items.push({ kind: "Data", label, bytes: byteSize(v), images: 0 }));
+  return items.sort((a, b) => b.bytes - a.bytes);
+}
+
+function openStorage() {
+  const items = storageBreakdown();
+  const total = cloudBytes();
+  const pics = items.reduce((s, i) => s + i.images, 0);
+  const ov = document.createElement("div");
+  ov.className = "cc-overlay open";
+  ov.id = "storage-overlay";
+  const rows = items.filter(i => i.bytes > 50).map(i => `<tr>
+      <td>${esc(i.label)}<br><small class="muted">${i.kind}${i.images ? " · " + i.images + (i.images === 1 ? " picture" : " pictures") : ""}</small></td>
+      <td class="nowrap">${fmtKB(i.bytes)}</td>
+      <td style="width:38%"><div class="bar-track" style="height:10px"><div class="bar-fill" style="width:${Math.min(100, (i.bytes / CLOUD_MAX_BYTES) * 100)}%;background:${i.images ? "var(--red)" : "var(--blue)"}"></div></div></td>
+      <td>${i.noteId ? `<button class="plan-x" onclick="storageOpenNote('${i.noteId}')">Open</button>` : ""}</td></tr>`).join("");
+  ov.innerHTML = `<div class="cc-modal" style="width:620px">
+    <div class="modal-header"><span class="modal-title">☁ What's using your cloud space</span><button class="modal-close">×</button></div>
+    <p class="plan-lead" style="margin:0 0 10px">Everything you sync is one Firebase record per account, capped at <b>1 MB</b>. You're using <b>${fmtKB(total)}</b> — <b>${Math.round((total / CLOUD_MAX_BYTES) * 100)}%</b>. At 100% sync pauses until you free space.</p>
+    ${pics ? `<div class="stuck-tip">${pics} ${pics === 1 ? "picture is" : "pictures are"} stored inside your notes and boards — usually the reason. <b>Shrink pictures</b> resizes them to at most ${IMG_MAX_SIDE}px and re-saves them compactly (WebP); they stay readable. Or open the note and delete the ones you don't need.</div>
+      <button class="plan-primary" id="shrink-btn" onclick="shrinkAllPictures()" style="margin-bottom:12px">🗜 Shrink pictures</button>` : ""}
+    <div class="dv-table-wrap"><table class="plan-table" style="min-width:0"><thead><tr><th>Item</th><th>Size</th><th>of 1 MB</th><th></th></tr></thead><tbody>${rows}</tbody></table></div>
+  </div>`;
+  document.body.appendChild(ov);
+  const close = () => ov.remove();
+  ov.querySelector(".modal-close").onclick = close;
+  ov.addEventListener("click", e => { if (e.target === ov) close(); });
+}
+function storageOpenNote(id) {
+  const ov = document.getElementById("storage-overlay");
+  if (ov) ov.remove();
+  switchTab("notes");
+  openNote(id);
+}
+
+// Resize one picture; keeps the original if the new one isn't smaller.
+function shrinkDataUrl(url) {
+  return new Promise(resolve => {
+    const img = new Image();
+    img.onload = () => {
+      const k = Math.min(1, IMG_MAX_SIDE / Math.max(img.naturalWidth, img.naturalHeight));
+      const c = document.createElement("canvas");
+      c.width = Math.max(1, Math.round(img.naturalWidth * k)); c.height = Math.max(1, Math.round(img.naturalHeight * k));
+      c.getContext("2d").drawImage(img, 0, 0, c.width, c.height);
+      let out = c.toDataURL("image/webp", IMG_QUALITY);
+      if (!out.startsWith("data:image/webp")) out = c.toDataURL("image/jpeg", IMG_QUALITY);
+      resolve(out.length < url.length ? out : url);
+    };
+    img.onerror = () => resolve(url);
+    img.src = url;
+  });
+}
+
+async function shrinkAllPictures() {
+  const btn = document.getElementById("shrink-btn");
+  if (btn) { btn.disabled = true; btn.textContent = "Shrinking…"; }
+  const before = cloudBytes();
+  saveCurrentNote();
+  const openId = noteBoard ? noteBoard.noteId : null;
+  noteBoardClose();
+  for (const n of notes) {
+    if (n.mode === "draw") {
+      const sc = noteScene(n);
+      const files = sc.files || {};
+      let changed = false;
+      for (const id of Object.keys(files)) {
+        const small = await shrinkDataUrl(files[id].dataURL);
+        if (small !== files[id].dataURL) { files[id] = { ...files[id], dataURL: small, mimeType: small.slice(5, small.indexOf(";")) }; changed = true; }
+      }
+      if (changed) { const packed = packScene({ ...sc, files }); delete n.scene; delete n.sceneZ; Object.assign(n, packed); n.updatedAt = Date.now(); }
+    }
+    const urls = (n.content || "").match(/data:image\/[a-z+]+;base64,[A-Za-z0-9+/=]+/g) || [];
+    for (const u of urls) {
+      const small = await shrinkDataUrl(u);
+      if (small !== u) { n.content = n.content.split(u).join(small); n.updatedAt = Date.now(); }
+    }
+  }
+  save();
+  if (activeTab === "notes" && activeNoteId) { const note = notes.find(x => x.id === activeNoteId); if (note) document.getElementById("note-content").innerHTML = notesClean(note.content || ""); }
+  if (openId && activeNoteId === openId) noteApplyMode();
+  const after = cloudBytes();
+  const ov = document.getElementById("storage-overlay");
+  if (ov) ov.remove();
+  openStorage();
+  toast(`Pictures shrunk: ${fmtKB(before)} → ${fmtKB(after)} (${Math.round((after / CLOUD_MAX_BYTES) * 100)}% of 1 MB).`);
+}
+
+// From now on, big pictures pasted or dropped into a text note are shrunk as they land.
+async function noteShrinkInline() {
+  const el = document.getElementById("note-content");
+  let changed = false;
+  for (const img of el.querySelectorAll('img[src^="data:image/"]')) {
+    if (img.src.length < 150000) continue;   // ~110 KB: leave small pictures alone
+    const s = await shrinkDataUrl(img.src);
+    if (s !== img.src) { img.src = s; changed = true; }
+  }
+  if (changed) autoSaveNote();
+}
+(function wireNoteShrink() {
+  const el = document.getElementById("note-content");
+  ["paste", "drop"].forEach(ev => el.addEventListener(ev, () => setTimeout(noteShrinkInline, 60)));
+})();
+
+function renderStorageLine() {
+  const el = document.getElementById("storage-line");
+  if (!el) return;
+  const total = cloudBytes(), pct = Math.round((total / CLOUD_MAX_BYTES) * 100);
+  el.innerHTML = `Cloud space: <b style="color:${pct >= 85 ? "var(--red)" : pct >= 60 ? "var(--accent)" : "var(--text)"}">${fmtKB(total)} · ${pct}% of 1 MB</b> · <a onclick="openStorage()">What's using it?</a>`;
 }
 
 // Excalidraw's own palette colors (they read well in its dark mode too).
