@@ -433,6 +433,104 @@ body.link-mode .resize-handle { display: none !important; }
 .phone-lost b { color: var(--red); }
 .phone-lost small { color: var(--text2); font-size: 10px; display: block; }
 
+/* POPUPS (diversion, import, picker) */
+.cc-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.7); z-index: 1000; align-items: center; justify-content: center; padding: 12px; }
+.cc-overlay.open { display: flex; }
+.cc-modal { background: var(--bg1); border: 1px solid var(--border); border-radius: 8px; padding: 20px; width: 480px; max-width: 96vw; max-height: 92vh; overflow-y: auto; }
+.cc-modal .form-label { margin-top: 12px; }
+.pick-search { margin-bottom: 8px; }
+.pick-list { max-height: 50vh; overflow-y: auto; display: flex; flex-direction: column; gap: 2px; }
+.pick-item { text-align: left; background: var(--bg2); border: 1px solid transparent; color: var(--text); padding: 8px 10px; border-radius: var(--radius); font-size: 12px; }
+.pick-item:hover { border-color: var(--accent); }
+.pick-item small { display: block; color: var(--text2); font-size: 10px; margin-top: 2px; }
+.dv-chips { display: flex; flex-wrap: wrap; gap: 5px; }
+.dv-chip { background: var(--bg2); border: 1px solid var(--border); color: var(--text2); padding: 5px 10px; border-radius: 14px; font-size: 11px; }
+.dv-chip.on { background: var(--accent-dim); border-color: var(--accent); color: var(--accent); }
+.dv-inline { display: flex; gap: 6px; align-items: center; margin-top: 6px; flex-wrap: wrap; }
+.dv-inline input { width: auto; flex: 1; min-width: 120px; padding: 6px 8px; font-size: 11px; }
+.dv-actions { display: flex; gap: 8px; margin-top: 16px; flex-wrap: wrap; }
+.dv-actions button { flex: 1; padding: 10px; }
+.dv-table td { vertical-align: top; }
+.dv-thought { max-width: 260px; white-space: pre-wrap; }
+.dv-table-wrap { overflow-x: auto; }
+.muted { color: var(--text2); }
+.nowrap { white-space: nowrap; }
+#divert-btn { width: 100%; padding: 9px; background: var(--bg2); border: 1px dashed #4a3a1a; color: var(--accent); font-size: 12px; border-radius: var(--radius); margin-bottom: 4px; }
+#import-btn { width: 100%; padding: 6px; background: none; border: 1px dashed var(--border); color: var(--text2); font-size: 11px; border-radius: var(--radius); margin-bottom: 4px; }
+#divert-fab { display: none; position: fixed; left: 4px; bottom: 14px; width: 36px; height: 36px; border-radius: 50%; background: var(--accent); color: #000; font-size: 17px; align-items: center; justify-content: center; z-index: 60; box-shadow: 0 2px 10px rgba(0,0,0,0.5); }
+body.sb-collapsed #divert-fab { display: flex; }
+#cc-toast { position: fixed; left: 50%; bottom: 24px; transform: translateX(-50%) translateY(20px); background: #222; border: 1px solid #444; color: #eee; padding: 9px 16px; border-radius: 18px; font-size: 12px; z-index: 2000; opacity: 0; pointer-events: none; transition: all 0.2s; max-width: 90vw; text-align: center; }
+#cc-toast.show { opacity: 1; transform: translateX(-50%); }
+.seg { display: inline-flex; border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; flex-wrap: wrap; }
+.seg button { background: var(--bg2); color: var(--text2); padding: 6px 12px; font-size: 11px; }
+.seg button.active { background: var(--accent-dim); color: var(--accent); }
+.stuck-tabs { margin-bottom: 14px; }
+/* IMPORT */
+.imp-row { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; margin: 10px 0; }
+.imp-row input[type=file] { width: auto; flex: 1; min-width: 200px; padding: 6px; font-size: 11px; }
+#imp-paste { font-size: 11px; }
+.imp-summary { font-size: 12px; margin: 10px 0 6px; }
+.imp-table { min-width: 560px; }
+.imp-ok { color: var(--green); } .imp-warn { color: var(--accent); font-size: 10px; } .imp-bad { color: var(--red); font-size: 10px; }
+#imp-go:disabled { opacity: 0.4; cursor: default; }
+/* HABITS */
+.hb-cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 8px; }
+.hb-card { display: flex; gap: 10px; align-items: flex-start; background: var(--bg2); border: 1px solid var(--border); border-radius: 6px; padding: 10px 12px; }
+.hb-card.done { border-color: rgba(52,199,123,0.45); }
+.hb-check { width: 34px; height: 34px; flex-shrink: 0; border-radius: 8px; border: 2px solid var(--border); background: var(--bg1); color: #000; font-size: 18px; font-weight: 700; }
+.hb-card.done .hb-check { background: var(--green); border-color: var(--green); }
+.hb-main { min-width: 0; }
+.hb-name { font-size: 13px; color: var(--text); }
+.hb-sub { font-size: 10px; color: var(--text2); margin-top: 3px; }
+.hb-warn { display: inline-block; font-size: 10px; margin-top: 5px; padding: 2px 7px; border-radius: 10px; border: 1px solid; }
+.hb-warn.warn { color: var(--accent); border-color: rgba(232,160,32,0.4); }
+.hb-warn.bad { color: var(--red); border-color: rgba(224,82,82,0.45); }
+.hb-grid-wrap { overflow-x: auto; }
+.hb-grid { border-collapse: collapse; font-size: 10px; }
+.hb-grid th { color: var(--text2); font-weight: 400; padding: 2px; text-align: center; line-height: 1.3; }
+.hb-grid th.today { color: var(--accent); }
+.hb-grid td { padding: 2px; text-align: center; }
+.hb-gname { text-align: left !important; max-width: 150px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; padding-right: 8px !important; color: var(--text); font-size: 11px; }
+.hb-cell { width: 22px; height: 22px; border-radius: 4px; background: var(--bg1); border: 1px solid var(--border); }
+.hb-cell.on { background: var(--green); border-color: var(--green); }
+.hb-cell.pre { opacity: 0.35; }
+.hb-pct { color: var(--text); padding-left: 8px !important; }
+.hb-heat-row { display: flex; gap: 12px; align-items: center; margin-bottom: 10px; flex-wrap: wrap; }
+.hb-heat-name { width: 200px; font-size: 11px; color: var(--text); }
+.hb-heat-name small { display: block; color: var(--text2); font-size: 10px; margin-top: 2px; }
+.hb-heat { display: flex; gap: 3px; }
+.hb-hcol { display: flex; flex-direction: column; gap: 3px; }
+.hb-hcol i { display: block; width: 11px; height: 11px; border-radius: 2px; background: #2a1d1d; }
+.hb-hcol i.on { background: var(--green); }
+.hb-hcol i.pre, .hb-hcol i.fut { background: var(--bg1); }
+/* DONE LOG */
+.log-summary { font-size: 12px; color: var(--text2); margin: 4px 0 14px; display: flex; gap: 12px; flex-wrap: wrap; align-items: center; }
+.log-summary b { color: var(--text); }
+.log-cat { display: inline-flex; align-items: center; gap: 5px; font-size: 11px; }
+.log-cat i { width: 8px; height: 8px; border-radius: 50%; display: inline-block; }
+.log-day { margin-bottom: 16px; max-width: 860px; }
+.log-day-head { display: flex; justify-content: space-between; font-size: 11px; color: var(--accent); border-bottom: 1px solid var(--border); padding-bottom: 5px; margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.8px; }
+.log-day-head span:last-child { color: var(--text2); text-transform: none; letter-spacing: 0; }
+.log-item { display: flex; gap: 10px; align-items: center; padding: 7px 10px; background: var(--bg2); border-left: 3px solid; border-radius: 0 var(--radius) var(--radius) 0; margin-bottom: 4px; }
+.log-time { font-size: 10px; color: var(--text2); width: 58px; flex-shrink: 0; }
+.log-main { flex: 1; min-width: 0; }
+.log-title { font-size: 12px; color: var(--text); }
+.log-meta { font-size: 10px; color: var(--text2); margin-top: 2px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.stats-done-link { margin-top: 18px; font-size: 12px; color: var(--text2); }
+.stats-done-link a { color: var(--accent); cursor: pointer; }
+/* BOARD BAR */
+#board-bar { display: none; align-items: center; gap: 8px; padding: 5px 12px; border-bottom: 1px solid var(--border); flex-wrap: wrap; font-size: 10px; }
+#note-edit-area.draw #board-bar { display: flex; }
+#board-status { flex: 1; display: flex; gap: 12px; flex-wrap: wrap; color: var(--text2); min-width: 200px; }
+#board-status .ok { color: var(--green); } #board-status .warn { color: var(--accent); } #board-status .bad { color: var(--red); }
+.board-actions { display: flex; gap: 5px; align-items: center; }
+.board-actions > button, .board-menu > summary { background: var(--bg2); border: 1px solid var(--border); color: var(--text); padding: 4px 9px; border-radius: var(--radius); font-size: 10px; cursor: pointer; list-style: none; }
+.board-menu { position: relative; }
+.board-menu > summary::-webkit-details-marker { display: none; }
+.board-menu > div { position: absolute; right: 0; top: calc(100% + 4px); z-index: 40; background: var(--bg1); border: 1px solid var(--border); border-radius: var(--radius); padding: 4px; display: flex; flex-direction: column; min-width: 190px; box-shadow: 0 6px 20px rgba(0,0,0,0.5); }
+.board-menu > div button { text-align: left; background: none; color: var(--text); padding: 7px 9px; font-size: 11px; border-radius: 3px; }
+.board-menu > div button:hover { background: var(--bg2); }
+
 /* PHONE USAGE */
 .phone-days { display: flex; align-items: flex-end; gap: 2px; height: 140px; padding-top: 6px; border-bottom: 1px solid var(--border); position: relative; }
 .phone-day { flex: 1; min-width: 2px; height: 100%; display: flex; align-items: flex-end; cursor: default; position: relative; }
@@ -448,8 +546,11 @@ body.link-mode .resize-handle { display: none !important; }
   .note-mode button { padding: 4px 6px; }
   .stuck-blocks { grid-template-columns: 1fr; }
   .phone-row { grid-template-columns: 1fr; }
+  .hb-heat-name { width: 100%; }
+  .dv-actions button { flex-basis: 100%; }
 }
 </style>
+<script src="https://cdn.jsdelivr.net/npm/lz-string@1.5.0/libs/lz-string.min.js"></script>
 </head>
 <body>
 <div id="app">
@@ -459,9 +560,11 @@ body.link-mode .resize-handle { display: none !important; }
       <button id="collapse-btn" onclick="toggleSidebar()">←</button>
     </div>
     <div id="tab-bar">
-      <button class="tab-btn active" data-tab="tasks" onclick="switchTab('tasks')">Tasks</button>
+      <button class="tab-btn active" data-tab="tasks" onclick="switchTab('tasks')" title="Tasks timeline">☰</button>
       <button class="tab-btn" data-tab="plan" onclick="switchTab('plan')" title="Plan & timebox">⏱</button>
-      <button class="tab-btn" data-tab="analytics" onclick="switchTab('analytics')">Stats</button>
+      <button class="tab-btn" data-tab="habits" onclick="switchTab('habits')" title="Habits">✔</button>
+      <button class="tab-btn" data-tab="analytics" onclick="switchTab('analytics')" title="Stats">◐</button>
+      <button class="tab-btn" data-tab="log" onclick="switchTab('log')" title="Done log">📒</button>
       <button class="tab-btn" data-tab="stuck" onclick="switchTab('stuck')" title="Stuck protocol">🧩</button>
       <button class="tab-btn" data-tab="notes" onclick="switchTab('notes')">📝</button>
       <button class="tab-btn" data-tab="vault" onclick="switchTab('vault')" title="Obsidian vault">📓</button>
@@ -470,6 +573,8 @@ body.link-mode .resize-handle { display: none !important; }
     <div id="task-list">
       <button id="add-task-btn" onclick="openModal(null)">+ New Task</button>
       <button id="add-break-btn" onclick="openBreakModal()">+ Break / DND Block</button>
+      <button id="divert-btn" onclick="openDivertModal()" title="Log the moment you reach for the phone (or any escape) instead of a task">⚡ I got diverted</button>
+      <button id="import-btn" onclick="openImport('tasks')">⬆ Import tasks (CSV / Excel)</button>
       <div id="task-list-items"></div>
     </div>
   </div>
@@ -509,6 +614,7 @@ body.link-mode .resize-handle { display: none !important; }
         <label title="Estimated minutes">Est <input id="plan-est" type="number" min="5" step="5" value="30" /></label>
         <select id="plan-cat" title="Category"></select>
         <button class="plan-primary" onclick="planAdd()">Add</button>
+        <button class="plan-ghost" onclick="openImport('backlog')" title="Add many tasks from CSV / Excel">⬆ Import</button>
       </div>
       <div class="plan-settings">
         <span>Plan</span><input type="date" id="plan-date" onchange="planSuggestion=null;renderPlan()" />
@@ -540,24 +646,7 @@ body.link-mode .resize-handle { display: none !important; }
         <div class="chart-box"><div class="chart-title">Time by Category</div><div id="pie-area"></div></div>
         <div class="chart-box"><div class="chart-title">Time by Tag</div><div id="bar-area"></div></div>
       </div>
-      <!-- Completed Tasks Section -->
-      <div style="margin-top:20px;">
-        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">
-          <button class="collapse-head" id="completed-toggle" onclick="toggleCompleted()" aria-expanded="false"><span class="caret">▸</span> COMPLETED TASKS <span id="completed-count"></span></button>
-          <button onclick="downloadCompleted()" style="padding:6px 12px;background:var(--bg2);border:1px solid var(--accent);color:var(--accent);border-radius:var(--radius);font-size:10px;font-family:var(--font);">⬇ Download CSV</button>
-        </div>
-        <div id="completed-body">
-        <div style="display:flex;gap:8px;align-items:center;margin-bottom:12px;flex-wrap:wrap;">
-          <label class="form-label" style="margin:0;white-space:nowrap;">Filter by date:</label>
-          <input type="date" id="completed-from" style="width:auto;padding:5px 8px;font-size:11px;" onchange="renderAnalytics()" />
-          <span style="color:var(--text2);font-size:11px;">to</span>
-          <input type="date" id="completed-to" style="width:auto;padding:5px 8px;font-size:11px;" onchange="renderAnalytics()" />
-          <button onclick="clearCompletedFilter()" style="padding:5px 10px;background:var(--bg2);border:1px solid var(--border);color:var(--text2);border-radius:var(--radius);font-size:10px;">Clear</button>
-        </div>
-        <div id="completed-filters" style="margin-bottom:10px;"></div>
-        <div id="completed-list"></div>
-        </div>
-      </div>
+      <div class="stats-done-link" id="stats-done-link"></div>
       <!-- Phone usage (StayFree export) -->
       <div style="margin-top:28px;">
         <div style="display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:12px;">
@@ -572,11 +661,47 @@ body.link-mode .resize-handle { display: none !important; }
       </div>
     </div>
 
+    <!-- Habits Panel -->
+    <div id="habits-panel" class="panel">
+      <div class="panel-title">HABITS</div>
+      <div class="plan-add">
+        <input id="hb-name" placeholder="New habit — small and specific, e.g. “Read 10 pages of SAP MM”" onkeydown="if(event.key==='Enter'){event.preventDefault();habitAdd()}" style="flex:1;min-width:200px" />
+        <select id="hb-freq" style="width:auto"><option value="daily">Every day</option><option value="1">1× / week</option><option value="2">2× / week</option><option value="3">3× / week</option><option value="4">4× / week</option><option value="5">5× / week</option><option value="6">6× / week</option></select>
+        <input id="hb-cue" placeholder="Cue (optional): after… / when…" style="width:auto;flex:0 1 230px" />
+        <button class="plan-primary" onclick="habitAdd()">Add</button>
+      </div>
+      <div id="habits-body"></div>
+      <details class="plan-help"><summary>Why consistency, not streaks</summary>
+        <ul>
+          <li>In Lally et al. (2010), people took <b>18 to 254 days</b> (median about 66) for a daily habit to feel automatic — not 21. The “day N of ~66” counter is a rough guide, not a deadline.</li>
+          <li>In the same study, <b>missing one day did not measurably hurt</b> habit formation. So a single miss isn't failure; the warning to watch is “missed twice”.</li>
+          <li>Tie each habit to a <b>cue</b> you already do every day (“after coffee”, “when I sit at my desk”) — repeating a behaviour in a stable context is what builds the automaticity.</li>
+          <li>Consistency = done ÷ due over the last 30 days (daily habits) or 12 weeks (weekly habits). Today only counts once it's done.</li>
+        </ul>
+      </details>
+    </div>
+
+    <!-- Done Log Panel -->
+    <div id="log-panel" class="panel">
+      <div class="stats-head">
+        <div class="panel-title" style="margin-bottom:0;">DONE LOG</div>
+        <div id="log-ranges"></div>
+      </div>
+      <div class="plan-add" style="margin-top:12px;">
+        <input id="log-search" placeholder="Search done tasks…" oninput="logQuery=this.value;renderLog()" style="flex:1;min-width:160px" />
+        <button class="plan-primary" onclick="logSomethingDone()">＋ Log something I did</button>
+        <button class="plan-ghost" onclick="openImport('done')">⬆ Import</button>
+        <button class="plan-ghost" onclick="logExportCsv()">⬇ CSV</button>
+      </div>
+      <div id="log-body"></div>
+    </div>
+
     <!-- Stuck Protocol Panel -->
     <div id="stuck-panel" class="panel">
-      <div class="panel-title">STUCK PROTOCOL</div>
+      <div class="panel-title">STUCK</div>
+      <div class="seg stuck-tabs"><button data-v="protocol" onclick="setStuckView('protocol')">🧩 Stuck protocol</button><button data-v="log" onclick="setStuckView('log')">⚡ Diversion log</button></div>
       <div id="stuck-body"></div>
-      <details class="plan-help"><summary>Where this comes from</summary>
+      <details class="plan-help" id="stuck-help"><summary>Where this comes from</summary>
         <ul>
           <li><b>5 Whys</b> (Taiichi Ohno, Toyota): keep asking why until you reach a cause you can act on, usually within about five steps.</li>
           <li><b>Task aversiveness</b> (Tim Pychyl's research on procrastination): we avoid tasks that feel boring, frustrating, difficult, ambiguous, unstructured or lacking meaning. Naming which one is at work points to the fix.</li>
@@ -629,6 +754,20 @@ body.link-mode .resize-handle { display: none !important; }
               <span id="note-saved-indicator" style="font-size:9px;color:var(--text2);align-self:center;">Saved</span>
             </div>
             <div id="note-content" contenteditable="true" style="flex:1;padding:16px;font-size:12px;line-height:1.8;color:var(--text);overflow-y:auto;outline:none;min-height:200px;" oninput="autoSaveNote()"></div>
+            <div id="board-bar">
+              <div id="board-status"></div>
+              <div class="board-actions">
+                <button onclick="boardSaveNow()" title="Save this board and sync it now">💾 Save now</button>
+                <details class="board-menu"><summary>⬆ Import</summary><div>
+                  <button onclick="this.closest('details').open=false;document.getElementById('board-file-add').click()">Add from a file…</button>
+                  <button onclick="this.closest('details').open=false;document.getElementById('board-file-replace').click()">Replace board with a file…</button>
+                  <button onclick="this.closest('details').open=false;boardImportVault('add')">Add a 📓 vault drawing…</button>
+                </div></details>
+                <button onclick="boardExport()" title="Download as .excalidraw (a backup you can open anywhere)">⬇ Export</button>
+              </div>
+              <input type="file" id="board-file-add" accept=".excalidraw,.json,.md,.svg,.png" hidden onchange="boardImportFile(event,'add')" />
+              <input type="file" id="board-file-replace" accept=".excalidraw,.json,.md,.svg,.png" hidden onchange="boardImportFile(event,'replace')" />
+            </div>
             <div id="note-board" class="board-wrap"><div class="board-msg">Loading whiteboard…</div></div>
             <div id="note-meta" style="padding:8px 16px;border-top:1px solid var(--border);font-size:9px;color:var(--text2);"></div>
             <div id="note-picker" class="note-picker">
@@ -723,6 +862,58 @@ body.link-mode .resize-handle { display: none !important; }
   </div>
 </div>
 
+<!-- Diversion quick log -->
+<button id="divert-fab" onclick="openDivertModal()" title="I got diverted">⚡</button>
+<div id="divert-overlay" class="cc-overlay" onclick="if(event.target===this)closeDivertModal()">
+  <div class="cc-modal">
+    <div class="modal-header"><span class="modal-title">⚡ I got diverted</span><button class="modal-close" onclick="closeDivertModal()">×</button></div>
+    <label class="form-label" style="margin-top:0">Time</label>
+    <input type="datetime-local" id="dv-at" />
+    <label class="form-label">Task I avoided</label>
+    <input id="dv-task" list="dv-task-list" placeholder="What were you supposed to be doing?" autocomplete="off" /><datalist id="dv-task-list"></datalist>
+    <label class="form-label">What was going on</label>
+    <div class="dv-chips" id="dv-triggers"></div>
+    <label class="form-label">Feeling</label>
+    <div class="dv-chips" id="dv-feelings"></div>
+    <div class="dv-inline"><input id="dv-custom-feeling" placeholder="Other feeling…" onkeydown="if(event.key==='Enter'){event.preventDefault();dvAddCustom('feelings','dv-custom-feeling')}" /><span class="muted" style="font-size:10px">Intensity</span><span class="dv-chips" id="dv-intensity"></span></div>
+    <label class="form-label">Thought — what was I telling myself? Why avoid it?</label>
+    <textarea id="dv-thought" rows="2" placeholder="e.g. “I don't know where to start”, “it'll take forever”, “just 5 minutes”"></textarea>
+    <label class="form-label">Diversion — where I went</label>
+    <div class="dv-chips" id="dv-diversions"></div>
+    <div class="dv-inline"><input id="dv-custom-div" placeholder="Other escape…" onkeydown="if(event.key==='Enter'){event.preventDefault();dvAddCustom('diversion','dv-custom-div')}" /></div>
+    <div class="dv-inline"><span class="muted" style="font-size:10px">Minutes lost</span><input id="dv-minutes" type="number" min="0" step="5" style="flex:0 0 80px;min-width:0" /><span class="dv-chips" id="dv-mins-quick"></span></div>
+    <div class="dv-actions">
+      <button class="plan-primary" onclick="saveDiversion(false)">Save</button>
+      <button class="plan-ghost" onclick="saveDiversion(true)" title="Save, then run the stuck protocol on this task">Save &amp; get unstuck →</button>
+    </div>
+  </div>
+</div>
+
+<!-- Bulk import -->
+<div id="import-overlay" class="cc-overlay" onclick="if(event.target===this)closeImport()">
+  <div class="cc-modal" style="width:760px">
+    <div class="modal-header"><span class="modal-title">⬆ Import tasks</span><button class="modal-close" onclick="closeImport()">×</button></div>
+    <div class="seg" id="imp-modes"><button data-mode="tasks" onclick="importSetMode('tasks')">Timeline tasks</button><button data-mode="done" onclick="importSetMode('done')">Completed (Log)</button><button data-mode="backlog" onclick="importSetMode('backlog')">Plan backlog</button></div>
+    <p class="plan-lead" id="imp-hint" style="margin:10px 0 0"></p>
+    <div class="imp-row">
+      <input type="file" id="imp-file" accept=".csv,.tsv,.txt,.xlsx,.xls,.ods" onchange="importFile(event)" />
+      <button class="plan-ghost" onclick="importTemplate()">⬇ Template</button>
+    </div>
+    <textarea id="imp-paste" rows="4" placeholder="…or paste rows from Excel / Google Sheets here — first row = column names (title, date, start, duration, category, tags, notes)" oninput="importPasted()"></textarea>
+    <details class="plan-help" style="margin-top:8px"><summary>Columns and formats</summary>
+      <ul>
+        <li><b>title</b> is the only required column. Others: <b>date</b>, <b>start</b>, <b>duration</b>, <b>category</b>, <b>tags</b>, <b>notes</b>, <b>completed</b> — for Plan: <b>est</b>, <b>importance</b>, <b>urgency</b>, <b>effort</b>, <b>aversiveness</b> (1–5).</li>
+        <li><b>date</b>: 2026-11-12, 12/11/2026 (day first), Nov 12 2026, today/tomorrow. <b>start</b>: 09:30, 9:30 pm, 9pm. <b>duration</b>: 45, 90m, 1h 30m, 1:30.</li>
+        <li><b>category</b>: Learning, Work, Practice, Planning, Review, Personal or Other. <b>tags</b>: separated by ; — <b>completed</b>: yes/no.</li>
+        <li>A file from <b>📒 Log → ⬇ CSV</b> imports back as is.</li>
+      </ul>
+    </details>
+    <label style="display:flex;gap:8px;align-items:center;font-size:11px;margin:10px 0 0;cursor:pointer"><input type="checkbox" id="imp-skipdup" checked onchange="importRender()" style="width:auto;accent-color:var(--accent)" /> Skip rows that already exist (same title and start)</label>
+    <div id="imp-preview"></div>
+    <button id="imp-go" class="plan-primary" style="width:100%;margin-top:12px;padding:10px" onclick="importCommit()">Nothing to add yet</button>
+  </div>
+</div>
+
 <!-- Task Modal -->
 <div id="modal-overlay" onclick="closeModal()">
   <div id="modal" onclick="event.stopPropagation()">
@@ -796,6 +987,8 @@ let backlog = [];   // Plan tab: { id, title, category, imp, urg, eff, avr, est,
 let stuckLog = [];  // Stuck tab: { id, problem, whys[], block, answers{}, action, actionMin, taskId, step, done, createdAt, updatedAt }
 let phone = null;   // StayFree import: { device, importedAt, days: { "YYYY-MM-DD": { t: sec, u: unlocks, o: opens, apps: { name: sec } } } }
 let prefs = { dayStart: "09:00", dayEnd: "18:00" };
+let diversions = []; // Diversion log: { id, at, task, taskId, trigger, feelings[], intensity, thought, diversion[], minutes, createdAt }
+let habits = [];     // Habits: { id, name, freq: "daily"|"weekly", target, cue, createdAt, archived, days: { "YYYY-MM-DD": 1 } }
 
 // ══════════════════════════════════════
 // 2. CONSTANTS
@@ -813,6 +1006,8 @@ const BACKLOG_KEY = "command_center_backlog";
 const STUCK_KEY = "command_center_stuck";
 const PHONE_KEY = "command_center_phone";
 const PREFS_KEY = "command_center_prefs";
+const DIVERSIONS_KEY = "command_center_diversions";
+const HABITS_KEY = "command_center_habits";
 
 // Responsive: calculate MPP based on available screen width
 function getMPP() {
@@ -876,16 +1071,21 @@ function getEnd(view, start) {
   return d;
 }
 
+// Each store is written separately, so one failure (e.g. the browser's ~5 MB
+// storage quota) can't stop the others — and it's reported instead of silent.
+function persistLocal() {
+  const put = (k, v) => { try { if (v === null) localStorage.removeItem(k); else localStorage.setItem(k, JSON.stringify(v)); return true; } catch (e) { return false; } };
+  const ok = [put(STORAGE_KEY, tasks), put(BREAKS_KEY, breaks), put(NOTES_KEY, notes), put(BACKLOG_KEY, backlog), put(STUCK_KEY, stuckLog),
+    put(PREFS_KEY, prefs), put(PHONE_KEY, phone), put(DIVERSIONS_KEY, diversions), put(HABITS_KEY, habits)].every(Boolean);
+  if (!ok && !persistLocal.warned) {
+    persistLocal.warned = true;
+    alert("⚠ This browser's storage is full, so some changes couldn't be saved on this device.\n\nIf you're signed in they still sync to the cloud. To free space: remove pictures from whiteboards, or use ⚙ → Export File, then Clear All Data and Import File.");
+  }
+  return ok;
+}
+
 function save() {
-  try {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(tasks));
-    localStorage.setItem(BREAKS_KEY, JSON.stringify(breaks));
-    localStorage.setItem(NOTES_KEY, JSON.stringify(notes));
-    localStorage.setItem(BACKLOG_KEY, JSON.stringify(backlog));
-    localStorage.setItem(STUCK_KEY, JSON.stringify(stuckLog));
-    localStorage.setItem(PREFS_KEY, JSON.stringify(prefs));
-    if (phone) localStorage.setItem(PHONE_KEY, JSON.stringify(phone)); else localStorage.removeItem(PHONE_KEY);
-  } catch(e) {}
+  persistLocal();
   if (window.cloudSchedulePush) window.cloudSchedulePush();
 }
 
@@ -909,7 +1109,10 @@ function load() {
     phone = JSON.parse(localStorage.getItem(PHONE_KEY) || "null");
     phoneCompact();
     prefs = { ...prefs, ...JSON.parse(localStorage.getItem(PREFS_KEY) || "{}") };
+    diversions = JSON.parse(localStorage.getItem(DIVERSIONS_KEY) || "[]");
+    habits = JSON.parse(localStorage.getItem(HABITS_KEY) || "[]");
   } catch(e) {}
+  if (migrateScenes()) persistLocal();
 }
 
 /*
@@ -926,7 +1129,9 @@ function renderAll() {
   renderToolbar();
   if (activeTab === "tasks") renderGantt();
   if (activeTab === "plan") renderPlan();
+  if (activeTab === "habits") renderHabits();
   if (activeTab === "analytics") renderAnalytics();
+  if (activeTab === "log") renderLog();
   if (activeTab === "stuck") renderStuck();
   if (activeTab === "notes") renderNotes();
   if (activeTab === "vault") renderVault();
@@ -937,10 +1142,11 @@ function renderSidebar() {
   const sb = document.getElementById("sidebar");
   if (sidebarCollapsed) sb.classList.add("collapsed"); else sb.classList.remove("collapsed");
   document.getElementById("collapse-btn").textContent = sidebarCollapsed ? "→" : "←";
+  document.body.classList.toggle("sb-collapsed", sidebarCollapsed);
   document.querySelectorAll(".tab-btn").forEach(btn => {
     btn.classList.toggle("active", btn.dataset.tab === activeTab);
-    const icons = { tasks: "☰", plan: "⏱", analytics: "◐", stuck: "🧩", notes: "📝", vault: "📓", sync: "⚙" };
-    const labels = { tasks: "Tasks", plan: "⏱", analytics: "Stats", stuck: "🧩", notes: "📝", vault: "📓", sync: "⚙" };
+    const icons = { tasks: "☰", plan: "⏱", habits: "✔", analytics: "◐", log: "📒", stuck: "🧩", notes: "📝", vault: "📓", sync: "⚙" };
+    const labels = icons;
     btn.textContent = sidebarCollapsed ? icons[btn.dataset.tab] : labels[btn.dataset.tab];
   });
   const listEl = document.getElementById("task-list-items");
@@ -1127,16 +1333,9 @@ function renderGantt() {
 // ── STATS RANGE & HOW FULL THE DAYS ARE ──
 const STATS_RANGES = [["today", "Today"], ["week", "This week"], ["month", "This month"], ["all", "All"]];
 const STATS_RANGE_KEY = "command_center_stats_range";
-const STATS_COMPLETED_KEY = "command_center_completed_open";
 let statsRange = (() => { try { return localStorage.getItem(STATS_RANGE_KEY) || "week"; } catch (e) { return "week"; } })();
 
 function setStatsRange(r) { statsRange = r; try { localStorage.setItem(STATS_RANGE_KEY, r); } catch (e) {} renderAnalytics(); }
-function statsCompletedOpen() { try { return localStorage.getItem(STATS_COMPLETED_KEY) === "1"; } catch (e) { return false; } }
-function toggleCompleted() {
-  try { localStorage.setItem(STATS_COMPLETED_KEY, statsCompletedOpen() ? "0" : "1"); } catch (e) {}
-  renderAnalytics();
-}
-
 function statsRangeBounds() {
   const now = new Date();
   if (statsRange === "all") return { from: null, to: null, label: "All tasks, all time" };
@@ -1242,60 +1441,8 @@ function renderAnalytics() {
   });
   document.getElementById("bar-area").innerHTML = barHtml || '<div style="color:var(--text2);font-size:11px;">Add tags to tasks to see data here.</div>';
 
-  // ── Completed tasks section (collapsible; the open/closed state is per device) ──
-  const open = statsCompletedOpen();
-  document.getElementById("completed-body").classList.toggle("open", open);
-  document.getElementById("completed-toggle").setAttribute("aria-expanded", open);
-  document.getElementById("completed-count").textContent = "(" + tasks.filter(t => t.completed).length + ")";
-  let completedTasks = tasks.filter(t => t.completed).sort((a, b) => b.start - a.start);
-
-  // Date filter
-  const fromEl = document.getElementById("completed-from");
-  const toEl = document.getElementById("completed-to");
-  if (fromEl && fromEl.value) {
-    const fromMs = new Date(fromEl.value + "T00:00:00").getTime();
-    completedTasks = completedTasks.filter(t => t.start >= fromMs);
-  }
-  if (toEl && toEl.value) {
-    const toMs = new Date(toEl.value + "T23:59:59").getTime();
-    completedTasks = completedTasks.filter(t => t.start <= toMs);
-  }
-
-  // Category filter
-  const completedCats = [...new Set(completedTasks.map(t => t.category))];
-  let catFilterHtml = `<button class="tag-filter-btn${!window._completedCatFilter ? ' active' : ''}" onclick="filterCompletedCat(null)">All (${completedTasks.length})</button>`;
-  completedCats.forEach(cat => {
-    const count = completedTasks.filter(t => t.category === cat).length;
-    catFilterHtml += `<button class="tag-filter-btn${window._completedCatFilter === cat ? ' active' : ''}" onclick="filterCompletedCat('${cat}')">${cat} (${count})</button>`;
-  });
-  document.getElementById("completed-filters").innerHTML = catFilterHtml;
-
-  if (window._completedCatFilter) {
-    completedTasks = completedTasks.filter(t => t.category === window._completedCatFilter);
-  }
-
-  // Completed total time
-  const completedMin = completedTasks.reduce((s, t) => s + t.duration, 0);
-
-  let compHtml = "";
-  if (!completedTasks.length) {
-    compHtml = '<div style="color:var(--text2);font-size:12px;text-align:center;padding:30px;">No completed tasks found.</div>';
-  } else {
-    compHtml += `<div style="font-size:11px;color:var(--accent);margin-bottom:10px;">${completedTasks.length} tasks · ${fmtDur(completedMin)} total</div>`;
-    completedTasks.forEach(t => {
-      const col = COLORS[t.category] || "#666";
-      const d = new Date(t.start);
-      const dateStr = d.toLocaleDateString("en-US", { weekday: "short", month: "short", day: "numeric" });
-      compHtml += `<div class="achievement-card" style="border-left-color:${col};display:flex;justify-content:space-between;align-items:center;">
-        <div>
-          <div style="font-size:12px;color:var(--text)">✓ ${t.title}</div>
-          <div style="font-size:10px;color:var(--text2);margin-top:3px">${dateStr} · ${fmtTime(d)} · ${fmtDur(t.duration)} · ${t.category}${t.tags?.length ? " · " + t.tags.join(", ") : ""}</div>
-        </div>
-        <button onclick="uncompleteTask('${t.id}')" title="Restore to active" style="background:none;border:1px solid var(--border);color:var(--text2);border-radius:3px;padding:3px 8px;font-size:9px;cursor:pointer;white-space:nowrap;font-family:var(--font);">↩ Undo</button>
-      </div>`;
-    });
-  }
-  document.getElementById("completed-list").innerHTML = compHtml;
+  const doneCount = tasks.filter(t => t.completed).length;
+  document.getElementById("stats-done-link").innerHTML = `✓ ${doneCount} completed ${doneCount === 1 ? "task" : "tasks"} in total — see them day by day in <a onclick="switchTab('log')">📒 Log</a>.`;
   phoneRender();
 }
 
@@ -1572,8 +1719,46 @@ function exVersion(EX, els) { return EX.hashElementsVersion ? EX.hashElementsVer
 
 // ── NOTE WHITEBOARD ──
 // A note is "text" or "draw" (note.mode); a drawing lives in note.scene and syncs like any note.
-const BOARD_MAX_BYTES = 700000;   // the whole cloud document is capped at 1 MB
-let noteBoard = null;             // { noteId, handle, timer, pending, ver }
+// ── BOARD STORAGE ──
+// A board's scene is stored compressed (note.sceneZ, lz-string base64): a big
+// pasted diagram is ~2.5× smaller, so more boards fit under the 1 MB cloud cap and
+// the ~5 MB browser storage. Older notes with a plain note.scene still open.
+const BOARD_MAX_BYTES = 600000;   // per board, compressed; the whole cloud document is capped at 1 MB
+const CLOUD_MAX_BYTES = 1000000;
+let noteBoard = null;             // { noteId, handle, timer, pending, ver, savedAt }
+const sceneCache = new Map();     // sceneZ string → parsed scene
+
+function noteScene(note) {
+  if (!note) return {};
+  if (note.sceneZ && window.LZString) {
+    if (!sceneCache.has(note.sceneZ)) {
+      let sc = {};
+      try { sc = JSON.parse(LZString.decompressFromBase64(note.sceneZ)) || {}; } catch (e) {}
+      sceneCache.clear();   // keep one entry: the open board
+      sceneCache.set(note.sceneZ, sc);
+    }
+    return sceneCache.get(note.sceneZ);
+  }
+  return note.scene || {};
+}
+function packScene(scene) {
+  if (!window.LZString) return { scene };                 // offline first visit: store plain
+  return { sceneZ: LZString.compressToBase64(JSON.stringify(scene)) };
+}
+function noteSceneBytes(note) {
+  return note.sceneZ ? note.sceneZ.length : note.scene ? JSON.stringify(note.scene).length : 0;
+}
+// Compress boards saved by the earlier version.
+function migrateScenes() {
+  if (!window.LZString) return false;
+  let changed = false;
+  notes.forEach(n => {
+    if (n.scene && !n.sceneZ) { Object.assign(n, packScene(n.scene)); delete n.scene; changed = true; }
+  });
+  return changed;
+}
+function cloudBytes() { return new Blob([JSON.stringify(getAllData())]).size; }
+function fmtKB(b) { return b >= 1e6 ? (b / 1e6).toFixed(2) + " MB" : Math.max(1, Math.round(b / 1000)) + " KB"; }
 
 function noteApplyMode() {
   const note = notes.find(n => n.id === activeNoteId);
@@ -1605,17 +1790,250 @@ async function noteBoardOpen(note) {
   const host = document.createElement("div");
   host.className = "board-host";
   wrap.append(host, msg);
-  const board = noteBoard = { noteId: note.id, handle: null, timer: null, pending: null, ver: null };
+  const board = noteBoard = { noteId: note.id, handle: null, timer: null, pending: null, ver: null, savedAt: note.updatedAt || null };
+  boardStatus();
   try {
-    const scene = note.scene || {};
+    const scene = noteScene(note);
     const handle = await exMount(host, { ...scene, elements: boardRecolor(scene.elements || []) }, (els, st, files) => noteBoardChanged(board, els, st, files), boardOpenTask);
     if (noteBoard !== board) { handle.unmount(); return; }
     board.ver = exVersion(handle.EX, handle.api.getSceneElements());   // baseline: what was loaded
     board.handle = handle;
     msg.remove();
+    boardStatus();
   } catch (e) {
     if (noteBoard === board) msg.textContent = "⚠ Couldn't load the whiteboard: " + e.message + " — are you offline?";
   }
+}
+
+function noteBoardChanged(board, els, st, files) {
+  if (!board.handle) return;                              // still mounting
+  const ver = exVersion(board.handle.EX, els);
+  if (board.applying) { board.ver = ver; return; }        // a change from another device
+  if (ver === board.ver) return;                          // only the view moved
+  board.ver = ver;
+  board.pending = { els, st, files };
+  boardStatus("Unsaved changes…");
+  clearTimeout(board.timer);
+  board.timer = setTimeout(() => noteBoardFlush(board), 800);
+}
+
+function noteBoardFlush(board) {
+  clearTimeout(board.timer); board.timer = null;
+  if (!board.pending) return;
+  const { els, st, files } = board.pending;
+  board.pending = null;
+  const note = notes.find(n => n.id === board.noteId);
+  if (!note) return;
+  const elements = JSON.parse(JSON.stringify(els.filter(e => !e.isDeleted)));
+  const used = {};
+  elements.forEach(e => { if (e.fileId && files[e.fileId]) { const f = files[e.fileId]; used[e.fileId] = { id: f.id, mimeType: f.mimeType, dataURL: f.dataURL, created: f.created }; } });
+  const appState = { viewBackgroundColor: st.viewBackgroundColor, gridSize: st.gridSize || null };
+  let packed = packScene({ elements, appState, files: used });
+  board.warn = "";
+  if ((packed.sceneZ || JSON.stringify(packed.scene)).length > BOARD_MAX_BYTES && Object.keys(used).length) {
+    packed = packScene({ elements, appState, files: {} });
+    board.warn = "Images were too large to sync, so they weren't saved — keep image-heavy drawings in the 📓 Vault";
+  }
+  delete note.scene; delete note.sceneZ;
+  Object.assign(note, packed);
+  note.updatedAt = Date.now();
+  board.savedAt = note.updatedAt;
+  save();
+  boardStatus();
+}
+
+function noteBoardClose() {
+  const board = noteBoard;
+  if (!board) return;
+  noteBoard = null;
+  noteBoardFlush(board);
+  if (board.handle) board.handle.unmount();
+  document.getElementById("note-board").innerHTML = "";
+}
+
+// Another device changed the board that's open here: show its version, unless
+// there are unsaved local changes (then the next save wins, as everywhere else).
+function noteBoardSyncRemote() {
+  const b = noteBoard;
+  if (!b || !b.handle || b.pending || b.timer) return;
+  const note = notes.find(n => n.id === b.noteId);
+  if (!note) return;
+  const sc = noteScene(note);
+  const els = sc.elements || [];
+  const v = exVersion(b.handle.EX, els);
+  if (v === b.ver) return;
+  const files = Object.values(sc.files || {});
+  if (files.length) b.handle.api.addFiles(files);
+  b.applying = true;   // the change this causes is not a local edit: don't save it back
+  b.handle.api.updateScene({ elements: boardRecolor(els) });
+  b.ver = exVersion(b.handle.EX, b.handle.api.getSceneElements());
+  setTimeout(() => { b.applying = false; }, 0);
+  clearTimeout(b.timer); b.timer = null; b.pending = null;
+  b.savedAt = note.updatedAt;
+  boardStatus("↻ Updated from another device");
+}
+
+// The strip above the board: saved here? synced? how big?
+function boardStatus(override) {
+  const el = document.getElementById("board-status");
+  if (!el) return;
+  const b = noteBoard;
+  const note = b && notes.find(n => n.id === b.noteId);
+  if (!note) { el.innerHTML = ""; return; }
+  const local = override ? `<span class="warn">${esc(override)}</span>`
+    : b.savedAt ? `<span class="ok">✓ Saved on this device ${new Date(b.savedAt).toLocaleTimeString([], { hour: "numeric", minute: "2-digit", second: "2-digit" })}</span>` : `<span>Not changed yet</span>`;
+  const cs = window.cloudState || {};
+  const cloud = !cs.signedIn ? `<span>☁ Not signed in — this board stays on this device</span>`
+    : cs.paused ? `<span class="bad">☁ Sync paused: over the 1 MB cloud limit</span>`
+    : cs.error ? `<span class="bad">☁ ${esc(cs.error)}</span>`
+    : cs.pending ? `<span class="warn">☁ Syncing…</span>`
+    : cs.syncedAt ? `<span class="ok">☁ Synced ${new Date(cs.syncedAt).toLocaleTimeString([], { hour: "numeric", minute: "2-digit", second: "2-digit" })}</span>` : `<span>☁ Connecting…</span>`;
+  const total = cloudBytes();
+  const pct = Math.round((total / CLOUD_MAX_BYTES) * 100);
+  el.innerHTML = `${local}${cloud}<span class="${pct >= 85 ? "bad" : pct >= 60 ? "warn" : ""}" title="This board / everything you sync, of the 1 MB cloud limit">${fmtKB(noteSceneBytes(note))} board · ${pct}% of cloud space</span>${b.warn ? `<span class="bad">${esc(b.warn)}</span>` : ""}`;
+}
+document.addEventListener("cloudstatus", () => boardStatus());
+
+function boardSaveNow() {
+  const b = noteBoard;
+  if (!b) return;
+  noteBoardFlush(b);
+  if (window.cloudPushNow) window.cloudPushNow();
+  boardStatus();
+}
+
+function boardExport() {
+  const h = noteBoard && noteBoard.handle;
+  if (!h) return;
+  const note = notes.find(n => n.id === noteBoard.noteId);
+  const json = h.EX.serializeAsJSON(h.api.getSceneElements(), h.api.getAppState(), h.api.getFiles(), "local");
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(new Blob([json], { type: "application/json" }));
+  a.download = ((note && note.title) || "whiteboard").replace(/[\\/:*?"<>|]/g, "_") + ".excalidraw";
+  a.click();
+  setTimeout(() => URL.revokeObjectURL(a.href), 1000);
+}
+
+// New ids for imported elements so a second copy never collides with the first.
+function boardRemapIds(elements) {
+  const ids = new Map(), groups = new Map();
+  const nid = () => Math.random().toString(36).slice(2, 10) + Math.random().toString(36).slice(2, 10);
+  elements.forEach(e => ids.set(e.id, nid()));
+  const m = id => ids.get(id) || id;
+  return elements.map(e => {
+    const c = { ...e, id: m(e.id) };
+    if (c.containerId) c.containerId = m(c.containerId);
+    if (c.frameId) c.frameId = m(c.frameId);
+    if (c.boundElements) c.boundElements = c.boundElements.map(b => ({ ...b, id: m(b.id) }));
+    if (c.startBinding) c.startBinding = { ...c.startBinding, elementId: m(c.startBinding.elementId) };
+    if (c.endBinding) c.endBinding = { ...c.endBinding, elementId: m(c.endBinding.elementId) };
+    if (c.groupIds) c.groupIds = c.groupIds.map(g => { if (!groups.has(g)) groups.set(g, nid()); return groups.get(g); });
+    return c;
+  });
+}
+
+// mode: "add" (placed to the right of what's there) or "replace"
+function boardInsert(data, mode, label) {
+  const h = noteBoard && noteBoard.handle;
+  if (!h) return;
+  let incoming = (data.elements || []).filter(e => !e.isDeleted);
+  if (!incoming.length) { alert("That drawing is empty."); return; }
+  const current = h.api.getSceneElements();
+  if (mode === "replace" && current.length && !confirm(`Replace everything on this board (${current.length} elements) with ${label}?`)) return;
+  if (mode === "add" && current.length) {
+    const maxX = Math.max(...current.map(e => e.x + (e.width || 0)));
+    const minX = Math.min(...incoming.map(e => e.x)), minY = Math.min(...incoming.map(e => e.y));
+    const minY0 = Math.min(...current.map(e => e.y));
+    incoming = boardRemapIds(incoming).map(e => ({ ...e, x: e.x - minX + maxX + 120, y: e.y - minY + minY0 }));
+  }
+  const files = Object.values(data.files || {});
+  if (files.length) h.api.addFiles(files);
+  h.api.updateScene({ elements: mode === "replace" ? incoming : [...h.api.getSceneElementsIncludingDeleted(), ...incoming] });
+  h.api.scrollToContent(incoming, { fitToViewport: true });
+  boardStatus(`Imported ${label} · ${incoming.length} elements — saving…`);
+}
+
+async function boardImportFile(event, mode) {
+  const file = event.target.files[0];
+  event.target.value = "";
+  const h = noteBoard && noteBoard.handle;
+  if (!file || !h) return;
+  try {
+    let data;
+    if (/\.md$/i.test(file.name)) {
+      const LZ = await vaultLz();
+      data = vaultParseDrawing(await file.text(), file.name, LZ).json;
+    } else {
+      data = await h.EX.loadFromBlob(file, null, null);
+    }
+    boardInsert(data, mode, `“${file.name}”`);
+  } catch (e) {
+    alert("Couldn't read that file as a drawing: " + e.message + "\n\nUse an .excalidraw or .json file, an Obsidian .excalidraw.md file, or a PNG/SVG exported with “Embed scene”.");
+  }
+}
+
+// Pick a drawing from the connected Obsidian vault.
+async function boardImportVault(mode) {
+  if (!noteBoard || !noteBoard.handle) return;
+  if (!vault.started) {
+    vault.started = true;
+    vault.cfg = vaultRead(VAULT_KEY, null);
+    vault.open = vaultRead(VAULT_OPEN_KEY, {});
+    vault.split = vaultRead(VAULT_SPLIT_KEY, true);
+  }
+  if (!vault.cfg) { alert("Connect your vault first: 📓 Vault → ⚙ settings."); return; }
+  if (!vault.ready) { boardStatus("Connecting to the vault…"); await vaultConnect(); }
+  if (!vault.ready) { alert("Couldn't reach the vault — check 📓 Vault settings."); boardStatus(); return; }
+  const drawings = vault.files.filter(vaultIsDrawing).sort((a, b) => a.rel.localeCompare(b.rel));
+  if (!drawings.length) { alert("No Excalidraw drawings found in the vault."); return; }
+  const f = await pickFromList("Import a vault drawing", drawings.map(d => ({ id: d.rel, label: d.rel.replace(/\.excalidraw(\.md)?$/i, ""), sub: vaultDir(d.rel) })));
+  if (!f) return;
+  const file = vault.byRel[f.toLowerCase()];
+  try {
+    boardStatus("Loading “" + f + "”…");
+    const LZ = await vaultLz();
+    const text = await (await vaultApi(vaultContentsUrl(file), { accept: "application/vnd.github.raw" })).text();
+    const data = vaultParseDrawing(text, file.rel, LZ).json;
+    data.files = await vaultDrawingFiles(text, file.rel);
+    boardInsert(data, mode, `“${vaultTitle(file).replace(/\.excalidraw$/i, "")}”`);
+  } catch (e) {
+    boardStatus();
+    alert("Couldn't import that drawing: " + e.message);
+  }
+}
+
+// A small searchable list in a popup; resolves with the chosen id (or null).
+function pickFromList(title, items) {
+  return new Promise(resolve => {
+    const ov = document.createElement("div");
+    ov.className = "cc-overlay open";
+    ov.innerHTML = `<div class="cc-modal" style="width:440px"><div class="modal-header"><span class="modal-title"></span><button class="modal-close">×</button></div>
+      <input class="pick-search" placeholder="Search…" autocomplete="off" /><div class="pick-list"></div></div>`;
+    ov.querySelector(".modal-title").textContent = title;
+    document.body.appendChild(ov);
+    const list = ov.querySelector(".pick-list"), search = ov.querySelector(".pick-search");
+    const done = v => { ov.remove(); resolve(v); };
+    const draw = () => {
+      const q = search.value.toLowerCase();
+      list.innerHTML = "";
+      items.filter(i => (i.label + " " + (i.sub || "")).toLowerCase().includes(q)).slice(0, 200).forEach(i => {
+        const b = document.createElement("button");
+        b.className = "pick-item";
+        b.innerHTML = `<span></span><small></small>`;
+        b.querySelector("span").textContent = i.label;
+        b.querySelector("small").textContent = i.sub || "";
+        b.onclick = () => done(i.id);
+        list.appendChild(b);
+      });
+      if (!list.children.length) list.innerHTML = '<div class="vault-empty">No matches</div>';
+    };
+    ov.querySelector(".modal-close").onclick = () => done(null);
+    ov.addEventListener("click", e => { if (e.target === ov) done(null); });
+    search.addEventListener("input", draw);
+    search.addEventListener("keydown", e => { if (e.key === "Escape") done(null); if (e.key === "Enter") { const f = list.querySelector(".pick-item"); if (f) f.click(); } });
+    draw();
+    setTimeout(() => search.focus(), 0);
+  });
 }
 
 // Excalidraw's own palette colors (they read well in its dark mode too).
@@ -1697,50 +2115,6 @@ function noteBoardMarkTask(ids, taskId) {
       return props ? bump(e, props) : e;
     }),
   });
-}
-
-function noteBoardChanged(board, els, st, files) {
-  if (!board.handle) return;                              // still mounting
-  const ver = exVersion(board.handle.EX, els);
-  if (ver === board.ver) return;                          // only the view moved
-  board.ver = ver;
-  board.pending = { els, st, files };
-  const ind = document.getElementById("note-saved-indicator");
-  if (ind) ind.textContent = "Saving...";
-  clearTimeout(board.timer);
-  board.timer = setTimeout(() => noteBoardFlush(board), 800);
-}
-
-function noteBoardFlush(board) {
-  clearTimeout(board.timer); board.timer = null;
-  if (!board.pending) return;
-  const { els, st, files } = board.pending;
-  board.pending = null;
-  const note = notes.find(n => n.id === board.noteId);
-  if (!note) return;
-  const elements = JSON.parse(JSON.stringify(els.filter(e => !e.isDeleted)));
-  const used = {};
-  elements.forEach(e => { if (e.fileId && files[e.fileId]) { const f = files[e.fileId]; used[e.fileId] = { id: f.id, mimeType: f.mimeType, dataURL: f.dataURL, created: f.created }; } });
-  let scene = { elements, appState: { viewBackgroundColor: st.viewBackgroundColor, gridSize: st.gridSize || null }, files: used };
-  let warn = "";
-  if (JSON.stringify(scene).length > BOARD_MAX_BYTES) {
-    scene = { ...scene, files: {} };
-    warn = "⚠ Images are too large to sync — they weren't saved";
-  }
-  note.scene = scene;
-  note.updatedAt = Date.now();
-  save();
-  const ind = document.getElementById("note-saved-indicator");
-  if (ind) ind.textContent = warn || "Saved ✓";
-}
-
-function noteBoardClose() {
-  const board = noteBoard;
-  if (!board) return;
-  noteBoard = null;
-  noteBoardFlush(board);
-  if (board.handle) board.handle.unmount();
-  document.getElementById("note-board").innerHTML = "";
 }
 
 // ── NOTE LINKS & EMBEDS ──
@@ -2153,54 +2527,10 @@ function handleBarClick(id) {
 }
 
 // Completed tasks filters and actions
-function filterCompletedCat(cat) { window._completedCatFilter = cat; renderAnalytics(); }
-function clearCompletedFilter() {
-  window._completedCatFilter = null;
-  const fromEl = document.getElementById("completed-from");
-  const toEl = document.getElementById("completed-to");
-  if (fromEl) fromEl.value = "";
-  if (toEl) toEl.value = "";
-  renderAnalytics();
-}
 function uncompleteTask(id) {
   const t = tasks.find(t => t.id === id);
   if (t) { t.completed = false; save(); renderAll(); }
 }
-function downloadCompleted() {
-  let completedTasks = tasks.filter(t => t.completed).sort((a, b) => b.start - a.start);
-  const fromEl = document.getElementById("completed-from");
-  const toEl = document.getElementById("completed-to");
-  if (fromEl && fromEl.value) {
-    const fromMs = new Date(fromEl.value + "T00:00:00").getTime();
-    completedTasks = completedTasks.filter(t => t.start >= fromMs);
-  }
-  if (toEl && toEl.value) {
-    const toMs = new Date(toEl.value + "T23:59:59").getTime();
-    completedTasks = completedTasks.filter(t => t.start <= toMs);
-  }
-  if (window._completedCatFilter) {
-    completedTasks = completedTasks.filter(t => t.category === window._completedCatFilter);
-  }
-  // Build CSV
-  let csv = "Title,Category,Date,Start Time,Duration (min),Tags,Notes\n";
-  completedTasks.forEach(t => {
-    const d = new Date(t.start);
-    const date = d.toLocaleDateString("en-US");
-    const time = fmtTime(d);
-    const tags = (t.tags || []).join("; ");
-    const notes = (t.notes || "").replace(/"/g, '""');
-    csv += `"${t.title}","${t.category}","${date}","${time}",${t.duration},"${tags}","${notes}"\n`;
-  });
-  const blob = new Blob([csv], { type: "text/csv" });
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement("a");
-  a.href = url;
-  a.download = "completed-tasks-" + new Date().toISOString().slice(0, 10) + ".csv";
-  a.click();
-  URL.revokeObjectURL(url);
-}
-
-// Unlink a dependency by clicking its arrow
 function unlinkDep(taskId, depId) {
   const t = tasks.find(tk => tk.id === taskId);
   if (t && t.dependencies) {
@@ -2444,8 +2774,9 @@ function openModal(id, preset) {
     document.getElementById("delete-btn").style.display = "inline-block";   // the stylesheet hides it by default
   } else {
     const p = preset || {};
-    const start = nowRounded();   // new tasks start now
-    document.getElementById("modal-title").textContent = "New Task";
+    // New tasks start now; logging something already done ends now.
+    const start = p.completed ? new Date(nowRounded() - (p.duration || 60) * 60000) : nowRounded();
+    document.getElementById("modal-title").textContent = p.completed ? "Log something you did" : "New Task";
     document.getElementById("f-title").value = p.title || "";
     document.getElementById("f-category").value = p.category || "Work";
     document.getElementById("f-duration").value = p.duration || 60;
@@ -2453,7 +2784,7 @@ function openModal(id, preset) {
     document.getElementById("f-time").value = timeStr(start);
     window._modalTags = [];
     document.getElementById("f-notes").value = p.notes || "";
-    document.getElementById("f-completed").checked = false;
+    document.getElementById("f-completed").checked = !!p.completed;
     document.getElementById("delete-btn").style.display = "none";
   }
   window._modalDeps = editingTaskId ? [...(tasks.find(t => t.id === editingTaskId)?.dependencies || [])] : [];
@@ -2866,6 +3197,13 @@ function renderStuck() {
   const panel = document.getElementById("stuck-panel");
   panel.classList.toggle("active", activeTab === "stuck");
   if (activeTab !== "stuck") return;
+  panel.querySelectorAll(".stuck-tabs button").forEach(b => b.classList.toggle("active", b.dataset.v === stuckView));
+  document.getElementById("stuck-help").style.display = stuckView === "log" ? "none" : "";
+  if (stuckView === "log") {
+    document.getElementById("stuck-body").innerHTML = renderDiversionLog();
+    wireBarTips(document.querySelector("#stuck-body .dv-hours"));
+    return;
+  }
   const s = stuckActive();
   let html = "";
   if (!s) {
@@ -3160,10 +3498,721 @@ function phoneWireTip() {
   box.addEventListener("mouseleave", () => { tip.style.display = "none"; });
 }
 
+// ── DIVERSION LOG ──
+// Log the moment you reach for the phone (or any escape) instead of a task:
+// Time · Task · Feeling · Thought · Diversion. Logged on the spot, because feelings
+// recalled later are distorted (mostly underestimated); kept non-judgemental,
+// because self-forgiveness — not self-criticism — predicts less procrastination next time.
+const DV_TRIGGERS = ["Stuck", "Overwhelmed", "Bored", "Tired", "Other"];
+const DV_FEELINGS = ["Anxious", "Overwhelmed", "Bored", "Frustrated", "Tired", "Restless", "Confused", "Guilty", "Sad", "Lonely", "Numb", "Excited"];
+const DV_DIVERSIONS = ["Phone scrolling", "YouTube", "Instagram", "Netflix / OTT", "WhatsApp / chat", "Games", "News / browsing", "Snacks", "Nap", "Daydreaming"];
+let dvForm = null;          // the open form's state
+let stuckView = "protocol"; // Stuck tab: "protocol" | "log"
+let dvRange = 30;           // days; 0 = all
+
+function dvChoices(base, key) {
+  const used = new Map();
+  diversions.forEach(d => (d[key] || []).forEach(v => used.set(v, (used.get(v) || 0) + 1)));
+  const custom = [...used.keys()].filter(v => !base.includes(v)).sort((a, b) => used.get(b) - used.get(a)).slice(0, 8);
+  return [...base, ...custom];
+}
+
+function openDivertModal(preset) {
+  const now = new Date();
+  dvForm = { feelings: [], diversion: [], trigger: "", intensity: 0, ...(preset || {}) };
+  const at = new Date(now - now.getTimezoneOffset() * 60000).toISOString().slice(0, 16);
+  document.getElementById("dv-at").value = at;
+  document.getElementById("dv-task").value = dvForm.task || "";
+  document.getElementById("dv-thought").value = "";
+  document.getElementById("dv-minutes").value = "";
+  document.getElementById("dv-custom-feeling").value = "";
+  document.getElementById("dv-custom-div").value = "";
+  document.getElementById("dv-task-list").innerHTML = [...new Set([
+    ...tasks.filter(t => !t.completed).sort((a, b) => Math.abs(a.start - now) - Math.abs(b.start - now)).map(t => t.title),
+    ...backlog.map(b => b.title),
+  ])].slice(0, 40).map(t => `<option value="${esc(t)}">`).join("");
+  dvRenderChips();
+  document.getElementById("divert-overlay").classList.add("open");
+  if (!isTouch()) setTimeout(() => document.getElementById("dv-task").focus(), 0);
+}
+function closeDivertModal() { document.getElementById("divert-overlay").classList.remove("open"); dvForm = null; }
+
+function dvRenderChips() {
+  const chip = (group, v, on) => `<button type="button" class="dv-chip${on ? " on" : ""}" onclick="dvToggle('${group}', this.dataset.v)" data-v="${esc(v)}">${esc(v)}</button>`;
+  document.getElementById("dv-triggers").innerHTML = DV_TRIGGERS.map(v => chip("trigger", v, dvForm.trigger === v)).join("");
+  document.getElementById("dv-feelings").innerHTML = dvChoices(DV_FEELINGS, "feelings").map(v => chip("feelings", v, dvForm.feelings.includes(v))).join("");
+  document.getElementById("dv-diversions").innerHTML = dvChoices(DV_DIVERSIONS, "diversion").map(v => chip("diversion", v, dvForm.diversion.includes(v))).join("");
+  document.getElementById("dv-intensity").innerHTML = [1, 2, 3, 4, 5].map(n => `<button type="button" class="dv-chip${dvForm.intensity === n ? " on" : ""}" onclick="dvToggle('intensity', ${n})">${n}</button>`).join("");
+  document.getElementById("dv-mins-quick").innerHTML = [5, 15, 30, 60].map(n => `<button type="button" class="dv-chip" onclick="document.getElementById('dv-minutes').value=${n}">${n}m</button>`).join("");
+}
+
+function dvToggle(group, v) {
+  if (group === "trigger") dvForm.trigger = dvForm.trigger === v ? "" : v;
+  else if (group === "intensity") dvForm.intensity = dvForm.intensity === v ? 0 : v;
+  else { const a = dvForm[group]; const i = a.indexOf(v); if (i >= 0) a.splice(i, 1); else a.push(v); }
+  dvRenderChips();
+}
+function dvAddCustom(group, inputId) {
+  const inp = document.getElementById(inputId);
+  const v = inp.value.trim();
+  if (!v) return;
+  if (!dvForm[group].includes(v)) dvForm[group].push(v);
+  inp.value = "";
+  const base = group === "feelings" ? DV_FEELINGS : DV_DIVERSIONS;
+  if (!base.includes(v)) base.push(v);   // show it for the rest of this visit
+  dvRenderChips();
+}
+
+function saveDiversion(thenStuck) {
+  if (!dvForm) return;
+  ["feelings", "diversion"].forEach(g => { const id = g === "feelings" ? "dv-custom-feeling" : "dv-custom-div"; if (document.getElementById(id).value.trim()) dvAddCustom(g, id); });
+  const task = document.getElementById("dv-task").value.trim();
+  const at = new Date(document.getElementById("dv-at").value).getTime() || Date.now();
+  if (!task && !dvForm.diversion.length && !dvForm.feelings.length) { alert("Add at least the task, a feeling or a diversion."); return; }
+  const t = tasks.find(x => x.title === task) || null;
+  diversions.unshift({
+    id: genId(), at, task, taskId: t ? t.id : null, trigger: dvForm.trigger,
+    feelings: dvForm.feelings.slice(), intensity: dvForm.intensity || 0,
+    thought: document.getElementById("dv-thought").value.trim(),
+    diversion: dvForm.diversion.slice(), minutes: Math.max(0, parseInt(document.getElementById("dv-minutes").value) || 0),
+    createdAt: Date.now(),
+  });
+  diversions.sort((a, b) => b.at - a.at);
+  save();
+  closeDivertModal();
+  if (thenStuck && task) { if (stuckStart(task)) { stuckView = "protocol"; switchTab("stuck"); } }
+  else { renderAll(); toast("Logged. Noticing it is the first step — no judgement needed."); }
+}
+
+function dvDelete(id) {
+  if (!confirm("Delete this entry?")) return;
+  diversions = diversions.filter(d => d.id !== id);
+  save(); renderStuck();
+}
+
+function setStuckView(v) { stuckView = v; renderStuck(); }
+function setDvRange(n) { dvRange = n; renderStuck(); }
+
+function dvExportCsv() {
+  const rows = [["time", "task", "trigger", "feelings", "intensity", "thought", "diversion", "minutes"]];
+  diversions.forEach(d => rows.push([new Date(d.at).toISOString(), d.task, d.trigger, d.feelings.join("; "), d.intensity || "", d.thought, d.diversion.join("; "), d.minutes || ""]));
+  downloadCsv(rows, "diversion-log-" + isoDate(new Date()) + ".csv");
+}
+
+function dvBars(entries, unit) {
+  if (!entries.length) return '<div style="color:var(--text2);font-size:11px">Nothing yet.</div>';
+  const max = entries[0][1] || 1;
+  return entries.map(([k, v]) => `<div class="bar-row"><span class="bar-label" style="width:110px" title="${esc(k)}">${esc(k)}</span><div class="bar-track"><div class="bar-fill" style="width:${(v / max) * 100}%;background:var(--blue)"></div></div><span style="width:58px;font-size:10px;color:var(--text2);flex-shrink:0">${unit(v)}</span></div>`).join("");
+}
+function dvCount(list, key, weight) {
+  const m = new Map();
+  list.forEach(d => { const vals = Array.isArray(d[key]) ? d[key] : [d[key]]; vals.filter(Boolean).forEach(v => m.set(v, (m.get(v) || 0) + (weight ? weight(d) : 1))); });
+  return [...m.entries()].sort((a, b) => b[1] - a[1]);
+}
+
+function renderDiversionLog() {
+  const since = dvRange ? Date.now() - dvRange * 864e5 : 0;
+  const list = diversions.filter(d => d.at >= since);
+  const mins = list.reduce((s, d) => s + (d.minutes || 0), 0);
+  const feelings = dvCount(list, "feelings"), divs = dvCount(list, "diversion"), avoided = dvCount(list, "task").slice(0, 6);
+  const divMins = dvCount(list, "diversion", d => d.minutes || 0).filter(([, v]) => v > 0);
+  const hours = Array(24).fill(0);
+  list.forEach(d => hours[new Date(d.at).getHours()]++);
+  const peak = hours.indexOf(Math.max(...hours));
+  // The most common feeling → diversion pair: the loop to interrupt.
+  const pairs = new Map();
+  list.forEach(d => d.feelings.forEach(f => d.diversion.forEach(v => { const k = f + "→" + v; pairs.set(k, (pairs.get(k) || 0) + 1); })));
+  const topPair = [...pairs.entries()].sort((a, b) => b[1] - a[1])[0];
+  const hmax = Math.max(...hours, 1);
+  const hourBars = hours.map((n, h) => `<div class="phone-day" data-tip="${h}:00–${h}:59 · ${n} ${n === 1 ? "time" : "times"}"><i style="height:${(n / hmax) * 100}%;${n ? "" : "background:transparent"}"></i></div>`).join("");
+  const rows = list.map(d => {
+    const dt = new Date(d.at);
+    return `<tr>
+      <td class="nowrap">${dt.toLocaleDateString("en-US", { month: "short", day: "numeric" })}<br><small>${fmtTime(dt)}</small></td>
+      <td>${esc(d.task) || '<span class="muted">—</span>'}${d.trigger ? `<br><small class="muted">${esc(d.trigger)}</small>` : ""}</td>
+      <td>${esc(d.feelings.join(", ")) || '<span class="muted">—</span>'}${d.intensity ? `<br><small class="muted">intensity ${d.intensity}/5</small>` : ""}</td>
+      <td class="dv-thought">${esc(d.thought) || '<span class="muted">—</span>'}</td>
+      <td>${esc(d.diversion.join(", ")) || '<span class="muted">—</span>'}${d.minutes ? `<br><small class="muted">${fmtDur(d.minutes)}</small>` : ""}</td>
+      <td><button class="plan-x" title="Delete" onclick="dvDelete('${d.id}')">×</button></td></tr>`;
+  }).join("");
+  return `
+    <div class="stuck-row" style="margin:0 0 12px">
+      <button class="plan-primary" onclick="openDivertModal()">⚡ Log a diversion</button>
+      <span style="flex:1"></span>
+      ${[[7, "7d"], [30, "30d"], [0, "All"]].map(([n, l]) => `<button class="tag-filter-btn${dvRange === n ? " active" : ""}" style="margin:0" onclick="setDvRange(${n})">${l}</button>`).join("")}
+      <button class="plan-x" onclick="dvExportCsv()">⬇ CSV</button>
+    </div>
+    <p class="plan-lead" style="margin:0 0 14px">Log it the moment you notice — no judgement. People who forgive themselves for procrastinating tend to procrastinate less next time; the point here is to spot the pattern, not to feel bad.</p>
+    ${list.length ? `
+    <div class="stat-grid">
+      <div class="stat-box"><div class="stat-value" style="color:var(--accent)">${list.length}</div><div class="stat-label">Diversions logged</div></div>
+      <div class="stat-box"><div class="stat-value" style="color:var(--red)">${fmtDur(mins)}</div><div class="stat-label">Time lost (logged)</div></div>
+      <div class="stat-box"><div class="stat-value" style="color:var(--blue);font-size:15px;line-height:1.9">${feelings[0] ? esc(feelings[0][0]) : "—"}</div><div class="stat-label">Most common feeling</div></div>
+      <div class="stat-box"><div class="stat-value" style="color:var(--purple);font-size:15px;line-height:1.9">${divs[0] ? esc(divs[0][0]) : "—"}</div><div class="stat-label">Most common escape</div></div>
+      <div class="stat-box"><div class="stat-value" style="color:var(--text)">${hours[peak] ? peak + ":00" : "—"}</div><div class="stat-label">Riskiest hour</div></div>
+    </div>
+    ${topPair && topPair[1] > 1 ? `<div class="stuck-tip">Your loop: when you feel <b>${esc(topPair[0].split("→")[0])}</b> you usually go to <b>${esc(topPair[0].split("→")[1])}</b> (${topPair[1]}×). Next time you notice that feeling, run 🧩 Stuck for two minutes first.</div>` : ""}
+    <div class="chart-row" style="margin-bottom:14px">
+      <div class="chart-box"><div class="chart-title">Feelings</div>${dvBars(feelings.slice(0, 8), v => v + "×")}</div>
+      <div class="chart-box"><div class="chart-title">Escapes · ${divMins.length ? "minutes lost" : "times"}</div>${divMins.length ? dvBars(divMins.slice(0, 8), fmtDur) : dvBars(divs.slice(0, 8), v => v + "×")}</div>
+    </div>
+    <div class="chart-row" style="margin-bottom:14px">
+      <div class="chart-box"><div class="chart-title">Time of day</div><div class="phone-days dv-hours" style="height:90px">${hourBars}</div><div class="phone-axis"><span>0:00</span><span>12:00</span><span>23:00</span></div></div>
+      <div class="chart-box"><div class="chart-title">Most avoided tasks</div>${dvBars(avoided, v => v + "×")}</div>
+    </div>
+    <div class="dv-table-wrap"><table class="plan-table dv-table"><thead><tr><th>Time</th><th>Task</th><th>Feeling</th><th>Thought</th><th>Diversion</th><th></th></tr></thead><tbody>${rows}</tbody></table></div>`
+    : `<div class="vault-empty" style="text-align:left">Nothing logged ${dvRange ? "in the last " + dvRange + " days" : "yet"}. Next time you catch yourself reaching for the phone instead of a task, press <b>⚡ I got diverted</b> in the sidebar — it takes 15 seconds.</div>`}`;
+}
+
+// Hover/tap tooltips for any bar strip whose bars carry data-tip.
+function wireBarTips(box) {
+  if (!box) return;
+  let tip = document.getElementById("phone-tip");
+  if (!tip) { tip = document.createElement("div"); tip.id = "phone-tip"; document.body.appendChild(tip); }
+  const show = e => {
+    const bar = e.target.closest("[data-tip]");
+    if (!bar || !box.contains(bar)) { tip.style.display = "none"; return; }
+    tip.textContent = bar.dataset.tip;
+    tip.style.display = "block";
+    tip.style.left = Math.min(e.clientX + 12, window.innerWidth - tip.offsetWidth - 8) + "px";
+    tip.style.top = (e.clientY - 34) + "px";
+  };
+  box.addEventListener("mousemove", show);
+  box.addEventListener("click", show);
+  box.addEventListener("mouseleave", () => { tip.style.display = "none"; });
+}
+
+// Short message at the bottom of the screen.
+function toast(text) {
+  let t = document.getElementById("cc-toast");
+  if (!t) { t = document.createElement("div"); t.id = "cc-toast"; document.body.appendChild(t); }
+  t.textContent = text;
+  t.classList.add("show");
+  clearTimeout(t._h);
+  t._h = setTimeout(() => t.classList.remove("show"), 3500);
+}
+
+function downloadCsv(rows, name) {
+  const cell = v => { const s = v == null ? "" : String(v); return /[",\n\r]/.test(s) ? '"' + s.replace(/"/g, '""') + '"' : s; };
+  const csv = "﻿" + rows.map(r => r.map(cell).join(",")).join("\r\n");
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(new Blob([csv], { type: "text/csv" }));
+  a.download = name;
+  a.click();
+  setTimeout(() => URL.revokeObjectURL(a.href), 1000);
+}
+
+// ── HABITS ──
+// Daily habits, or N× per week. Consistency (%) instead of fragile streaks: in
+// Lally et al. (2010) missing one day did not hurt habit formation, and habits took
+// 18–254 days (median ~66) to feel automatic — so the rule shown is "never miss twice".
+const HABIT_WEEKS = 12;
+
+function habitStart(h) {
+  const done = Object.keys(h.days || {}).sort();
+  const created = isoDate(h.createdAt || Date.now());
+  return done.length && done[0] < created ? done[0] : created;
+}
+function addDays(iso, n) { const d = new Date(iso + "T00:00"); d.setDate(d.getDate() + n); return isoDate(d); }
+function weekStartIso(iso) { return isoDate(getStart("week", new Date(iso + "T00:00"))); }
+function habitDone(h, iso) { return !!(h.days && h.days[iso]); }
+function habitWeekCount(h, wkIso) { let n = 0; for (let i = 0; i < 7; i++) if (habitDone(h, addDays(wkIso, i))) n++; return n; }
+function habitTarget(h) { return h.freq === "weekly" ? Math.min(7, Math.max(1, h.target || 3)) : 7; }
+
+// Done vs expected in [fromIso, toIso] (inclusive), never before the habit started, never after today.
+function habitScore(h, fromIso, toIso) {
+  const today = isoDate(new Date()), start = habitStart(h);
+  if (toIso > today) toIso = today;
+  if (fromIso < start) fromIso = start;
+  if (fromIso > toIso) return null;
+  if (h.freq !== "weekly") {
+    let done = 0, due = 0;
+    for (let d = fromIso; d <= toIso; d = addDays(d, 1)) {
+      const isDone = habitDone(h, d);
+      if (d === today && !isDone) continue;   // today isn't missed yet
+      due++; if (isDone) done++;
+    }
+    return due ? { done, due } : null;
+  }
+  let done = 0, due = 0;
+  for (let wk = weekStartIso(fromIso); wk <= toIso; wk = addDays(wk, 7)) {
+    const n = Math.min(habitTarget(h), habitWeekCount(h, wk));
+    const current = addDays(wk, 6) >= today;
+    if (current && n < habitTarget(h)) continue;   // this week isn't over
+    due += habitTarget(h); done += n;
+  }
+  return due ? { done, due } : null;
+}
+
+function habitConsistency(h) {
+  const today = isoDate(new Date());
+  const s = h.freq === "weekly" ? habitScore(h, addDays(weekStartIso(today), -7 * (HABIT_WEEKS - 1)), today) : habitScore(h, addDays(today, -29), today);
+  return s ? Math.round((s.done / s.due) * 100) : null;
+}
+
+function habitRun(h) {
+  const today = isoDate(new Date());
+  let n = 0;
+  if (h.freq !== "weekly") {
+    let d = habitDone(h, today) ? today : addDays(today, -1);
+    while (habitDone(h, d)) { n++; d = addDays(d, -1); }
+    return n ? n + (n === 1 ? " day" : " days") + " in a row" : "";
+  }
+  let wk = weekStartIso(today);
+  if (habitWeekCount(h, wk) < habitTarget(h)) wk = addDays(wk, -7);
+  while (habitWeekCount(h, wk) >= habitTarget(h) && wk >= weekStartIso(habitStart(h))) { n++; wk = addDays(wk, -7); }
+  return n ? n + (n === 1 ? " week" : " weeks") + " on target" : "";
+}
+
+// "Never miss twice": the warning that matters, instead of a broken streak.
+function habitWarning(h) {
+  const today = isoDate(new Date()), start = habitStart(h);
+  if (h.freq !== "weekly") {
+    const y = addDays(today, -1), y2 = addDays(today, -2);
+    if (habitDone(h, today) || y < start) return null;
+    if (!habitDone(h, y) && y2 >= start && !habitDone(h, y2)) return { level: "bad", text: "Missed 2 days — today matters most" };
+    if (!habitDone(h, y)) return { level: "warn", text: "Missed yesterday — don't miss twice" };
+    return null;
+  }
+  const lastWk = addDays(weekStartIso(today), -7);
+  if (addDays(lastWk, 6) < start) return null;
+  const left = habitTarget(h) - habitWeekCount(h, weekStartIso(today));
+  const daysLeft = 7 - Math.round((new Date(today + "T00:00") - new Date(weekStartIso(today) + "T00:00")) / 864e5);
+  if (left > daysLeft) return { level: "bad", text: "Can't reach this week's target — just do one" };
+  if (habitWeekCount(h, lastWk) < habitTarget(h)) return { level: "warn", text: "Missed last week's target — don't miss twice" };
+  return null;
+}
+
+function habitAdd() {
+  const name = document.getElementById("hb-name").value.trim();
+  if (!name) return;
+  const f = document.getElementById("hb-freq").value;
+  habits.push({ id: genId(), name, freq: f === "daily" ? "daily" : "weekly", target: f === "daily" ? 7 : parseInt(f), cue: document.getElementById("hb-cue").value.trim(), createdAt: Date.now(), archived: false, days: {} });
+  document.getElementById("hb-name").value = ""; document.getElementById("hb-cue").value = "";
+  save(); renderHabits();
+}
+function habitToggle(id, iso) {
+  const h = habits.find(x => x.id === id);
+  if (!h) return;
+  h.days = h.days || {};
+  if (h.days[iso]) delete h.days[iso]; else h.days[iso] = 1;
+  save(); renderHabits();
+}
+function habitEdit(id) {
+  const h = habits.find(x => x.id === id);
+  if (!h) return;
+  const name = prompt("Habit name:", h.name);
+  if (name === null) return;
+  const cue = prompt("Cue — when/after what? (optional, e.g. “after morning coffee”)", h.cue || "");
+  if (name.trim()) h.name = name.trim();
+  if (cue !== null) h.cue = cue.trim();
+  save(); renderHabits();
+}
+function habitArchive(id) { const h = habits.find(x => x.id === id); if (h) { h.archived = !h.archived; save(); renderHabits(); } }
+function habitDelete(id) {
+  const h = habits.find(x => x.id === id);
+  if (!h || !confirm(`Delete “${h.name}” and its history? (Archive keeps the history.)`)) return;
+  habits = habits.filter(x => x.id !== id); save(); renderHabits();
+}
+let habitShowArchived = false;
+function habitToggleArchived() { habitShowArchived = !habitShowArchived; renderHabits(); }
+
+function renderHabits() {
+  const panel = document.getElementById("habits-panel");
+  panel.classList.toggle("active", activeTab === "habits");
+  if (activeTab !== "habits") return;
+  const today = isoDate(new Date());
+  const active = habits.filter(h => !h.archived), archived = habits.filter(h => h.archived);
+  const body = document.getElementById("habits-body");
+  if (!active.length) {
+    body.innerHTML = `<div class="vault-empty" style="text-align:left;line-height:1.7">No habits yet. Add one above — small and specific works best (“10 pushups after brushing teeth” beats “exercise”). Add a cue: tying a habit to something you already do is how it becomes automatic.</div>` + habitArchivedHtml(archived);
+    return;
+  }
+  // Today
+  const todayCards = active.map(h => {
+    const done = habitDone(h, today), warn = habitWarning(h);
+    const sub = h.freq === "weekly" ? `${habitWeekCount(h, weekStartIso(today))}/${habitTarget(h)} this week` : (habitRun(h) || "Not started a run yet");
+    return `<div class="hb-card${done ? " done" : ""}">
+      <button class="hb-check" onclick="habitToggle('${h.id}','${today}')" aria-pressed="${done}" title="${done ? "Undo" : "Mark done today"}">${done ? "✓" : ""}</button>
+      <div class="hb-main"><div class="hb-name">${esc(h.name)}</div>
+        <div class="hb-sub">${h.cue ? esc(h.cue) + " · " : ""}${sub}</div>
+        ${warn ? `<div class="hb-warn ${warn.level}">${warn.text}</div>` : ""}</div>
+    </div>`;
+  }).join("");
+  // Last 14 days grid
+  const days = []; for (let i = 13; i >= 0; i--) days.push(addDays(today, -i));
+  const head = days.map(d => { const dt = new Date(d + "T00:00"); return `<th class="${d === today ? "today" : ""}">${dt.toLocaleDateString("en-US", { weekday: "narrow" })}<br>${dt.getDate()}</th>`; }).join("");
+  const gridRows = active.map(h => {
+    const start = habitStart(h);
+    const cells = days.map(d => `<td><button class="hb-cell${habitDone(h, d) ? " on" : d < start ? " pre" : ""}" onclick="habitToggle('${h.id}','${d}')" title="${d}${habitDone(h, d) ? " · done" : ""}"></button></td>`).join("");
+    const c = habitConsistency(h);
+    return `<tr><td class="hb-gname" title="${esc(h.name)}">${esc(h.name)}</td>${cells}<td class="hb-pct">${c === null ? "—" : c + "%"}</td>
+      <td class="nowrap"><button class="plan-x" title="Edit" onclick="habitEdit('${h.id}')">✎</button><button class="plan-x" title="Archive" onclick="habitArchive('${h.id}')">🗄</button><button class="plan-x" title="Delete" onclick="habitDelete('${h.id}')">×</button></td></tr>`;
+  }).join("");
+  // Weekly consistency, all habits together
+  const thisWk = weekStartIso(today);
+  const weeks = []; for (let i = HABIT_WEEKS - 1; i >= 0; i--) weeks.push(addDays(thisWk, -7 * i));
+  const weekly = weeks.map(wk => {
+    let done = 0, due = 0;
+    active.forEach(h => {
+      const start = habitStart(h); if (addDays(wk, 6) < start) return;
+      if (h.freq === "weekly") { due += habitTarget(h); done += Math.min(habitTarget(h), habitWeekCount(h, wk)); }
+      else for (let i = 0; i < 7; i++) { const d = addDays(wk, i); if (d < start || d > today) continue; if (d === today && !habitDone(h, d)) continue; due++; if (habitDone(h, d)) done++; }
+    });
+    return { wk, pct: due ? Math.round((done / due) * 100) : null, current: wk === thisWk, done, due };
+  });
+  const bars = weekly.map(w => `<div class="phone-day${w.current ? " wkend" : ""}" data-tip="Week of ${fmtDate(new Date(w.wk + "T00:00"))}: ${w.pct === null ? "no habits yet" : w.pct + "% (" + w.done + " of " + w.due + ")"}${w.current ? " · so far" : ""}"><i style="height:${w.pct || 0}%;background:var(--green)"></i></div>`).join("");
+  const avgWeeks = weekly.filter(w => w.pct !== null && !w.current);
+  const avg = avgWeeks.length ? Math.round(avgWeeks.reduce((s, w) => s + w.pct, 0) / avgWeeks.length) : null;
+  // Per-habit heatmaps (weeks across, days down)
+  const heat = active.map(h => {
+    const start = habitStart(h);
+    const cols = weeks.map(wk => `<div class="hb-hcol">${[0, 1, 2, 3, 4, 5, 6].map(i => { const d = addDays(wk, i); const cls = d > today ? "fut" : d < start ? "pre" : habitDone(h, d) ? "on" : ""; return `<i class="${cls}" data-tip="${fmtDate(new Date(d + "T00:00"))}${cls === "on" ? " · done" : cls === "" ? " · missed" : ""}"></i>`; }).join("")}</div>`).join("");
+    const c = habitConsistency(h);
+    const age = Math.round((new Date(today + "T00:00") - new Date(start + "T00:00")) / 864e5) + 1;
+    return `<div class="hb-heat-row"><div class="hb-heat-name"><b>${esc(h.name)}</b><small>${h.freq === "weekly" ? habitTarget(h) + "× / week" : "daily"} · ${c === null ? "—" : c + "% consistent"} · day ${age}${age < 66 ? " of ~66" : ""}</small></div><div class="hb-heat">${cols}</div></div>`;
+  }).join("");
+  body.innerHTML = `
+    <div class="chart-title" style="margin-top:2px">Today · ${new Date().toLocaleDateString("en-US", { weekday: "long", month: "short", day: "numeric" })}</div>
+    <div class="hb-cards">${todayCards}</div>
+    <div class="chart-box" style="margin:16px 0">
+      <div class="chart-title">Consistency per week · all habits${avg !== null ? ` · ${avg}% average` : ""}</div>
+      <div class="phone-days hb-weekly" style="height:110px">${bars}<div class="phone-avg" style="bottom:${avg || 0}%;${avg === null ? "display:none" : ""}"><span>avg ${avg}%</span></div></div>
+      <div class="phone-axis"><span>${fmtDate(new Date(weeks[0] + "T00:00"))}</span><span>this week (so far)</span></div>
+    </div>
+    <div class="chart-title">Last 14 days · tap a square to fix a day</div>
+    <div class="hb-grid-wrap"><table class="hb-grid"><thead><tr><th></th>${head}<th title="Consistency: last 30 days (daily) or 12 weeks (weekly)">%</th><th></th></tr></thead><tbody>${gridRows}</tbody></table></div>
+    <div class="chart-box" style="margin-top:16px"><div class="chart-title">Each habit · last ${HABIT_WEEKS} weeks</div>${heat}</div>
+    ${habitArchivedHtml(archived)}`;
+  wireBarTips(body.querySelector(".hb-weekly"));
+  body.querySelectorAll(".hb-heat").forEach(wireBarTips);
+}
+function habitArchivedHtml(archived) {
+  if (!archived.length) return "";
+  return `<div style="margin-top:14px"><button class="plan-x" onclick="habitToggleArchived()">${habitShowArchived ? "Hide" : "Show"} archived (${archived.length})</button>
+    ${habitShowArchived ? archived.map(h => `<div class="stuck-log-item done"><div class="main">${esc(h.name)}<div class="meta">${Object.keys(h.days || {}).length} days done</div></div><button class="plan-x" onclick="habitArchive('${h.id}')">Restore</button><button class="plan-x" onclick="habitDelete('${h.id}')">×</button></div>`).join("") : ""}</div>`;
+}
+
+// ── DONE LOG ──
+// Every completed task, grouped by day. "＋ Log something I did" records work
+// that was never planned; ⬆ Import adds many at once.
+let logRange = "week";
+let logQuery = "";
+
+function logBounds() {
+  if (logRange === "all") return [0, Infinity];
+  const view = logRange === "today" ? "day" : logRange;
+  const from = getStart(view, new Date());
+  return [from.getTime(), getEnd(view, from).getTime()];
+}
+function logList() {
+  const [from, to] = logBounds();
+  const q = logQuery.toLowerCase();
+  return tasks.filter(t => t.completed && t.start >= from && t.start < to &&
+    (!q || [t.title, t.notes, t.category, ...(t.tags || [])].join(" ").toLowerCase().includes(q)))
+    .sort((a, b) => b.start - a.start);
+}
+function setLogRange(r) { logRange = r; renderLog(); }
+
+function renderLog() {
+  const panel = document.getElementById("log-panel");
+  panel.classList.toggle("active", activeTab === "log");
+  if (activeTab !== "log") return;
+  document.getElementById("log-ranges").innerHTML = [["today", "Today"], ["week", "This week"], ["month", "This month"], ["all", "All"]]
+    .map(([k, l]) => `<button class="tag-filter-btn${logRange === k ? " active" : ""}" style="margin:0 2px 0 0" onclick="setLogRange('${k}')">${l}</button>`).join("");
+  const list = logList();
+  const total = list.reduce((s, t) => s + (t.duration || 0), 0);
+  const cats = new Map();
+  list.forEach(t => cats.set(t.category, (cats.get(t.category) || 0) + (t.duration || 0)));
+  const body = document.getElementById("log-body");
+  if (!list.length) {
+    body.innerHTML = `<div class="vault-empty" style="text-align:left">${logQuery ? "Nothing matches “" + esc(logQuery) + "”." : "Nothing completed in this range yet."} Tick tasks as done on the timeline, press <b>＋ Log something I did</b> for unplanned work, or <b>⬆ Import</b> a list.</div>`;
+    return;
+  }
+  const days = new Map();
+  list.forEach(t => { const k = isoDate(new Date(t.start)); if (!days.has(k)) days.set(k, []); days.get(k).push(t); });
+  let html = `<div class="log-summary"><b>${list.length}</b> done · <b>${fmtDur(total)}</b>${[...cats.entries()].sort((a, b) => b[1] - a[1]).map(([c, m]) => `<span class="log-cat"><i style="background:${COLORS[c] || "#666"}"></i>${esc(c)} ${fmtDur(m)}</span>`).join("")}</div>`;
+  days.forEach((items, iso) => {
+    const d = new Date(iso + "T00:00");
+    const mins = items.reduce((s, t) => s + (t.duration || 0), 0);
+    const label = iso === isoDate(new Date()) ? "Today" : d.toLocaleDateString("en-US", { weekday: "long", month: "short", day: "numeric" });
+    html += `<div class="log-day"><div class="log-day-head"><span>${label}</span><span>${items.length} · ${fmtDur(mins)}</span></div>`;
+    items.forEach(t => {
+      const st = new Date(t.start);
+      html += `<div class="log-item" style="border-left-color:${COLORS[t.category] || "#666"}">
+        <span class="log-time">${fmtTime(st)}</span>
+        <div class="log-main"><div class="log-title">✓ ${esc(t.title)}</div>
+          <div class="log-meta">${fmtDur(t.duration || 0)} · ${esc(t.category)}${t.tags && t.tags.length ? " · " + t.tags.map(esc).join(", ") : ""}${t.notes ? " · " + esc(t.notes.split("\n")[0].slice(0, 90)) : ""}</div></div>
+        <button class="plan-x" title="Edit" onclick="openModal('${t.id}')">✎</button>
+        <button class="plan-x" title="Mark as not done" onclick="uncompleteTask('${t.id}')">↩</button>
+      </div>`;
+    });
+    html += `</div>`;
+  });
+  body.innerHTML = html;
+}
+
+function logSomethingDone() { openModal(null, { completed: true, duration: 30 }); }
+
+function logExportCsv() {
+  const list = logList();
+  if (!list.length) { alert("Nothing to export in this range."); return; }
+  downloadCsv(taskCsvRows(list), "done-log-" + isoDate(new Date()) + ".csv");
+}
+// Same columns the importer reads, so an export can be imported again.
+function taskCsvRows(list) {
+  const rows = [["title", "date", "start", "duration", "category", "tags", "notes", "completed"]];
+  list.forEach(t => { const d = new Date(t.start); rows.push([t.title, isoDate(d), timeStr(d), t.duration, t.category, (t.tags || []).join("; "), t.notes || "", t.completed ? "yes" : "no"]); });
+  return rows;
+}
+function downloadCompleted() { downloadCsv(taskCsvRows(tasks.filter(t => t.completed).sort((a, b) => b.start - a.start)), "completed-tasks-" + isoDate(new Date()) + ".csv"); }
+
+// ── BULK IMPORT ──
+// One importer for three targets: timeline tasks, completed tasks (Done log) and
+// the Plan backlog. Reads CSV/TSV, Excel, or rows pasted from Excel/Sheets; shows a
+// preview with every problem before anything is added. Header names are flexible.
+const IMPORT_MODES = {
+  tasks: { label: "Timeline tasks", hint: "Planned tasks on the timeline. Missing date → today; missing start → stacked from your day start." },
+  done: { label: "Completed tasks", hint: "Past work for the 📒 Log — every row is marked done. Missing date → today." },
+  backlog: { label: "Plan backlog", hint: "Unscheduled tasks for ⏱ Plan, with importance/urgency/effort/aversiveness 1–5 (default 3)." },
+};
+const IMPORT_ALIASES = {
+  title: ["title", "task", "name", "taskname", "subject", "item"],
+  date: ["date", "day", "on", "startdate", "completeddate", "donedate"],
+  start: ["start", "starttime", "time", "from", "at"],
+  duration: ["duration", "durationmin", "durationmins", "minutes", "mins", "min", "length", "time spent", "timespent"],
+  category: ["category", "cat", "type", "area"],
+  tags: ["tags", "tag", "labels", "label"],
+  notes: ["notes", "note", "description", "details", "comment", "comments"],
+  completed: ["completed", "done", "status", "complete"],
+  est: ["est", "estimate", "estimatemin", "estmin", "estimated", "estimatedminutes"],
+  imp: ["importance", "imp", "important"],
+  urg: ["urgency", "urg", "urgent"],
+  eff: ["effort", "eff"],
+  avr: ["aversiveness", "aversion", "avr", "dread"],
+};
+const IMPORT_TEMPLATES = {
+  tasks: [["title", "date", "start", "duration", "category", "tags", "notes"],
+    ["Review PO approvals", "2026-11-12", "09:30", "45", "Work", "SAP; Daily", "Check the release strategy"],
+    ["MM chapter 4 notes", "12/11/2026", "2:00 pm", "1h 30m", "Learning", "SAP", ""],
+    ["Call vendor", "", "", "15", "Work", "", "no date/start: today, stacked from your day start"]],
+  done: [["title", "date", "start", "duration", "category", "tags", "notes"],
+    ["Finished MM chapter 3", "2026-11-08", "10:00", "90", "Learning", "SAP", ""],
+    ["Gym", "08/11/2026", "18:30", "60", "Personal", "Health", ""]],
+  backlog: [["title", "est", "importance", "urgency", "effort", "aversiveness", "category", "notes"],
+    ["Write MM config notes", "120", "5", "4", "5", "5", "Work", ""],
+    ["Renew passport", "30", "4", "3", "2", "4", "Personal", ""]],
+};
+let importState = { mode: "tasks", rows: null, source: "", items: [] };
+
+function openImport(mode) {
+  importState = { mode: mode || "tasks", rows: null, source: "", items: [] };
+  document.getElementById("imp-paste").value = "";
+  document.getElementById("imp-file").value = "";
+  document.getElementById("imp-skipdup").checked = true;
+  document.getElementById("import-overlay").classList.add("open");
+  importRender();
+}
+function closeImport() { document.getElementById("import-overlay").classList.remove("open"); }
+function importSetMode(m) { importState.mode = m; importBuild(); }
+function importTemplate() { downloadCsv(IMPORT_TEMPLATES[importState.mode], "template-" + importState.mode + ".csv"); }
+
+async function importFile(ev) {
+  const file = ev.target.files[0];
+  if (!file) return;
+  try {
+    if (/\.(xlsx|xls|ods)$/i.test(file.name)) {
+      await phoneLoadLib();
+      const wb = XLSX.read(await file.arrayBuffer(), { type: "array", cellDates: true });
+      importState.rows = XLSX.utils.sheet_to_json(wb.Sheets[wb.SheetNames[0]], { header: 1, raw: true, defval: "" });
+    } else {
+      importState.rows = parseDelimited(await file.text());
+    }
+    importState.source = file.name;
+    document.getElementById("imp-paste").value = "";
+    importBuild();
+  } catch (e) { alert("Couldn't read that file: " + e.message); }
+}
+function importPasted() {
+  const t = document.getElementById("imp-paste").value;
+  importState.rows = t.trim() ? parseDelimited(t) : null;
+  importState.source = t.trim() ? "pasted rows" : "";
+  importBuild();
+}
+
+// CSV/TSV with quotes; the delimiter is guessed from the header line.
+function parseDelimited(text) {
+  text = text.replace(/^﻿/, "");
+  const first = text.split(/\r?\n/)[0] || "";
+  const count = ch => first.split(ch).length - 1;
+  const delim = count("\t") ? "\t" : count(";") > count(",") ? ";" : ",";
+  const rows = []; let row = [], cell = "", q = false;
+  for (let i = 0; i < text.length; i++) {
+    const c = text[i];
+    if (q) {
+      if (c === '"') { if (text[i + 1] === '"') { cell += '"'; i++; } else q = false; }
+      else cell += c;
+    } else if (c === '"' && cell === "") q = true;
+    else if (c === delim) { row.push(cell); cell = ""; }
+    else if (c === "\n" || c === "\r") { if (c === "\r" && text[i + 1] === "\n") i++; row.push(cell); rows.push(row); row = []; cell = ""; }
+    else cell += c;
+  }
+  if (cell !== "" || row.length) { row.push(cell); rows.push(row); }
+  return rows.filter(r => r.some(v => String(v).trim() !== ""));
+}
+
+function normKey(s) { return String(s || "").toLowerCase().replace(/\(.*?\)/g, "").replace(/[^a-z ]/g, "").trim(); }
+function importColumns(header) {
+  const map = {};
+  header.forEach((h, i) => {
+    const k = normKey(h), compact = k.replace(/ /g, "");
+    for (const [field, names] of Object.entries(IMPORT_ALIASES)) {
+      if (map[field] === undefined && (names.includes(k) || names.includes(compact))) { map[field] = i; break; }
+    }
+  });
+  return map;
+}
+
+// Dates: 2026-11-12, 12/11/2026 or 12-11-26 (day first), "Nov 12, 2026", today/tomorrow/yesterday, Excel dates.
+function parseDateCell(v) {
+  if (v instanceof Date && !isNaN(v)) return isoDate(new Date(v.getTime() + 30000));   // Excel dates arrive a few seconds early
+  if (typeof v === "number" && v > 20000) { const d = new Date(Math.round((v - 25569) * 864e5)); return d.getUTCFullYear() + "-" + String(d.getUTCMonth() + 1).padStart(2, "0") + "-" + String(d.getUTCDate()).padStart(2, "0"); }
+  const s = String(v || "").trim().toLowerCase();
+  if (!s) return "";
+  const rel = { today: 0, tomorrow: 1, yesterday: -1 }[s];
+  if (rel !== undefined) return addDays(isoDate(new Date()), rel);
+  let m = /^(\d{4})[-/.](\d{1,2})[-/.](\d{1,2})/.exec(s);
+  if (m) return m[1] + "-" + m[2].padStart(2, "0") + "-" + m[3].padStart(2, "0");
+  m = /^(\d{1,2})[-/.](\d{1,2})[-/.](\d{2,4})$/.exec(s);
+  if (m) { const y = m[3].length === 2 ? "20" + m[3] : m[3]; if (+m[2] > 12) return null; return y + "-" + m[2].padStart(2, "0") + "-" + m[1].padStart(2, "0"); }
+  if (/[a-z]/.test(s)) { const d = new Date(v); if (!isNaN(d)) return isoDate(d); }
+  return null;
+}
+// Times: 09:30, 9:30 pm, 9pm, 21.30, Excel times.
+function parseTimeCell(v) {
+  if (v instanceof Date && !isNaN(v)) { const d = new Date(v.getTime() + 30000); return String(d.getHours()).padStart(2, "0") + ":" + String(d.getMinutes()).padStart(2, "0"); }
+  if (typeof v === "number" && v >= 0 && v < 1) { const m = Math.round(v * 1440); return String(Math.floor(m / 60) % 24).padStart(2, "0") + ":" + String(m % 60).padStart(2, "0"); }
+  const s = String(v || "").trim().toLowerCase().replace(/\s+/g, "");
+  if (!s) return "";
+  const m = /^(\d{1,2})(?:[:.](\d{2}))?(am|pm|a|p)?$/.exec(s);
+  if (!m) return null;
+  let h = +m[1], mi = +(m[2] || 0);
+  if (m[3] && m[3][0] === "p" && h < 12) h += 12;
+  if (m[3] && m[3][0] === "a" && h === 12) h = 0;
+  if (h > 23 || mi > 59) return null;
+  return String(h).padStart(2, "0") + ":" + String(mi).padStart(2, "0");
+}
+// Durations: 45, 90m, 1h, 1h 30m, 1.5h, 1:30.
+function parseDurCell(v) {
+  if (typeof v === "number") return v > 0 ? Math.round(v) : null;
+  const s = String(v || "").trim().toLowerCase();
+  if (!s) return "";
+  let m = /^(\d+):(\d{2})$/.exec(s);
+  if (m) return +m[1] * 60 + +m[2];
+  m = /^(\d+(?:\.\d+)?)$/.exec(s);
+  if (m) return Math.round(+m[1]) || null;
+  const h = /(\d+(?:\.\d+)?)\s*h/.exec(s), mi = /(\d+)\s*m/.exec(s);
+  if (!h && !mi) return null;
+  return Math.round((h ? +h[1] * 60 : 0) + (mi ? +mi[1] : 0)) || null;
+}
+function parseYes(v) { return /^(y|yes|true|1|done|x|✓|✔|complete|completed)$/i.test(String(v || "").trim()); }
+function parseScale(v) { const n = parseInt(v); return n >= 1 && n <= 5 ? n : 3; }
+
+function importBuild() {
+  const rows = importState.rows;
+  importState.items = [];
+  if (rows && rows.length) {
+    const cols = importColumns(rows[0]);
+    const get = (r, f) => cols[f] === undefined ? "" : r[cols[f]];
+    if (cols.title === undefined) {
+      importState.error = "No “title” column found. The first row must be the column names — download the template to see them.";
+    } else {
+      importState.error = "";
+      const cursor = {};   // per date: next free start for rows without a time
+      rows.slice(1).forEach((r, i) => {
+        const it = { row: i + 2, title: String(get(r, "title") || "").trim(), problems: [], warnings: [] };
+        if (!it.title) { it.problems.push("no title"); importState.items.push(it); return; }
+        const catRaw = String(get(r, "category") || "").trim();
+        it.category = CATEGORIES.find(c => c.toLowerCase() === catRaw.toLowerCase()) || (catRaw ? "Other" : "Work");
+        if (catRaw && it.category === "Other" && catRaw.toLowerCase() !== "other") it.warnings.push(`category “${catRaw}” → Other`);
+        it.notes = String(get(r, "notes") || "");
+        if (importState.mode === "backlog") {
+          const est = parseDurCell(get(r, "est") || get(r, "duration"));
+          if (est === null) it.problems.push("can't read the estimate");
+          it.est = est || 30;
+          ["imp", "urg", "eff", "avr"].forEach(k => { it[k] = parseScale(get(r, k)); });
+          it.dup = backlog.some(b => b.title.toLowerCase() === it.title.toLowerCase());
+        } else {
+          let date = parseDateCell(get(r, "date"));
+          if (date === null) { it.problems.push("can't read the date (use 2026-11-12 or 12/11/2026)"); date = ""; }
+          if (!date) date = isoDate(new Date());
+          let dur = parseDurCell(get(r, "duration"));
+          if (dur === null) { it.problems.push("can't read the duration"); dur = ""; }
+          it.duration = dur || 60;
+          let time = parseTimeCell(get(r, "start"));
+          if (time === null) { it.problems.push("can't read the start time (use 09:30 or 9:30 pm)"); time = ""; }
+          if (!time) {   // rows without a time stack one after another from your day start
+            const c = cursor[date] || new Date(date + "T" + prefs.dayStart).getTime();
+            it.start = c; it.warnings.push("no start time → " + timeStr(new Date(c)));
+            cursor[date] = c + it.duration * 60000;
+          } else it.start = new Date(date + "T" + time).getTime();
+          it.tags = String(get(r, "tags") || "").split(/[;,|]/).map(s => s.trim()).filter(Boolean);
+          it.completed = importState.mode === "done" || parseYes(get(r, "completed"));
+          it.dup = tasks.some(t => t.title.toLowerCase() === it.title.toLowerCase() && t.start === it.start);
+        }
+        importState.items.push(it);
+      });
+    }
+  } else importState.error = "";
+  importRender();
+}
+
+function importRender() {
+  const m = importState.mode;
+  document.querySelectorAll("#imp-modes button").forEach(b => b.classList.toggle("active", b.dataset.mode === m));
+  document.getElementById("imp-hint").textContent = IMPORT_MODES[m].hint;
+  const items = importState.items, skipDup = document.getElementById("imp-skipdup").checked;
+  const ok = items.filter(i => !i.problems.length && !(skipDup && i.dup));
+  const prev = document.getElementById("imp-preview");
+  if (importState.error) { prev.innerHTML = `<div class="hb-warn bad">${esc(importState.error)}</div>`; }
+  else if (!items.length) { prev.innerHTML = `<div class="vault-empty" style="text-align:left">Choose a file or paste rows (with the header row) to see a preview here.</div>`; }
+  else {
+    const head = m === "backlog" ? "<th>Title</th><th>Est</th><th>I/U/E/A</th><th>Category</th>" : "<th>Title</th><th>When</th><th>Dur</th><th>Category</th><th>Done</th>";
+    const rows = items.slice(0, 200).map(i => {
+      const status = i.problems.length ? `<span class="imp-bad">✕ ${esc(i.problems.join("; "))}</span>` : i.dup ? `<span class="imp-warn">${skipDup ? "skipped: " : ""}already exists</span>` : i.warnings.length ? `<span class="imp-warn">${esc(i.warnings.join("; "))}</span>` : `<span class="imp-ok">✓</span>`;
+      const cells = i.problems.includes("no title") ? `<td colspan="${m === "backlog" ? 4 : 5}" class="muted">—</td>`
+        : m === "backlog" ? `<td>${esc(i.title)}</td><td>${i.est}m</td><td>${i.imp}/${i.urg}/${i.eff}/${i.avr}</td><td>${esc(i.category)}</td>`
+        : `<td>${esc(i.title)}</td><td class="nowrap">${fmtDate(new Date(i.start))} ${fmtTime(new Date(i.start))}</td><td>${fmtDur(i.duration)}</td><td>${esc(i.category)}</td><td>${i.completed ? "✓" : ""}</td>`;
+      return `<tr><td class="muted">${i.row}</td>${cells}<td>${status}</td></tr>`;
+    }).join("");
+    prev.innerHTML = `<div class="imp-summary"><b>${ok.length}</b> ready to add · ${items.filter(i => i.problems.length).length} with errors · ${items.filter(i => i.dup).length} duplicates${importState.source ? " · from " + esc(importState.source) : ""}</div>
+      <div class="dv-table-wrap"><table class="plan-table imp-table"><thead><tr><th>Row</th>${head}<th></th></tr></thead><tbody>${rows}</tbody></table></div>${items.length > 200 ? `<div class="muted" style="font-size:10px">Showing the first 200 of ${items.length} rows.</div>` : ""}`;
+  }
+  const btn = document.getElementById("imp-go");
+  btn.disabled = !ok.length;
+  btn.textContent = ok.length ? `Add ${ok.length} ${m === "backlog" ? "to Plan" : m === "done" ? "to the Log" : "to the timeline"}` : "Nothing to add yet";
+}
+
+function importCommit() {
+  const skipDup = document.getElementById("imp-skipdup").checked;
+  const ok = importState.items.filter(i => !i.problems.length && !(skipDup && i.dup));
+  if (!ok.length) return;
+  const m = importState.mode;
+  ok.forEach(i => {
+    if (m === "backlog") backlog.push({ id: genId(), title: i.title, category: i.category, imp: i.imp, urg: i.urg, eff: i.eff, avr: i.avr, est: i.est, notes: i.notes, createdAt: Date.now() });
+    else tasks.push({ id: genId(), title: i.title, category: i.category, start: i.start, duration: i.duration, dependencies: [], notes: i.notes, tags: i.tags, completed: i.completed });
+  });
+  if (m === "backlog") planSuggestion = null;
+  save();
+  closeImport();
+  renderAll();
+  toast(`Added ${ok.length} ${m === "backlog" ? "tasks to ⏱ Plan" : m === "done" ? "completed tasks to 📒 Log" : "tasks to the timeline"}.`);
+}
+
 // ── Export / Import / Clear ──
 // One place lists everything that is backed up, copied and synced.
 function getAllData() {
-  return { tasks, breaks, notes, backlog, stuck: stuckLog, phone, prefs };
+  return { tasks, breaks, notes, backlog, stuck: stuckLog, phone, prefs, diversions, habits };
 }
 function setAllData(data) {
   if (data.tasks) tasks = data.tasks.map(t => ({ ...t, start: new Date(t.start).getTime() }));
@@ -3173,12 +4222,15 @@ function setAllData(data) {
   if (data.stuck) stuckLog = data.stuck;
   if ("phone" in data) phone = data.phone;
   if (data.prefs) prefs = { ...prefs, ...data.prefs };
+  if (data.diversions) diversions = data.diversions;
+  if (data.habits) habits = data.habits;
+  migrateScenes();
   // Older backups/devices still carry the removed Quick Todo list.
   if (data.todos) migrateTodos(data.todos);
 }
 
 function exportData() {
-  const data = { version: 6, exportedAt: new Date().toISOString(), ...getAllData() };
+  const data = { version: 7, exportedAt: new Date().toISOString(), ...getAllData() };
   const blob = new Blob([JSON.stringify(data, null, 2)], { type: "application/json" });
   const url = URL.createObjectURL(blob);
   const a = document.createElement("a");
@@ -3209,7 +4261,7 @@ function importData(event) {
 function clearAllData() {
   if (!confirm("This will delete ALL tasks, breaks, notes, plans, stuck sessions and phone usage. Are you sure?")) return;
   if (!confirm("Really? This cannot be undone.")) return;
-  tasks = []; breaks = []; notes = []; backlog = []; stuckLog = []; phone = null;
+  tasks = []; breaks = []; notes = []; backlog = []; stuckLog = []; phone = null; diversions = []; habits = [];
   activeNoteId = null; selectedTaskId = null;
   save(); renderAll();
 }
@@ -3284,21 +4336,14 @@ function applySyncData(data) {
   setAllData(data);
   if (activeNoteId && !notes.some(n => n.id === activeNoteId)) activeNoteId = null;
   if (selectedTaskId && !tasks.some(t => t.id === selectedTaskId)) selectedTaskId = null;
-  try {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(tasks));
-    localStorage.setItem(BREAKS_KEY, JSON.stringify(breaks));
-    localStorage.setItem(NOTES_KEY, JSON.stringify(notes));
-    localStorage.setItem(BACKLOG_KEY, JSON.stringify(backlog));
-    localStorage.setItem(STUCK_KEY, JSON.stringify(stuckLog));
-    localStorage.setItem(PREFS_KEY, JSON.stringify(prefs));
-    if (phone) localStorage.setItem(PHONE_KEY, JSON.stringify(phone)); else localStorage.removeItem(PHONE_KEY);
-  } catch(e) {}
+  persistLocal();
   renderAll();
+  noteBoardSyncRemote();
 }
 
 // ── COPY / PASTE SYNC ──
 function copyDataToClipboard() {
-  const data = { version: 6, exportedAt: new Date().toISOString(), ...getAllData() };
+  const data = { version: 7, exportedAt: new Date().toISOString(), ...getAllData() };
   const text = JSON.stringify(data);
   navigator.clipboard.writeText(text).then(() => {
     const st = document.getElementById("copy-status");
@@ -4102,6 +5147,7 @@ let vaultLzPromise = null;
 let vaultDraw = null;   // { cur, parsed: { fmt, json }, text, handle, ver, dirty, orig: Map }
 
 function vaultLz() {
+  if (window.LZString) return Promise.resolve(window.LZString);   // loaded in <head>
   if (!vaultLzPromise) {
     vaultLzPromise = import(LZ_URL).then(m => m.default || m);
     vaultLzPromise.catch(() => { vaultLzPromise = null; });
@@ -4477,6 +5523,12 @@ function setStatus(text, color) {
   statusEl.textContent = text;
   statusEl.style.color = color || "var(--text2)";
 }
+// Sync state for other parts of the page (the whiteboard's status strip).
+function cloudState(patch) {
+  window.cloudState = { ...(window.cloudState || {}), ...patch };
+  document.dispatchEvent(new Event("cloudstatus"));
+}
+window.cloudPushNow = function () { if (!userRef) return; clearTimeout(pushTimer); push(); };
 
 function isTyping() {
   const el = document.activeElement;
@@ -4488,7 +5540,8 @@ async function push() {
   const payload = JSON.stringify(getSyncData());
   // Firestore caps a document at 1 MB; whiteboards with images are the usual culprit.
   if (new Blob([payload]).size > 1000000) {
-    setStatus("⚠ Sync paused: your data is over the 1 MB cloud limit — remove images from whiteboards or delete old phone data", "var(--red)");
+    setStatus("⚠ Sync paused: your data is over the 1 MB cloud limit — remove pictures from whiteboards, or move big drawings to the 📓 Vault", "var(--red)");
+    cloudState({ pending: false, paused: true });
     return;
   }
   lastRev = Date.now() + "-" + Math.random().toString(36).slice(2, 8);
@@ -4499,14 +5552,17 @@ async function push() {
       updatedAt: serverTimestamp(),
     });
     setStatus("✓ Synced " + new Date().toLocaleTimeString(), "var(--green)");
+    cloudState({ pending: false, paused: false, error: "", syncedAt: Date.now() });
   } catch (e) {
     setStatus("⚠ Sync failed: " + e.message, "var(--red)");
+    cloudState({ pending: false, error: "Sync failed: " + e.message });
   }
 }
 
 window.cloudSchedulePush = function () {
   if (!userRef) return;
   setStatus("Saving…");
+  cloudState({ pending: true });
   clearTimeout(pushTimer);
   pushTimer = setTimeout(push, 800);
 };
@@ -4546,6 +5602,7 @@ onAuthStateChanged(auth, async (user) => {
 
   if (!user) {
     setStatus("Not signed in — data is saved on this device only.");
+    cloudState({ signedIn: false });
     signInBtn.style.display = "block";
     signOutBtn.style.display = "none";
     return;
@@ -4554,6 +5611,7 @@ onAuthStateChanged(auth, async (user) => {
   signInBtn.style.display = "none";
   signOutBtn.style.display = "block";
   setStatus("Connecting as " + user.email + "…");
+  cloudState({ signedIn: true });
   const ref = doc(db, "users", user.uid);
 
   // First time on this device: decide whether cloud or device data wins.
